@@ -1,1 +1,3 @@
-rootProject.name = 'ecospot'
+rootProject.name = 'backend'
+include 'ecospot'
+project(':ecospot').projectDir = file('ecospot')
