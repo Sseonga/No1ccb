@@ -1,4 +1,7 @@
 package fs.human.ecospot.community.dao;
 
-public class ReviewDAO {
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface ReviewDAO {
 }

@@ -1,4 +1,7 @@
 package fs.human.ecospot.location.dao;
 
-public class AccomDAO {
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface AccomDAO {
 }

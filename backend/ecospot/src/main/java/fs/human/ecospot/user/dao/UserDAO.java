@@ -1,4 +1,7 @@
 package fs.human.ecospot.user.dao;
 
-public class UserDAO {
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface UserDAO {
 }

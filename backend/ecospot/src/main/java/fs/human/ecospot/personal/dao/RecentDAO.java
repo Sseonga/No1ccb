@@ -1,4 +1,7 @@
 package fs.human.ecospot.personal.dao;
 
-public class RecentDAO {
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface RecentDAO {
 }
