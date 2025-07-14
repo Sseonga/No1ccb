@@ -45,6 +45,7 @@ const FindPasswordForm = () => {
     // 이메일 입력 체크
     if (!formData.email) {
       newErrors.email = '이메일을 입력해주세요.';
+
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = '올바른 이메일 형식이 아닙니다.';
     }
@@ -140,7 +141,7 @@ const FindPasswordForm = () => {
               name="email"
               value={formData.email}
               onChange={handleInputChange}
-              placeholder="human@echospot.com"
+              placeholder="이메일을 입력하세요"
               className={`form-input ${errors.email ? 'error' : ''}`}
             />
             <button
@@ -148,12 +149,12 @@ const FindPasswordForm = () => {
               className="send-button"
               onClick={handleSendCode}
             >
-              발송
+              인증받기
             </button>
           </div>
-          {errors.email && <span className="error-message">{errors.email}</span>}
-        </div>
 
+        </div>
+        {errors.email && <div className="error-message">{errors.email}</div>}
         {/* 인증코드 입력 + 인증확인 */}
         <div className="input-group">
           <div className="input-with-button">
@@ -162,28 +163,32 @@ const FindPasswordForm = () => {
               name="verificationCode"
               value={formData.verificationCode}
               onChange={handleInputChange}
-              placeholder="1231412"
+              placeholder="인증번호를 입력하세요"
               className={`form-input ${errors.verificationCode ? 'error' : ''}`}
             />
             <button
               type="button"
               name="verificationCode"
+              className="check"
               onClick={handleVerifyCode}
             >
               인증확인
             </button>
           </div>
-          {errors.verificationCode && <span className="error-message">{errors.verificationCode}</span>}
-        </div>
 
+        </div>
+        {errors.verificationCode && <div className="error-message">{errors.verificationCode}</div>}
         {/* 비밀번호 초기화 버튼 */}
-        <button
-          type="button"
-          className="reset-button"
-          onClick={handlePasswordReset}
-        >
-          비밀번호 초기화
-        </button>
+        <div className="reset-area">
+            <button
+
+              type="button"
+              className="reset-button"
+              onClick={handlePasswordReset}
+            >
+              비밀번호 초기화
+            </button>
+        </div>
       </div>
 
       {/* 임시 비밀번호 발급 모달 */}
@@ -191,11 +196,10 @@ const FindPasswordForm = () => {
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal-content" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>임시 비밀번호 발급</h3>
+              <h3>임시 비밀번호가 생성되었습니다</h3>
               <button className="close-button" onClick={closeModal}>x</button>
             </div>
             <div className="modal-body">
-              <p>임시 비밀번호가 발급되었습니다.</p>
               <div className="temp-password-container">
                 <div className="temp-password">{tempPassword}</div>
                 <button className="copy-button" onClick={copyToClipboard}>
