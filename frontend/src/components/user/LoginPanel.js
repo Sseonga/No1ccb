@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import AuthTabMenu from './AuthTabMenu';
-import LoginForm from './LoginForm';
-import JoinForm from './JoinForm';
-import FindPasswordForm from './FindPasswordForm';
-import './user.css';
+import React, { useState } from "react";
+import AuthTabMenu from "./AuthTabMenu";
+import LoginForm from "./LoginForm";
+import JoinForm from "./JoinForm";
+import FindPasswordForm from "./FindPasswordForm";
+import "./user.css";
 
 function LoginPanel() {
-  const [activeTab, setActiveTab] = useState('login'); // 기본 로그인 탭
+  const [activeTab, setActiveTab] = useState("login"); // 기본 로그인 탭
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -19,15 +19,15 @@ function LoginPanel() {
   // ];
 
   return (
-    <div className='login-container'>
+    <div className="login-container">
       <h1 className="h2">회원</h1>
-       <AuthTabMenu activeTab={activeTab} onTabClick={handleTabClick} />
+      <AuthTabMenu activeTab={activeTab} onTabClick={handleTabClick} />
 
-       <div className="login-form-box">
-         {activeTab === 'login' && <LoginForm />}
-         {activeTab === 'signup' && <JoinForm />}
-         {activeTab === 'findpw' && <FindPasswordForm />}
-       </div>
+      <div className="login-form-box">
+        {activeTab === "login" && <LoginForm />}
+        {activeTab === "signup" && <JoinForm />}
+        {activeTab === "findpw" && <FindPasswordForm />}
+      </div>
       {/* <div className='login-tab'>
         {tabs.map(tab => (
           <NavLink

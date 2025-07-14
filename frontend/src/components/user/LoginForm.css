@@ -50,15 +50,14 @@ body {
   font-weight: bold;
   border: none;
   margin-top: 12px;
-  border-radius: 10px;   /* input과 동일하게 */
-  box-shadow: 0 4px 16px rgba(90,180,90,0.08);
+  border-radius: 10px; /* input과 동일하게 */
+  box-shadow: 0 4px 16px rgba(90, 180, 90, 0.08);
   cursor: pointer;
   transition: background 0.2s;
 }
 .login-container button:hover {
   background: #86b93b;
 }
-
 
 .login-links {
   margin-top: 24px;

@@ -1,5 +1,5 @@
-import React from 'react';
-import './common.css';
+import React from "react";
+import "./common.css";
 
 const MyLocationButton = ({ tmapObjRef, myMarkerRef }) => {
   const handleMyLocation = () => {
@@ -22,12 +22,12 @@ const MyLocationButton = ({ tmapObjRef, myMarkerRef }) => {
         myMarkerRef.current = new window.Tmapv2.Marker({
           position: myLatLng,
           map: map,
-          icon: "https://maps.gstatic.com/mapfiles/ms2/micons/blue-dot.png"
+          icon: "https://maps.gstatic.com/mapfiles/ms2/micons/blue-dot.png",
         });
       },
       (error) => {
-        console.error('위치 오류:', error);
-        alert('내 위치를 가져올 수 없습니다.');
+        console.error("위치 오류:", error);
+        alert("내 위치를 가져올 수 없습니다.");
       }
     );
   };
