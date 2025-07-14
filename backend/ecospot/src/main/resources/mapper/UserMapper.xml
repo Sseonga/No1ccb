@@ -4,5 +4,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="fs.human.ecospot.user.dao.UserDAO">
+    <insert id="insertUser" parameterType="fs.human.ecospot.user.vo.UserVO">
+        <selectKey keyProperty="userId" resultType="long" order="BEFORE">
+            SELECT SEQ_USER_ID.NEXTVAL FROM DUAL
+        </selectKey>
 
+        INSERT INTO TB_USER (
+            USER_ID, USER_EMAIL, USER_PASSWORD, IS_ADMIN
+        )
+        VALUES (
+            #{userId}, #{userEmail}, #{userPassword}, 'N'
+        )
+    </insert>
 </mapper>

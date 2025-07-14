@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import axios from "axios";
 
-const JoinForm = () => {
+const JoinForm = ({ onSuccess }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -33,30 +34,35 @@ const JoinForm = () => {
       newErrors.password = "비밀번호가 8자 이상이어야 합니다.";
     }
 
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = "비밀번호를 다시 한 번 입력해주세요.";
-    } else if (formData.password !== formData.confirmPassword) {
+    if (!formData.password || formData.password.length < 8)
+      newErrors.password = "비밀번호는 8자 이상이어야 합니다.";
+    if (formData.password !== formData.confirmPassword)
       newErrors.confirmPassword = "비밀번호가 일치하지 않습니다.";
-    }
-
-    if (!formData.agreeTrems) {
-      newErrors.agreeTerms = "이용약관에 동의해주세요.";
-    }
+    if (!formData.agreeTerms) newErrors.agreeTerms = "약관 동의가 필요합니다.";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      console.log("회원가입 데이터:", formData);
+    if (!validateForm()) return;
+
+    try {
+      const res = await axios.post("/api/user/join", {
+        userEmail: formData.email,
+        userPassword: formData.password,
+      });
+      alert("회원가입 성공!");
+      if (onSuccess) onSuccess();
+    } catch (err) {
+      alert("회원가입 실패: " + (err.response?.data?.message || "서버 오류"));
     }
   };
 
   return (
     <div className="join-form-container">
-      <form onSubmit={handleInputChange} className="join-form">
+      <form onSubmit={handleSubmit} className="join-form">
         <div className="input-group">
           <input
             type="email"
@@ -77,6 +83,20 @@ const JoinForm = () => {
             name="password"
             value={formData.password}
             onChange={handleInputChange}
+            placeholder="비밀번호"
+            className={`form-input ${errors.password ? "error" : ""}`}
+          />
+          {errors.password && (
+            <span className="error-message">{errors.confirmPassword}</span>
+          )}
+        </div>
+
+        <div className="input-group">
+          <input
+            type="password"
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleInputChange}
             placeholder="비밀번호 재확인"
             className={`form-input ${errors.confirmPassword ? "error" : ""}`}
           />
@@ -91,7 +111,7 @@ const JoinForm = () => {
               type="checkbox"
               id="agreeTerms"
               name="agreeTerms"
-              checked={"formData.agreeTerms"}
+              checked={formData.agreeTerms}
               onChange={handleInputChange}
               className="checkbox-input"
             />
