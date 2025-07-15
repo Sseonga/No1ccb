@@ -42,35 +42,46 @@ const UserManageTable = () => {
 
   return (
     <div className="user-manage-table">
+
+
       {/* 관리자 페이지 제목 */}
       <h2>관리자페이지</h2>
 
       <div className="user-table-box">
-        {/* 테이블 헤더 */}
-        <div className="user-table-header">
-          <div className="user-table-cell user-table-number">번호</div>
-          <div className="user-table-cell user-table-number">이메일</div>
-          <div className="user-table-cell user-table-number">비밀번호</div>
-          <div className="user-table-cell user-table-select"></div>
+        <div className="table-name">
+            회원리뷰
         </div>
-
-        {/* 사용자 목록 렌더링 */}
-        {mockUserList.map((user, index) => (
-          <UserManageRow
-            key={user.id}
-            number={index + 1} // 순서 번호 (1부터 시작)
-            user={user}
-            isSelected={selectedUserIds.includes(user.id)} // 선택 상태 확인
-            onSelect={handleSelect} // 선택 처리 함수 전달
-          />
-        ))}
+        <table className="user-table">
+          <thead>
+            <tr className="user-table-header">
+              <th className="user-table-cell user-table-number">번호</th>
+              <th className="user-table-cell user-table-email">이메일</th>
+              <th className="user-table-cell user-table-password">비밀번호</th>
+              <th className="user-table-cell user-table-select"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {mockUserList.map((user, index) => (
+              <UserManageRow
+                key={user.id}
+                number={index + 1}
+                user={user}
+                isSelected={selectedUserIds.includes(user.id)}
+                onSelect={handleSelect}
+              />
+            ))}
+          </tbody>
+        </table>
+            <div className="button-area">
+                <DeleteSelectedUsersButton
+                onDelete={handleDeleteSelected}
+                disabled={selectedUserIds.length === 0}
+              />
+            </div>
       </div>
 
       {/* 선택된 사용자 삭제 버튼 */}
-      <DeleteSelectedUsersButton
-        onDelete={handleDeleteSelected}
-        disabled={selectedUserIds.length === 0} // 선택된 사용자가 없으면 비활성화
-      />
+
     </div>
   );
 };

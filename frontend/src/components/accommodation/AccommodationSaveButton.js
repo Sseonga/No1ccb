@@ -1,4 +1,4 @@
-cdimport React from 'react';
+import React from 'react';
 
 /**
  * 숙소 저장 버튼 컴포넌트

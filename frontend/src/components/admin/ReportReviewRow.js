@@ -12,27 +12,27 @@ import ReportSelectCheckBox from './ReportSelectCheckbox';
  */
 const ReportReviewRow = ({ no, report, checked, onSelect }) => {
   return (
-    <div className="table-row">
+    <tr>
       {/* 순서 번호 */}
-      <div className="cell-no">{no}</div>
+      <td>{no}</td>
 
       {/* 신고된 리뷰 제목 */}
-      <div className="cell title">{report.title}</div>
+      <td>{report.title}</td>
 
       {/* 신고 사유 */}
-      <div className="cell reason">{report.reason}</div>
+      <td>{report.reason}</td>
 
       {/* 신고 횟수 */}
-      <div className="cell count">{report.count}</div>
+      <td>{report.count}</td>
 
       {/* 선택 체크박스 */}
-      <div className="cell check">
+      <td>
         <ReportSelectCheckBox
           checked={checked}
           onChange={(e) => onSelect(report.id, e.target.checked)} // 체크박스 변경 시 선택 처리
         />
-      </div>
-    </div>
+      </td>
+    </tr>
   );
 };
 

@@ -19,26 +19,26 @@ const UserManageRow = ({ number, user, isSelected, onSelect }) => {
   };
 
   return (
-    <div className="user-table-row">
+    <tr className="user-table-row">
       {/* 사용자 번호 */}
-      <div className="user-table-cell user-table-number">{number}</div>
+      <td className="user-table-cell user-table-number">{number}</td>
 
       {/* 사용자 이메일 */}
-      <div className="user-table-cell user-table-email">{user.email}</div>
+      <td className="user-table-cell user-table-email">{user.email}</td>
 
       {/* 비밀번호 (보안상 마스킹 처리) */}
-      <div className="user-table-cell user-table-password">********</div>
+      <td className="user-table-cell user-table-password">********</td>
 
       {/* 선택 체크박스 */}
-      <div className="user-table-cell user-table-select">
+      <td className="user-table-cell user-table-select">
         <input
           type="checkbox"
           checked={isSelected}
           onChange={handleCheckboxChange}
           aria-label={`사용자 ${user.email} 선택`} // 접근성을 위한 라벨
         />
-      </div>
-    </div>
+      </td>
+    </tr>
   );
 };
 

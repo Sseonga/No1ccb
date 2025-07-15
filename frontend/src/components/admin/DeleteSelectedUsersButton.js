@@ -24,7 +24,7 @@ const DeleteSelectedUsersButton = ({ onDelete, disabled }) => {
       className={`delete-button ${disabled ? 'disabled' : ''}`}
       aria-label="선택된 사용자 삭제" // 접근성을 위한 라벨
     >
-      선택된 사용자 삭제
+      삭제
     </button>
   );
 };

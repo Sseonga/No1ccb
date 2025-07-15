@@ -15,7 +15,7 @@ const DeleteSelectedReportsButton = ({ onDelete, disabled }) => {
       disabled={disabled} // 선택된 신고가 없으면 비활성화
       aria-label="선택된 신고 삭제" // 접근성을 위한 라벨
     >
-      선택된 신고 삭제
+      삭제
     </button>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ReportReviewRow from './ReportReviewRow';
 import DeleteSelectedReportsButton from './DeleteSelectedReportsButton';
-import "./admin.css";
+import './admin.css';
 
 /**
  * 신고된 리뷰 관리 테이블 컴포넌트
@@ -14,6 +14,8 @@ const mockReports = [
   { id: 2, title: '리뷰 제목2', reason: '도배', count: 5 },
   { id: 3, title: '리뷰 제목3', reason: '광고', count: 2 },
   { id: 4, title: '리뷰 제목4', reason: '허위 정보', count: 1 },
+
+
 ];
 
 const ReportReviewTable = () => {
@@ -43,33 +45,44 @@ const ReportReviewTable = () => {
       {/* 관리자 페이지 제목 */}
       <h2>관리자페이지</h2>
 
+      {/* 테이블 박스 */}
       <div className="table-box">
-        {/* 테이블 헤더 */}
-        <div className="table-header">
-          <div className="cell no">NO.</div>
-          <div className="cell title">제목</div>
-          <div className="cell reason">신고사유</div>
-          <div className="cell count">신고횟수</div>
-          <div className="cell check"></div>
+        <div className="table-name">
+            신고리뷰
         </div>
-
-        {/* 신고 목록 렌더링 */}
-        {mockReports.map((report, idx) => (
-          <ReportReviewRow
-            key={report.id}
-            no={idx + 1} // 순서 번호 (1부터 시작)
-            report={report}
-            checked={selected.includes(report.id)} // 선택 상태 확인
-            onSelect={handleSelect} // 선택 처리 함수 전달
-          />
-        ))}
+        <table className="report-table">
+          <thead>
+            <tr>
+              <th>번호</th>
+              <th>제목</th>
+              <th>신고사유</th>
+              <th>신고횟수</th>
+              <th>선택</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* 신고 목록 렌더링 */}
+            {mockReports.map((report, idx) => (
+              <ReportReviewRow
+                key={report.id}
+                no={idx + 1} // 순서 번호 (1부터 시작)
+                report={report}
+                checked={selected.includes(report.id)} // 선택 상태 확인
+                onSelect={handleSelect} // 선택 처리 함수 전달
+              />
+            ))}
+          </tbody>
+        </table>
+        <div className="button-area">
+            {/* 선택된 신고 삭제 버튼 */}
+                  <DeleteSelectedReportsButton
+                    onDelete={handleDelete}
+                    disabled={selected.length === 0} // 선택된 신고가 없으면 비활성화
+                  />
+        </div>
       </div>
 
-      {/* 선택된 신고 삭제 버튼 */}
-      <DeleteSelectedReportsButton
-        onDelete={handleDelete}
-        disabled={selected.length === 0} // 선택된 신고가 없으면 비활성화
-      />
+
     </div>
   );
 };

@@ -6,35 +6,36 @@ import "./admin.css";
 const AdminSidebar = () => {
   return (
     <div className="sidebar">
-      <Link to="/">
+      <Link to="/accommodation">
         <img src={logo} alt="로고" width="100" height="100" />
       </Link>
 
       <NavLink
-        to="/"
-        className={({ isActive }) => (isActive ? "tab active" : "tab")}
-      >
-        <i className="fa-solid fa-location-dot"></i>
-        <br />
-        숙소추가
-      </NavLink>
-      <NavLink
-        to="/route"
-        className={({ isActive }) => (isActive ? "tab active" : "tab")}
-      >
-        <i className="fa-solid fa-diamond-turn-right"></i>
-        <br />
-        리뷰 및 신고 관리
-      </NavLink>
-      <NavLink
-        to="/hotel"
+        to="/accommodation"
         className={({ isActive }) => (isActive ? "tab active" : "tab")}
       >
         <i className="fa-solid fa-hotel"></i>
         <br />
-        회원관리
+        숙소추가
       </NavLink>
 
+      <NavLink
+        to="/report"
+        className={({ isActive }) => (isActive ? "tab active" : "tab")}
+      >
+        <i className="fa-solid fa-star"></i>
+        <br />
+        신고리뷰
+      </NavLink>
+
+      <NavLink
+        to="/userCare"
+        className={({ isActive }) => (isActive ? "tab active" : "tab")}
+      >
+        <i className="fa-solid fa-user-gear"></i>
+        <br />
+        회원관리
+      </NavLink>
     </div>
   );
 };

@@ -40,7 +40,7 @@
 // export default App;
 
 import React from "react";
-// import { BrowserRouter, useLocation, Route, Routes } from "react-router-dom";
+import { BrowserRouter, useLocation, Route, Routes } from "react-router-dom";
 // import Tmap from "./components/station/Tmap";
 // import "./App.css";
 // import "./components/common/common.css";
@@ -50,8 +50,11 @@ import React from "react";
 // import RouteSearchPanel from "./components/route/RouteSearchPanel";
 // import IntroCar from "./components/intro/IntroCar";
 // import LoginPanel from "./components/user/LoginPanel";
-// import "@fortawesome/fontawesome-free/css/all.min.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import AdminLayout from "./components/admin/AdminLayout";
 import ReportReviewTable from "./components/admin/ReportReviewTable";
+import AccommodationAddForm from "./components/accommodation/AccommodationAddForm";
+import UserManageTable from "./components/admin/UserManageTable";
 
 // const AppContent = () => {
 //   const [filters, setFilters] = useState({
@@ -93,7 +96,16 @@ import ReportReviewTable from "./components/admin/ReportReviewTable";
 const App = () => {
   return (
     <div className="container">
-      <ReportReviewTable />
+       <BrowserRouter>
+       <Routes>
+            <Route path="/" element={<AdminLayout />}>
+
+                <Route path="accommodation" element={<AccommodationAddForm />} />
+                <Route path="report" element={<ReportReviewTable />} />
+                <Route path="userCare" element={<UserManageTable />} />
+            </Route>
+       </Routes>
+       </BrowserRouter>
     </div>
   );
 };

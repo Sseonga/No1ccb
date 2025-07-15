@@ -1,69 +1,144 @@
 .report-review-table {
 
   font-family: 'Noto Sans KR', sans-serif;
-
   border-radius: 8px;
+  height:70%;
+}
+
+.user-manage-table{
+
+    font-family: 'Noto Sans KR', sans-serif;
+    border-radius: 8px;
+    height:70%;
+
 }
 
 .report-review-table h2 {
-  font-size: 1.5rem;
-  margin-top:3%;
-  margin-bottom:5%;
+  width:60%;
+  margin:2% auto 5% auto;
+  padding-bottom:4%;
   text-align:center;
+  border-bottom:solid 1px #d3d3d3;
+
+
+}
+
+.accommodation-add-form h2{
+  width:60%;
+  margin:2% auto 5% auto;
+  padding-bottom:4%;
+  text-align:center;
+  border-bottom:solid 1px #d3d3d3;
 }
 
 .table-box {
-  border: 1px solid #ddd;
+  width:60%;
+  margin:auto;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   border-radius: 6px;
-  overflow: hidden;
+  height:80%;
   background-color: #fff;
+  overflow-y: auto;
+
 }
 
-.table-header,
-.report-row {
-  display: flex;
-  border-bottom: 1px solid #eee;
-  align-items: center;
+.user-table-box{
+  width:60%;
+  margin:auto;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  height:80%;
+  background-color: #fff;
+  overflow-y: auto;
+
+
+}
+.table-name{
+    width:90%;
+    margin:10px auto 0px auto;
+    font-weight:bold;
+    font-size:20px;
+    padding-bottom:10px;
+    padding-top:10px;
 }
 
-.table-header {
-  background-color: #f0f0f0;
-  font-weight: bold;
-  color: #333;
-  padding: 0.8rem 0;
+.button-area{
+
+    justify-content: flex-end;
+    display: flex;
+
 }
 
-.report-row {
-  padding: 0.6rem 0;
+.user-manage-table h2{
+
+    width:60%;
+    margin:2% auto 5% auto;
+    padding-bottom:4%;
+    text-align:center;
+    border-bottom:solid 1px #d3d3d3;
+
 }
 
-.cell {
-  padding: 0 1rem;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
+.button-area button{
+    background-color:red;
+    color:white;
+    width:60px;
+    height:30px;
+    font-size:14px;
+    margin-bottom:16px;
+    margin-right:23.5px;
+
+
+
+
 }
 
-.cell.no {
-  width: 60px;
+.report-table{
+
+    margin: 10px auto 40px auto;
+    width:90%;
+    border-collapse: collapse;
+
 }
 
-.cell.title {
-  flex: 1;
+.user-table{
+
+    margin: 10px auto 40px auto;
+    width:90%;
+    border-collapse: collapse;
 }
 
-.cell.reason {
-  flex: 1.5;
+.report-table td{
+
+    text-align:center;
+
+
 }
 
-.cell.count {
-  width: 100px;
-  text-align: center;
+.user-table td{
+
+    text-align:center;
 }
 
-.cell.check {
-  width: 60px;
-  text-align: center;
+.report-table tr{
+
+    border-bottom:1px solid #c0c0c0;
+
+
+}
+
+.user-table tr{
+
+    border-bottom:1px solid #c0c0c0;
+
+
+}
+
+.add-area{
+
+    width:60%;
+    margin:0 auto;
+
 }
 
 button.delete-btn {
@@ -120,3 +195,16 @@ a i {
   margin-bottom: 2px;
 }
 
+.admin-content{
+
+    position: absolute;
+    left: 8%;
+    top: 0px;
+    width: 92%;
+    background: white;
+    padding-top: 15px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    height: 100%;
+
+}
