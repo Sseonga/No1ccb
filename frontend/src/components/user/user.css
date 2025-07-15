@@ -86,3 +86,20 @@
   display: flex;
   padding-top: 40px;
 }
+
+/* 입력 그룹 스타일 */
+.input-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.input-group .error-message {
+  color: #ff4444;
+  font-size: 14px;
+  margin-top: 5px;
+  display: block;
+}
+
+.input-group input.error {
+  border-color: #ff4444;
+}

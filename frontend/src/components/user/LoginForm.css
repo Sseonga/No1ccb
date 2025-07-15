@@ -1,76 +1,97 @@
+/* 전체 페이지 배경색 설정 */
 body {
   background: #f6f7eb;
 }
 
+/* 로그인 컨테이너 메인 스타일 */
 .login-container {
   width: 450px;
-  margin: 70px auto;
-  background: linear-gradient(135deg, #f8f8e8 60%, #e9f3e3 100%);
-  border-radius: 24px;
-  box-shadow: 0 8px 32px rgba(100, 140, 100, 0.09);
-  padding: 48px 40px 30px 40px;
+  margin: 70px auto; /* 상하 70px, 좌우 가운데 정렬 */
+  background: linear-gradient(
+    135deg,
+    #f8f8e8 60%,
+    #e9f3e3 100%
+  ); /* 그라데이션 배경 */
+  border-radius: 24px; /* 둥근 모서리 */
+  box-shadow: 0 8px 32px rgba(100, 140, 100, 0.09); /* 그림자 효과 */
+  padding: 48px 40px 30px 40px; /* 내부 여백 */
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center; /* 수평 중앙 정렬 */
+  justify-content: center; /* 수직 중앙 정렬 */
 }
 
+/* 로그인 제목 스타일 */
 .login-container h2 {
   margin-bottom: 32px;
-  color: #343917;
+  color: #343917; /* 진한 녹색 */
   font-size: 2.1rem;
   font-weight: bold;
 }
 
+/* 이메일, 비밀번호 입력 필드 및 버튼 공통 스타일 */
 .login-container input[type="email"],
 .login-container input[type="password"],
 .login-container button {
   width: 100%;
+  max-width: 350px; /* 최대 너비 제한 */
   padding: 16px;
-  box-sizing: border-box;
+  box-sizing: border-box; /* 패딩 포함하여 전체 너비 계산 */
   font-size: 1rem;
-  border-radius: 10px;
+  border-radius: 10px; /* 둥근 모서리 */
+  display: block; /* 블록 요소로 설정 */
+  margin-left: auto; /* 좌우 자동 여백으로 중앙 정렬 */
+  margin-right: auto; /* 좌우 자동 여백으로 중앙 정렬 */
 }
 
+/* 입력 필드 스타일 */
 .login-container input[type="email"],
 .login-container input[type="password"] {
-  margin-bottom: 16px;
-  border: 2px solid #b2d88d;
-  background: #fff;
-  outline: none;
-  transition: border 0.2s;
+  margin-bottom: 16px; /* 필드 간 간격 */
+  border: 2px solid #b2d88d; /* 연한 녹색 테두리 */
+  background: #fff; /* 흰색 배경 */
+  outline: none; /* 포커스 시 기본 아웃라인 제거 */
+  transition: border 0.2s; /* 테두리 색상 변화 애니메이션 */
 }
 
+/* 입력 필드 포커스 시 스타일 */
 .login-container input:focus {
-  border: 2px solid #82c255;
+  border: 2px solid #82c255; /* 포커스 시 진한 녹색 테두리 */
 }
 
+/* 로그인 버튼 스타일 */
 .login-container button {
-  background: #95c93d;
-  color: #fff;
+  background: #95c93d; /* 녹색 배경 */
+  color: #fff; /* 흰색 글자 */
   font-weight: bold;
-  border: none;
-  margin-top: 12px;
-  border-radius: 10px; /* input과 동일하게 */
-  box-shadow: 0 4px 16px rgba(90, 180, 90, 0.08);
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.login-container button:hover {
-  background: #86b93b;
+  border: none; /* 테두리 제거 */
+  margin-top: 12px; /* 위쪽 여백 */
+  border-radius: 10px; /* input과 동일한 둥근 모서리 */
+  box-shadow: 0 4px 16px rgba(90, 180, 90, 0.08); /* 버튼 그림자 */
+  cursor: pointer; /* 마우스 포인터 변경 */
+  transition: background 0.2s; /* 배경색 변화 애니메이션 */
 }
 
+/* 로그인 버튼 호버 효과 */
+.login-container button:hover {
+  background: #86b93b; /* 호버 시 더 진한 녹색 */
+}
+
+/* 로그인 링크 영역 스타일 */
 .login-links {
-  margin-top: 24px;
-  text-align: center;
+  margin-top: 24px; /* 위쪽 여백 */
+  text-align: center; /* 가운데 정렬 */
   font-size: 1rem;
 }
 
+/* 로그인 링크 스타일 */
 .login-links a {
-  color: #2a84da;
-  text-decoration: none;
-  margin: 0 4px;
+  color: #2a84da; /* 파란색 링크 */
+  text-decoration: none; /* 밑줄 제거 */
+  margin: 0 4px; /* 좌우 여백 */
 }
 
+/* 로그인 링크 호버 효과 */
 .login-links a:hover {
-  text-decoration: underline;
+  text-decoration: underline; /* 호버 시 밑줄 추가 */
 }

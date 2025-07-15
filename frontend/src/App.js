@@ -39,18 +39,19 @@
 
 // export default App;
 
-import React, { useRef, useState } from "react";
-import { BrowserRouter, useLocation, Route, Routes } from "react-router-dom";
-import Tmap from "./components/station/Tmap";
-import "./App.css";
-import "./components/common/common.css";
-import Sidebar from "./components/common/Sidebar";
-import MyLocationButton from "./components/common/MyLocationButton";
-import FilterPanel from "./components/station/Filterpanel";
-import RouteSearchPanel from "./components/route/RouteSearchPanel";
-import IntroCar from "./components/intro/IntroCar";
-import LoginPanel from "./components/user/LoginPanel";
-import "@fortawesome/fontawesome-free/css/all.min.css";
+import React, { useRef, useState } from 'react';
+import { BrowserRouter, useLocation, Route, Routes } from 'react-router-dom';
+import Tmap from './components/station/Tmap';
+import './App.css';
+import './components/common/common.css';
+import Sidebar from './components/common/Sidebar';
+import MyLocationButton from './components/common/MyLocationButton';
+import FilterPanel from './components/station/Filterpanel';
+import RouteSearchPanel from './components/route/RouteSearchPanel';
+import IntroCar from './components/intro/IntroCar';
+import LoginPanel from './components/user/LoginPanel';
+// import JoinForm from './components/user/JoinForm';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const AppContent = () => {
   const [filters, setFilters] = useState({
@@ -65,7 +66,7 @@ const AppContent = () => {
   const location = useLocation(); // 현재 경로 확인
 
   // 숨길 경로들
-  const hideOn = ["/info", "/user", "/user/*"];
+  const hideOn = ['/info', '/user', '/user/*'];
 
   return (
     <div className="container">
@@ -81,7 +82,7 @@ const AppContent = () => {
       )}
 
       <Routes>
-        <Route path="/" element={<></>} />
+        {/* <Route path="/" element={<JoinForm />} /> */}
         <Route path="/route" element={<RouteSearchPanel />} />
         <Route path="/hotel" element={<div>충전숙소 패널</div>} />
         <Route path="/rank" element={<div>랭킹 패널</div>} />

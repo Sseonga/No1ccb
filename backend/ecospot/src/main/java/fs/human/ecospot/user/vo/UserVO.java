@@ -10,4 +10,5 @@ public class UserVO {
     private String isAdmin;
     private String createdId;
     private String updatedId;
+    private String emailVerified;  // 이메일 인증 상태 ('Y' 또는 'N')
 }
