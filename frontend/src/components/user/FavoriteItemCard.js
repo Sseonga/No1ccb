@@ -1,5 +1,5 @@
-import React from 'react';
-import FavoriteStarButton from './FavoriteStarButton';
+import React from "react";
+import FavoriteStarButton from "./FavoriteStarButton";
 
 const FavoriteItemCard = ({ item, onToggleFavorite }) => {
   const { id, title, description, isFavorite } = item;
@@ -12,7 +12,7 @@ const FavoriteItemCard = ({ item, onToggleFavorite }) => {
           <p className="item-description">{description}</p>
         </div>
       </div>
-      
+
       <div className="item-actions">
         <FavoriteStarButton
           isFavorite={isFavorite}

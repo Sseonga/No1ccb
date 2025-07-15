@@ -1,0 +1,122 @@
+.report-review-table {
+
+  font-family: 'Noto Sans KR', sans-serif;
+
+  border-radius: 8px;
+}
+
+.report-review-table h2 {
+  font-size: 1.5rem;
+  margin-top:3%;
+  margin-bottom:5%;
+  text-align:center;
+}
+
+.table-box {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.table-header,
+.report-row {
+  display: flex;
+  border-bottom: 1px solid #eee;
+  align-items: center;
+}
+
+.table-header {
+  background-color: #f0f0f0;
+  font-weight: bold;
+  color: #333;
+  padding: 0.8rem 0;
+}
+
+.report-row {
+  padding: 0.6rem 0;
+}
+
+.cell {
+  padding: 0 1rem;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.cell.no {
+  width: 60px;
+}
+
+.cell.title {
+  flex: 1;
+}
+
+.cell.reason {
+  flex: 1.5;
+}
+
+.cell.count {
+  width: 100px;
+  text-align: center;
+}
+
+.cell.check {
+  width: 60px;
+  text-align: center;
+}
+
+button.delete-btn {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: crimson;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button.delete-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.sidebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 8%;
+  height: 100%;
+  background-color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding-top: 15px;
+
+  z-index: 10;
+}
+
+.sidebar a {
+  display: block;
+  color: black;
+  text-decoration: none;
+
+  font-weight: 550;
+  text-align: center;
+  font-size: 16px;
+  margin: 0px auto;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.sidebar a:hover {
+  color: #80d6fb;
+}
+
+.sidebar a.active {
+  background-color: #80d6fb;
+  color: white;
+}
+
+a i {
+  font-size: 35px;
+  margin-bottom: 2px;
+}
+

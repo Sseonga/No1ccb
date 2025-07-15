@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from "react";
 
 const Tmap = ({ tmapObjRef }) => {
   const mapRef = useRef(null);
@@ -9,8 +9,8 @@ const Tmap = ({ tmapObjRef }) => {
     // 1. 지도 초기화 (기본 중심: 서울시청)
     const map = new window.Tmapv2.Map(mapRef.current, {
       center: new window.Tmapv2.LatLng(36.81023, 127.14644),
-      width: '100%',
-      height: '100%',
+      width: "100%",
+      height: "100%",
       zoom: 15,
       zoomControl: false,
     });
@@ -31,7 +31,7 @@ const Tmap = ({ tmapObjRef }) => {
             position: userLatLng,
             map: map,
             title: "내 위치",
-            icon: "https://maps.gstatic.com/mapfiles/ms2/micons/blue-dot.png"
+            icon: "https://maps.gstatic.com/mapfiles/ms2/micons/blue-dot.png",
           });
         },
         (error) => {

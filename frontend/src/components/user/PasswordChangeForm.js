@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import PasswordChangeButton from './PasswordChangeButton';
+import React, { useState } from "react";
+import PasswordChangeButton from "./PasswordChangeButton";
 
 const PasswordChangeForm = ({ onSubmit }) => {
   const { formData, setFormData } = useState({
-    email: '1234@naver.com',
-    password: '',
-    newPassword: '',
-    confirmPassword: '',
+    email: "1234@naver.com",
+    password: "",
+    newPassword: "",
+    confirmPassword: "",
   });
 
   const handleChange = (e) => {

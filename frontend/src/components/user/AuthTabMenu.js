@@ -1,19 +1,27 @@
-import React from 'react';
+import React from "react";
 
 function AuthTabMenu({ activeTab, onTabClick }) {
-
-return(
+  return (
     <div className="auth-tab-menu">
-      <button className={activeTab === 'login' ? 'active' : ''} onClick={() => onTabClick('login')}>
+      <button
+        className={activeTab === "login" ? "active" : ""}
+        onClick={() => onTabClick("login")}
+      >
         로그인
       </button>
-      <button className={activeTab === 'signup' ? 'active' : ''} onClick={() => onTabClick('signup')}>
+      <button
+        className={activeTab === "signup" ? "active" : ""}
+        onClick={() => onTabClick("signup")}
+      >
         회원가입
       </button>
-      <button className={activeTab === 'findpw' ? 'active' : ''} onClick={() => onTabClick('findpw')}>
+      <button
+        className={activeTab === "findpw" ? "active" : ""}
+        onClick={() => onTabClick("findpw")}
+      >
         비밀번호 찾기
       </button>
     </div>
-);
+  );
 }
 export default AuthTabMenu;

@@ -1,8 +1,9 @@
 import React from "react";
 import { NavLink, Link } from "react-router-dom";
 import logo from "../logo.png";
+import "./admin.css";
 
-const Sidebar = () => {
+const AdminSidebar = () => {
   return (
     <div className="sidebar">
       <Link to="/">
@@ -15,7 +16,7 @@ const Sidebar = () => {
       >
         <i className="fa-solid fa-location-dot"></i>
         <br />
-        주변충전소
+        숙소추가
       </NavLink>
       <NavLink
         to="/route"
@@ -23,7 +24,7 @@ const Sidebar = () => {
       >
         <i className="fa-solid fa-diamond-turn-right"></i>
         <br />
-        길찾기
+        리뷰 및 신고 관리
       </NavLink>
       <NavLink
         to="/hotel"
@@ -31,30 +32,11 @@ const Sidebar = () => {
       >
         <i className="fa-solid fa-hotel"></i>
         <br />
-        충전숙소
-      </NavLink>
-      <NavLink
-        to="/rank"
-        className={({ isActive }) => (isActive ? "tab active" : "tab")}
-      >
-        <i className="fa-solid fa-ranking-star"></i>
-        <br />
-        랭킹
-      </NavLink>
-      <NavLink
-        to="/info"
-        className={({ isActive }) => (isActive ? "tab active" : "tab")}
-      >
-        <i className="fa-solid fa-car-side"></i>
-        <br />
-        전기차 소개
+        회원관리
       </NavLink>
 
-      <Link to="/user" className="loginbtn">
-        로그인
-      </Link>
     </div>
   );
 };
 
-export default Sidebar;
+export default AdminSidebar;

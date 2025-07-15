@@ -1,38 +1,38 @@
-import React, { useState } from 'react';
-import FavoriteItemCard from './FavoriteItemCard';
-import FavoriteStarButton from './FavoriteStarButton';
+import React, { useState } from "react";
+import FavoriteItemCard from "./FavoriteItemCard";
+import FavoriteStarButton from "./FavoriteStarButton";
 
 const FavoriteListPanel = () => {
   const [favoriteItems, setFavoriteItems] = useState([
     {
       id: 1,
-      title: '경로 이름',
-      description: '어디부터 어디까지',
-      category: '내 경로',
+      title: "경로 이름",
+      description: "어디부터 어디까지",
+      category: "내 경로",
       isFavorite: true,
     },
 
     {
       id: 2,
-      title: '충전소 이름',
-      description: '충전소 주소',
-      category: '내 충전소',
+      title: "충전소 이름",
+      description: "충전소 주소",
+      category: "내 충전소",
       isFavorite: true,
     },
 
     {
       id: 3,
-      title: '장소 이름',
-      description: '장소 주소',
-      category: '내 장소',
+      title: "장소 이름",
+      description: "장소 주소",
+      category: "내 장소",
       isFavorite: true,
     },
 
     {
       id: 4,
-      title: '숙소 이름',
-      description: '숙소 주소',
-      category: '내 숙소',
+      title: "숙소 이름",
+      description: "숙소 주소",
+      category: "내 숙소",
       isFavorite: true,
     },
   ]);
