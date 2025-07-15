@@ -13,7 +13,7 @@ const Sidebar = () => {
 
 
       <NavLink to="/" className={({ isActive }) => isActive ? 'tab active' : 'tab'}>
-        <i className="fa-solid fa-location-dot"></i><br />주변충전소
+        <i className="fa-solid fa-location-dot"></i><br />주변 충전소
       </NavLink>
       <NavLink to="/route" className={({ isActive }) => isActive ? 'tab active' : 'tab'}>
         <i className="fa-solid fa-diamond-turn-right"></i><br />길찾기
