@@ -37,7 +37,9 @@ const Sidebar = () => {
 
       {/* 로그인 또는 사용자 이름 + 로그아웃 */}
       {!isLoggedIn ? (
+      <div className="login-area">
         <Link to="/user" className="loginbtn">로그인</Link>
+      </div>
       ) : (
         <div className="user-info">
           <span
@@ -47,7 +49,9 @@ const Sidebar = () => {
           >
             {username}
           </span>
-          <button className="logout-btn" onClick={handleLogout}>로그아웃</button>
+
+            <button className="logout-btn" onClick={handleLogout}>로그아웃</button>
+
         </div>
       )}
     </div>
