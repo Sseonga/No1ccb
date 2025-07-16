@@ -39,6 +39,9 @@ dependencies {
 	//비밀번호 해시를 위한 의존성 추가
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
+	//이메일 발송을 위한 의존성 추가
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 }
 
 tasks.named('test') {

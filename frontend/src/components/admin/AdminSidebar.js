@@ -4,14 +4,19 @@ import logo from "../logo.png";
 import "./admin.css";
 
 const AdminSidebar = () => {
+  const handleLogout = () => {
+    sessionStorage.clear();
+    window.location.href = "/"; // 로그아웃 후 홈으로 이동
+  };
+
   return (
     <div className="sidebar">
-      <Link to="/accommodation">
+      <Link to="/admin/accommodation">
         <img src={logo} alt="로고" width="100" height="100" />
       </Link>
 
       <NavLink
-        to="/accommodation"
+        to="/admin/accommodation"
         className={({ isActive }) => (isActive ? "tab active" : "tab")}
       >
         <i className="fa-solid fa-hotel"></i>
@@ -20,7 +25,7 @@ const AdminSidebar = () => {
       </NavLink>
 
       <NavLink
-        to="/report"
+        to="/admin/report"
         className={({ isActive }) => (isActive ? "tab active" : "tab")}
       >
         <i className="fa-solid fa-star"></i>
@@ -29,13 +34,18 @@ const AdminSidebar = () => {
       </NavLink>
 
       <NavLink
-        to="/userCare"
+        to="/admin/userCare"
         className={({ isActive }) => (isActive ? "tab active" : "tab")}
       >
         <i className="fa-solid fa-user-gear"></i>
         <br />
         회원관리
       </NavLink>
+
+      {/* 로그아웃 버튼만 표시 */}
+      <button className="logout-btn" onClick={handleLogout}>
+        로그아웃
+      </button>
     </div>
   );
 };

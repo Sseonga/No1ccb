@@ -157,14 +157,14 @@
 
 .check{
      width:80px;
-         height:50px;
-         font-size:14px;
-         margin:auto 0px;
-         border-radius: 10px;
-         border:none;
-         background-color:#80D6FB;
-         color:white;
-         font-weight:bold;
+     height:50px;
+     font-size:14px;
+     margin:auto 0px;
+     border-radius: 10px;
+     border:none;
+     background-color:#80D6FB;
+     color:white;
+     font-weight:bold;
 }
 
 .check:hover{
@@ -186,7 +186,7 @@
 
     color:red;
     font-size: 13px;
-    margin-left:11%;
+    margin-left:15%;
 
 
 
@@ -224,15 +224,21 @@
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
   z-index: 999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
 .modal-content {
 
   background-color: white;
-  padding: 30px;
-  width: 100%;
+  padding: 10px;
+  width: 30%;
+
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   text-align: center;
+  border-radius:30px;
+
 
 }
 
@@ -311,7 +317,7 @@
 
 .form-input {
 
-    margin:13px 90px 13px 13px;
+    margin:13px 90px 13px 11px;
 
 
 
@@ -322,7 +328,35 @@ input.form-input {
    width:65%;
 
 
+}
 
+.submit-button{
+    width: 80%;
+    margin: 20px auto 40px auto;
+    height: 60px;
+    font-size: 20px;
+    color: white;
+    background-color: #80D6FB;
+    border: none;
+    border-radius: 10px;
+}
+
+.button-area-user{
+    display:flex;
+    justify-container:center;
+
+
+}
+
+.button-area-user .reset-button{
+
+    margin:20px auto 40px auto;
+
+}
+
+input.form-input:focus {
+    border:2px #80D6FB solid;
+    outline: none;
 }
 
 .email-input-container button{
@@ -405,5 +439,48 @@ input.form-input {
 .sumbit-btn button:hover{
 
     background-color:#FFD600;
+
+}
+
+.password-input-group{
+    display:flex;
+    height:50px;
+
+
+
+}
+
+.password-input-group label{
+    font-weight:550;
+    font-size:14px;
+    width:90px;
+    line-height: 50px;
+    margin-left:10px;
+
+}
+
+.password-input-group input{
+    width:200px;
+}
+
+.notice{
+    font-size:15px;
+    color:#c0c0c0;
+
+}
+
+button.confirm-button{
+    font-size:14px;
+    width:100px;
+    height:30px;
+    margin:10px auto;
+}
+
+
+
+.confirm-button{
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
 
 }

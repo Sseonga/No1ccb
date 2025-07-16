@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
-const JoinForm = () => {
+const JoinForm = ({ onSuccess }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     confirmPassword: '',
     agreeTerms: false,
+    verificationCode: '',
   });
 
   const [errors, setErrors] = useState({});
-  const [emailCheckStatus, setEmailCheckStatus] = useState(''); // 'checking', 'available', 'unavailable'
-  const [isEmailChecked, setIsEmailChecked] = useState(false);
-  const [passwordMatch, setPasswordMatch] = useState(null); // null, true, false
+  const [emailVerification, setEmailVerification] = useState({
+    isCodeSent: false,
+    isVerified: false,
+    isLoading: false,
+  });
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -19,109 +23,112 @@ const JoinForm = () => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }));
-
-    // 이메일 입력 시 중복 확인 상태 초기화
-    if (name === 'email') {
-      setIsEmailChecked(false);
-      setEmailCheckStatus('');
-    }
-
-    // 비밀번호 확인 로직
-    if (name === 'password' || name === 'confirmPassword') {
-      const password = name === 'password' ? value : formData.password;
-      const confirmPassword =
-        name === 'confirmPassword' ? value : formData.confirmPassword;
-
-      if (confirmPassword) {
-        setPasswordMatch(password === confirmPassword);
-      } else {
-        setPasswordMatch(null);
-      }
-    }
-  };
-
-  const handleEmailCheck = async () => {
-    if (!formData.email) {
-      setErrors((prev) => ({ ...prev, email: '이메일을 입력해주세요.' }));
-      return;
-    }
-
-    if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      setErrors((prev) => ({
-        ...prev,
-        email: '올바른 이메일 형식이 아닙니다.',
-      }));
-      return;
-    }
-
-    setEmailCheckStatus('checking');
-
-    try {
-      // 실제 API 호출 대신 시뮬레이션
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // 간단한 시뮬레이션: test@test.com은 중복, 나머지는 사용 가능
-      const isDuplicate = formData.email.toLowerCase() === 'test@test.com';
-
-      if (isDuplicate) {
-        setEmailCheckStatus('unavailable');
-        setIsEmailChecked(false);
-        setErrors((prev) => ({ ...prev, email: '' })); // 기본 에러 메시지 제거
-      } else {
-        setEmailCheckStatus('available');
-        setIsEmailChecked(true);
-        setErrors((prev) => ({ ...prev, email: '' }));
-      }
-    } catch (error) {
-      setEmailCheckStatus('');
-      setErrors((prev) => ({
-        ...prev,
-        email: '중복 확인 중 오류가 발생했습니다.',
-      }));
-    }
   };
 
   const validateForm = () => {
     const newErrors = {};
+    if (!formData.email) newErrors.email = '이메일을 입력해주세요.';
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = '올바른 이메일 형식이 아닙니다.';
+    if (!emailVerification.isVerified) newErrors.email = '이메일 인증을 완료해주세요.';
 
-    if (!formData.email) {
-      newErrors.email = '이메일을 입력해주세요.';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = '올바른 이메일 형식이 아닙니다.';
-    } else if (!isEmailChecked) {
-      newErrors.email = '이메일 중복 확인을 해주세요.';
-    }
+    if (!formData.password || formData.password.length < 8)
+      newErrors.password = '비밀번호는 8자 이상이어야 합니다.';
 
-    if (!formData.password) {
-      newErrors.password = '비밀번호를 입력해주세요.';
-    } else if (formData.password.length < 8) {
-      newErrors.password = '비밀번호가 8자 이상이어야 합니다.';
-    }
-
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = '비밀번호를 다시 한 번 입력해주세요.';
-    } else if (formData.password !== formData.confirmPassword) {
+    if (formData.password !== formData.confirmPassword)
       newErrors.confirmPassword = '비밀번호가 일치하지 않습니다.';
-    }
 
-    if (!formData.agreeTerms) {
-      newErrors.agreeTerms = '이용약관에 동의해주세요.';
-    }
+    if (!formData.agreeTerms) newErrors.agreeTerms = '약관 동의가 필요합니다.';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSendVerificationCode = async () => {
+    if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email)) {
+      setErrors((prev) => ({
+        ...prev,
+        email: '유효한 이메일을 입력해주세요.',
+      }));
+      return;
+    }
+
+    setEmailVerification((prev) => ({ ...prev, isLoading: true }));
+
+    try {
+      await axios.post('http://localhost:18090/api/user/send-verification', {
+        email: formData.email,
+      });
+
+      setEmailVerification((prev) => ({
+        ...prev,
+        isCodeSent: true,
+        isLoading: false,
+      }));
+
+      alert('인증 코드가 발송되었습니다!');
+    } catch (err) {
+      setEmailVerification((prev) => ({ ...prev, isLoading: false }));
+      alert('인증 코드 발송 실패: ' + (err.response?.data?.message || '서버 오류'));
+    }
+  };
+
+  const handleVerifyCode = async () => {
+    if (!formData.verificationCode) {
+      setErrors((prev) => ({
+        ...prev,
+        verificationCode: '인증 코드를 입력해주세요.',
+      }));
+      return;
+    }
+
+    setEmailVerification((prev) => ({ ...prev, isLoading: true }));
+
+    try {
+      await axios.post('http://localhost:18090/api/user/verify-code', {
+        email: formData.email,
+        verificationCode: formData.verificationCode,
+      });
+
+      setEmailVerification((prev) => ({
+        ...prev,
+        isVerified: true,
+        isLoading: false,
+      }));
+
+      setErrors((prev) => ({
+        ...prev,
+        email: '',
+        verificationCode: '',
+      }));
+
+      alert('이메일 인증이 완료되었습니다!');
+    } catch (err) {
+      setEmailVerification((prev) => ({ ...prev, isLoading: false }));
+      alert('인증 실패: ' + (err.response?.data?.message || '서버 오류'));
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      console.log('회원가입 데이터:', formData);
+    if (!validateForm()) return;
+
+    try {
+      await axios.post('http://localhost:18090/api/user/join', {
+        userEmail: formData.email,
+        userPassword: formData.password,
+      });
+
+      alert('회원가입 성공!');
+      if (onSuccess) onSuccess();
+    } catch (err) {
+      alert('회원가입 실패: ' + (err.response?.data?.message || '서버 오류'));
     }
   };
 
   return (
     <div className="join-form-container">
       <form onSubmit={handleSubmit} className="join-form">
+        {/* 이메일 */}
         <div className="input-group">
           <div className="email-input-container">
             <input
@@ -130,47 +137,72 @@ const JoinForm = () => {
               value={formData.email}
               onChange={handleInputChange}
               placeholder="이메일을 입력하세요"
-              className={`form-input ${errors.email ? 'error' : ''} ${
-                emailCheckStatus === 'available' ? 'success' : ''
-              }`}
+              className={`form-input ${errors.email ? 'error' : ''}`}
+              disabled={emailVerification.isVerified}
             />
             <button
               type="button"
-              onClick={handleEmailCheck}
-              disabled={emailCheckStatus === 'checking'}
-              className="email-check-button"
+              onClick={handleSendVerificationCode}
+              disabled={emailVerification.isLoading || emailVerification.isVerified}
+              className="verification-btn"
             >
-              {emailCheckStatus === 'checking' ? '확인 중...' : '중복 확인'}
+              {emailVerification.isLoading
+                ? '발송중...'
+                : emailVerification.isVerified
+                ? '인증완료'
+                : emailVerification.isCodeSent
+                ? '재발송'
+                : '인증확인'}
             </button>
           </div>
 
         </div>
 
-          {emailCheckStatus === 'available' && (
-            <span className="success-message">사용 가능한 이메일입니다.</span>
-          )}
-          {emailCheckStatus === 'unavailable' && (
-            <span className="error-message">다른 이메일을 사용해주세요.</span>
-          )}
-          {errors.email && (
-            <span className="error-message">{errors.email}</span>
-          )}
+        {errors.email && <span className="error-message">{errors.email}</span>}
+
+        {/* 인증코드 */}
+        {emailVerification.isCodeSent && !emailVerification.isVerified && (
+          <div className="input-group">
+            <div className="verification-input-container">
+              <input
+                type="text"
+                name="verificationCode"
+                value={formData.verificationCode}
+                onChange={handleInputChange}
+                placeholder="인증 코드를 입력하세요"
+                className={`form-input ${errors.verificationCode ? 'error' : ''}`}
+              />
+              <button
+                type="button"
+                onClick={handleVerifyCode}
+                disabled={emailVerification.isLoading}
+                className="verify-code-btn"
+              >
+                {emailVerification.isLoading ? '확인중...' : '확인'}
+              </button>
+            </div>
+            {errors.verificationCode && (
+              <span className="error-message">{errors.verificationCode}</span>
+            )}
+          </div>
+        )}
+
+        {/* 비밀번호 */}
         <div className="input-group">
           <input
             type="password"
             name="password"
             value={formData.password}
             onChange={handleInputChange}
-            placeholder="비밀번호를 입력하세요"
+            placeholder="비밀번호"
             className={`form-input ${errors.password ? 'error' : ''}`}
           />
 
         </div>
 
-          {errors.password && (
-            <div className="error-message">{errors.password}</div>
-          )}
+         {errors.password && <span className="error-message">{errors.password}</span>}
 
+        {/* 비밀번호 확인 */}
         <div className="input-group">
           <input
             type="password"
@@ -178,21 +210,14 @@ const JoinForm = () => {
             value={formData.confirmPassword}
             onChange={handleInputChange}
             placeholder="비밀번호 재확인"
-            className={`form-input ${errors.confirmPassword ? 'error' : ''} ${
-              passwordMatch === true ? 'success' : ''
-            }`}
+            className={`form-input ${errors.confirmPassword ? 'error' : ''}`}
           />
-
-        </div>
-          {passwordMatch === true && (
-            <span className="success-message">비밀번호가 일치합니다.</span>
-          )}
-          {passwordMatch === false && (
-            <span className="error-message">비밀번호가 일치하지 않습니다.</span>
-          )}
           {errors.confirmPassword && (
             <span className="error-message">{errors.confirmPassword}</span>
           )}
+        </div>
+
+        {/* 약관 */}
         <div className="terms-section">
           <div className="checkbox-group">
             <input
@@ -210,22 +235,27 @@ const JoinForm = () => {
           {errors.agreeTerms && (
             <span className="error-message">{errors.agreeTerms}</span>
           )}
-
           <div className="terms-context">
             <p className="terms-text">
               "echo spot"은 회원가입 및 서비스 제공을 위해 아래와 같이
-              개인정보를 수집·이용합니다. 수집항목:이름,이메일,주소 등
-              이용목적:회원가입. 서비스 제공, 고객상담, 마케팅 활동
-              보유기간:회원탈퇴 시까지(관련 법령에 따라 일정기간 보관) 개인정보
-              수집·이용에 동의하지 않으실 경우 회원가입이 제한될 수 있습니다.
+              개인정보를 수집·이용합니다.
+              <br />
+              수집항목: 이름, 이메일, 주소 등
+              <br />
+              이용목적: 회원가입, 서비스 제공, 고객상담, 마케팅 활동
+              <br />
+              보유기간: 회원탈퇴 시까지 (관련 법령에 따라 일정기간 보관)
+              <br />
+              개인정보 수집·이용에 동의하지 않으실 경우 회원가입이 제한될 수
+              있습니다.
             </p>
           </div>
         </div>
 
-        <div className="sumbit-btn">
-            <button type="submit" className="submit-button">
-              회원 가입
-            </button>
+        <div className="button-area-user">
+          <button type="submit" className="submit-button">
+            회원 가입
+          </button>
         </div>
       </form>
     </div>
