@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   BrowserRouter,
   Route,
@@ -7,6 +7,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import "./App.css"
 
 // 관리자 컴포넌트
 import AdminLayout from "./components/admin/AdminLayout";
@@ -28,6 +29,8 @@ import FavoriteListPanel from "./components/user/FavoriteListPanel"; // 마이�
 import PasswordChangeForm from "./components/user/PasswordChangeForm";
 import MyReview from "./components/user/MyReview";
 import MyPageLayout from "./components/user/MyPageLayout";
+import StationListPanel from "./components/station/StationListPanel";
+import SearchAgainButton from "./components/common/SearchAgainButton";
 
 // 관리자 여부 확인
 const isAdmin = sessionStorage.getItem("isAdmin") === "Y";
@@ -38,6 +41,53 @@ const UserLayout = () => {
   const tmapObjRef = useRef(null);
   const myMarkerRef = useRef(null);
   const location = useLocation();
+  //홈(전기차충전소 찾기 맵)
+  const isHome = location.pathname === "/";
+  const [poiList, setPoiList] = useState([]);
+  const [selectedPoi, setSelectedPoi] = useState(null);
+  const [center, setCenter] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const mapRef = useRef(null); // Tmap Map 객체 보관용
+  const [isMapMoved, setIsMapMoved] = useState(false);
+
+
+  useEffect(() => {
+  if (!navigator.geolocation) return;
+
+  navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords;
+        setCenter({ lat: latitude, lon: longitude }); // 중심 좌표 상태 업데이트
+      },
+      (err) => {
+        console.warn("현재위치 조회 실패, 기본값 사용", err);
+        setCenter({ lat: 36.81023, lon: 127.14644 }); // 천안역
+      }
+    );
+  }, []);
+
+  useEffect(() => {
+    const fetchPOIs = async () => {
+      if (!center.lat || !center.lon) return;
+      setLoading(true);
+      try {
+        const res = await fetch(
+          `https://apis.openapi.sk.com/tmap/pois?version=1&searchKeyword=전기차 충전소&centerLat=${center.lat}&centerLon=${center.lon}&radius=5&count=20&resCoordType=WGS84GEO&reqCoordType=WGS84GEO&appKey=WGS84GEO&reqCoordType=WGS84GEO&appKey=YgInMIl2n421NwwwG3XOrf0oQSE1paEFRCFbejc0`
+        );
+        const data = await res.json();
+        setPoiList(data?.searchPoiInfo?.pois?.poi ?? []);
+      } catch (e) {
+        console.error(e);
+        setErrorMsg("API 에러 발생");
+      }
+      setLoading(false);
+    };
+    fetchPOIs();
+  }, [center]);
+
+
 
   const hideOn = ["/info", "/user", "/user/*"];
   const hideUI = hideOn.includes(location.pathname);
@@ -45,14 +95,38 @@ const UserLayout = () => {
   return (
     <div className="container">
       <Sidebar />
-      <Tmap tmapObjRef={tmapObjRef} />
+      <Tmap
+        // tmapObjRef={tmapObjRef}
+        poiList={poiList}
+        onMarkerClick={setSelectedPoi}
+        mapRef={mapRef}
+        onMapMoved={() => setIsMapMoved(true)}
+        />
+
       {!hideUI && (
         <>
           <MyLocationButton
             tmapObjRef={tmapObjRef}
             myMarkerRef={myMarkerRef}
           />
+          {isMapMoved && (
+            <SearchAgainButton
+              onClick={() => {
+                const center = mapRef.current.getCenter();
+                setCenter({ lat: center._lat, lon: center._lng });
+                setIsMapMoved(false);
+              }}
+            />
+          )}
+
           <FilterPanel filters={filters} onChange={setFilters} />
+          {isHome && poiList.length > 0 && !hideUI && (
+            <StationListPanel
+              poiList={poiList}
+              selectedPoi={selectedPoi}
+              onSelect={setSelectedPoi}
+            />
+          )}
         </>
       )}
 

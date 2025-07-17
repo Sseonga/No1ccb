@@ -10,6 +10,8 @@ Frontend 소스트리 기본
 │   ├── AppLayout.js                  ─ 전체 페이지 레이아웃 프레임 (로고, 사이드바, 본문 등)
 │   ├── Sidebar.js                    ─ 왼쪽 고정 네비게이션 메뉴
 │   ├── GoToMyPageButton.js          ─ 마이페이지로 이동 버튼/링크
+│   ├── MyLocationButton.js          ─ 지도 내위치로 이동 버튼
+│   ├── SearchAgainButton.js         ─ 지도 위치변경시 재검색 버튼
 │   ├── LogoutButton.js              ─ 로그아웃 실행 버튼
 │   └── ProfileBadge.js              ─ 닉네임, 프로필, 레벨 등 사용자 뱃지 UI
 
