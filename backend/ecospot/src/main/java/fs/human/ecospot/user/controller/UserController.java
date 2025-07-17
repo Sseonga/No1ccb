@@ -186,6 +186,40 @@ public class UserController {
     }
 
     /**
+     * 로그인된 사용자의 비밀번호 변경 API (현재 비밀번호 확인 후 변경)
+     */
+    @PostMapping("/change-current-password")
+    public ResponseEntity<?> changeCurrentPassword(@RequestBody Map<String, String> request) {
+        try {
+            System.out.println("=== 로그인 사용자 비밀번호 변경 요청 ===");
+            String email = request.get("email");
+            String currentPassword = request.get("currentPassword");
+            String newPassword = request.get("newPassword");
+            
+            System.out.println("요청 이메일: " + email);
+            
+            // 1. 현재 비밀번호 확인
+            boolean isCurrentPasswordValid = userService.login(email, currentPassword);
+            
+            if (!isCurrentPasswordValid) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Map.of("message", "현재 비밀번호가 올바르지 않습니다."));
+            }
+            
+            // 2. 새 비밀번호로 변경
+            userService.updatePassword(email, newPassword);
+            
+            return ResponseEntity.ok(Map.of("message", "비밀번호가 성공적으로 변경되었습니다."));
+            
+        } catch (Exception e) {
+            System.err.println("비밀번호 변경 실패: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("message", "비밀번호 변경에 실패했습니다."));
+        }
+    }
+
+    /**
      * 로그인 API
      */
     @PostMapping("/login")
