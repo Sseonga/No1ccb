@@ -181,12 +181,12 @@ const JoinForm = ({ onSuccess }) => {
                 {emailVerification.isLoading ? '확인중...' : '확인'}
               </button>
             </div>
-            {errors.verificationCode && (
-              <span className="error-message">{errors.verificationCode}</span>
-            )}
+
           </div>
         )}
-
+            {errors.verificationCode && (
+                          <span className="error-message">{errors.verificationCode}</span>
+                        )}
         {/* 비밀번호 */}
         <div className="input-group">
           <input

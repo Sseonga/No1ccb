@@ -484,3 +484,30 @@ button.confirm-button{
   justify-content:center;
 
 }
+
+.verification-input-container{
+    width:100%;
+    justify-content: center;
+    display:flex;
+
+}
+
+.verification-input-container input{
+
+    margin:13px;
+
+}
+
+.verification-input-container button{
+
+    width: 80px;
+    height: 50px;
+    font-size: 14px;
+    margin: auto 0px;
+    border-radius: 10px;
+    border: none;
+    background-color: #80D6FB;
+    color: white;
+    font-weight: bold;
+
+}
