@@ -89,7 +89,7 @@ const UserLayout = () => {
 
 
 
-  const hideOn = ["/info", "/user", "/user/*"];
+  const hideOn = ["/info", "/user", "/user/*", "/mypage/info", "/mypage/favorites", "/mypage/reviews"];
   const hideUI = hideOn.includes(location.pathname);
 
   return (

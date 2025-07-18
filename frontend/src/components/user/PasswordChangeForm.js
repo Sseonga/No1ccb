@@ -136,10 +136,10 @@ const PasswordChangeForm = ({ onSubmit }) => {
 
   return (
     <div className="password-change-container">
-      <h2>비밀번호 변경</h2>
+      <h3>비밀번호 변경</h3>
 
-      <div className="form-group">
-        <label>이메일</label>
+      <div className="change_area">
+        <div className="label_area"><label>이메일</label></div>
         <input
           type="email"
           name="email"
@@ -151,8 +151,8 @@ const PasswordChangeForm = ({ onSubmit }) => {
         {errors.email && <span className="error-message">{errors.email}</span>}
       </div>
 
-      <div className="form-group">
-        <label>현재 비밀번호</label>
+      <div className="change_area">
+        <div className="label_area"><label>현재 비밀번호</label></div>
         <input
           type="password"
           name="currentPassword"
@@ -161,13 +161,15 @@ const PasswordChangeForm = ({ onSubmit }) => {
           placeholder="현재 비밀번호를 입력하세요"
           className={`form-input ${errors.currentPassword ? 'error' : ''}`}
         />
-        {errors.currentPassword && (
-          <span className="error-message">{errors.currentPassword}</span>
-        )}
+
       </div>
 
-      <div className="form-group">
-        <label>새 비밀번호</label>
+        {errors.currentPassword && (
+                  <span className="error-message">{errors.currentPassword}</span>
+                )}
+
+      <div className="change_area">
+        <div className="label_area"><label>새 비밀번호</label></div>
         <input
           type="password"
           name="newPassword"
@@ -176,13 +178,15 @@ const PasswordChangeForm = ({ onSubmit }) => {
           placeholder="새 비밀번호를 입력하세요 (8자 이상)"
           className={`form-input ${errors.newPassword ? 'error' : ''}`}
         />
-        {errors.newPassword && (
-          <span className="error-message">{errors.newPassword}</span>
-        )}
+
       </div>
 
-      <div className="form-group">
-        <label>비밀번호 확인</label>
+        {errors.newPassword && (
+                  <span className="error-message">{errors.newPassword}</span>
+                )}
+
+      <div className="change_area">
+        <div className="label_area"><label>비밀번호 확인</label></div>
         <input
           type="password"
           name="confirmPassword"
@@ -191,19 +195,22 @@ const PasswordChangeForm = ({ onSubmit }) => {
           placeholder="새 비밀번호를 다시 입력하세요"
           className={`form-input ${errors.confirmPassword ? 'error' : ''}`}
         />
-        {errors.confirmPassword && (
-          <span className="error-message">{errors.confirmPassword}</span>
-        )}
+
       </div>
 
-      <button
-        type="button"
-        className="change-password-button"
-        onClick={handleSubmit}
-        disabled={isLoading}
-      >
-        {isLoading ? '변경 중...' : '비밀번호 변경'}
-      </button>
+        {errors.confirmPassword && (
+                  <span className="error-message">{errors.confirmPassword}</span>
+                )}
+        <div className="change-button">
+          <button
+            type="button"
+            className="change-password-button"
+            onClick={handleSubmit}
+            disabled={isLoading}
+          >
+            {isLoading ? '변경 중...' : '비밀번호 변경'}
+          </button>
+        </div>
     </div>
   );
 };

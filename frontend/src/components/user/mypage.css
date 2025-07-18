@@ -1,0 +1,119 @@
+
+.mypage-box{
+
+    position: absolute;
+    left: 8%;
+    top: 0px;
+    width: 93%;
+    background: white;
+    padding-top: 15px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+    min-height: 100%;
+
+
+
+}
+
+.mypage-box h2{
+
+    text-align:center;
+    margin-top:21px;
+    margin-bottom:50px;
+
+}
+
+.mypage-tabs{
+
+    display:flex;
+    justify-content:center;
+
+
+}
+
+.mypage-tabs a{
+
+    text-decoration: none;
+    color: black;
+    padding: 3px 80px;
+    font-weight: 550;
+    background-color: white;
+    border: none;
+    font-size:14px;
+
+}
+
+.mypage-tabs .active{
+
+    color: #80D6FB;
+    border-bottom: 1px solid  #80D6FB;
+
+
+
+}
+
+.mypage-content{
+
+        width: 55%;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        margin: 70px auto;
+        border-radius: 15px;;
+
+
+
+}
+
+.mypage-content h3{
+    padding-top:20px;
+    margin-left:30px;
+}
+
+.change_area{
+
+   margin: 10px 0px;
+   width: 100%;
+   display:flex;
+   justify-content:center;
+
+}
+
+.label_area{
+
+    width:100px;
+    text-align:right;
+
+}
+
+.label_area label{
+
+    line-height: 47px;
+    font-size:13px;
+    font-weight:550;
+}
+
+.change-button{
+
+    display:flex;
+    justify-content:center;
+
+}
+
+.change-button button{
+
+    width: 30%;
+    margin: 12px auto 30px auto;
+    height: 30px;
+    font-size: 15px;
+    color: white;
+    background-color: #80D6FB;
+    border: none;
+    border-radius: 10px;
+
+
+}
+
+.change-button button:hover{
+
+    background: #ffd600;
+
+}

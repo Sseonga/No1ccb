@@ -57,7 +57,7 @@ const FavoriteListPanel = () => {
   return (
     <div className="favorite-list-panel">
       <div className="panel-header">
-        <h2>즐겨찾기</h2>
+        <h3>즐겨찾기</h3>
       </div>
 
       <div className="favorite-content">
