@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="fs.human.ecospot.route.dao.RouteDAO">
+
+    <!-- 전체 리스트 조회 -->
+    <select id="getAllRoutes" resultType="fs.human.ecospot.route.vo.RouteVO">
+        SELECT
+        ROUTE_ID,
+        USER_ID,
+        ROUTE_NAME,
+        START_ADDRESS,
+        START_ADDRESS_D,
+        START_LAT,
+        START_LON,
+        END_ADDRESS,
+        END_ADDRESS_D,
+        END_LAT,
+        END_LON,
+        CREATED_ID,
+        CREATED_AT
+        FROM TB_ROUTES
+        ORDER BY ROUTE_ID DESC
+    </select>
+
+    <!-- 경로 등록 (insert) -->
+    <insert id="insertRoute" parameterType="fs.human.ecospot.route.dao.RouteDAO">
+        INSERT INTO TB_ROUTES (
+        ROUTE_ID,
+        USER_ID,
+        ROUTE_NAME,
+        START_ADDRESS,
+        START_ADDRESS_D,
+        START_LAT,
+        START_LON,
+        END_ADDRESS,
+        END_ADDRESS_D,
+        END_LAT,
+        END_LON,
+        CREATED_ID,
+        CREATED_AT
+        )
+        VALUES (
+        ROUTES_SEQ.NEXTVAL,  <!-- 시퀀스 사용 (오라클) -->
+        #{userId},
+        #{routeName},
+        #{startAddress},
+        #{startAddressD},
+        #{startLat},
+        #{startLon},
+        #{endAddress},
+        #{endAddressD},
+        #{endLat},
+        #{endLon},
+        #{createdId},
+        SYSDATE
+        )
+    </insert>
+
+</mapper>

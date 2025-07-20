@@ -216,7 +216,7 @@ const Tmap = ({ poiList, onMarkerClick, mapRef, onMapMoved }) => {
   return (
     <div className="mapContainer">
       <div ref={mapDivRef} style={{ width: "100%", height: "100%" }} />
-      
+
       {isMapMoved && <div className="center-marker" />}
     </div>
   );
