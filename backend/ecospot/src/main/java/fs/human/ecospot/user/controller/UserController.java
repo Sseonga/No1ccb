@@ -238,7 +238,8 @@ public class UserController {
                 return ResponseEntity.ok(Map.of(
                         "message", "로그인 성공",
                         "email", request.getEmail(),
-                        "isAdmin", "Y".equals(user.getIsAdmin()) // boolean true/false도 가능
+                        "isAdmin", "Y".equals(user.getIsAdmin()), // boolean true/false도 가능
+                        "userId", user.getUserId()
                 ));
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)

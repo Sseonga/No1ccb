@@ -41,13 +41,15 @@ function LoginForm() {
         {
           email: formData.email,
           password: formData.password,
+
         }
       );
 
-      const { email, isAdmin } = response.data;
+      const { email, isAdmin, userId  } = response.data;
 
       // ✅ 세션 스토리지에 저장 (탭 종료 시 자동 삭제)
       sessionStorage.setItem('email', email);
+      sessionStorage.setItem("userId", userId);
       sessionStorage.setItem('isAdmin', isAdmin ? 'Y' : 'N');
 
       alert('로그인 성공! 환영합니다.');

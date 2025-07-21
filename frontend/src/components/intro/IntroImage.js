@@ -13,7 +13,7 @@ const IntroImage = () => {
         alt="Echo spot Illustration" // 이미지 접근성을 위한 대체 텍스트
         className="intro-illustration" // CSS 스타일링을 위한 클래스명
         style={{
-          width: '500px', // 이미지 고정 너비 500px
+          width: '80%', // 이미지 고정 너비 500px
           height: 'auto', // 비율 유지를 위한 자동 높이 조정
           maxWidth: '100%', // 반응형 디자인: 컨테이너 너비를 초과하지 않도록 제한
           objectFit: 'contain', // 이미지 비율 유지하며 컨테이너에 맞춤

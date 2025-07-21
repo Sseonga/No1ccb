@@ -28,11 +28,9 @@ const Sidebar = () => {
       <NavLink to="/hotel" className={({ isActive }) => (isActive ? "tab active" : "tab")}>
         <i className="fa-solid fa-hotel"></i><br />충전숙소
       </NavLink>
-      <NavLink to="/rank" className={({ isActive }) => (isActive ? "tab active" : "tab")}>
-        <i className="fa-solid fa-ranking-star"></i><br />랭킹
-      </NavLink>
+
       <NavLink to="/info" className={({ isActive }) => (isActive ? "tab active" : "tab")}>
-        <i className="fa-solid fa-car-side"></i><br />전기차 소개
+        <i className="fas fa-leaf"></i><br /> 에코스팟은?
       </NavLink>
 
       {/* 로그인 또는 사용자 이름 + 로그아웃 */}
