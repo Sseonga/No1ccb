@@ -156,7 +156,7 @@ button.delete-btn:disabled {
   cursor: not-allowed;
 }
 
-.sidebar {
+/* .sidebar {
   position: absolute;
   top: 0;
   left: 0;
@@ -167,7 +167,7 @@ button.delete-btn:disabled {
   padding-top: 15px;
 
   z-index: 10;
-}
+} */
 
 .sidebar a {
   display: block;

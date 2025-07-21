@@ -38,9 +38,9 @@ const isAdmin = sessionStorage.getItem("isAdmin") === "Y";
 // 사용자용 레이아웃
 const UserLayout = () => {
   const [filters, setFilters] = useState({ type: [], parking: [], brand: [] });
-  const tmapObjRef = useRef(null);
   const myMarkerRef = useRef(null);
   const location = useLocation();
+  const handleResetMarkers = useRef(null);
   //홈(전기차충전소 찾기 맵)
   const isHome = location.pathname === "/";
   const [poiList, setPoiList] = useState([]);
@@ -52,7 +52,7 @@ const UserLayout = () => {
   const mapRef = useRef(null); // Tmap Map 객체 보관용
   const [isMapMoved, setIsMapMoved] = useState(false);
 
-
+  //현재 위치 받을수있으면 현재위치로 지도센터 설정
   useEffect(() => {
   if (!navigator.geolocation) return;
 
@@ -68,6 +68,7 @@ const UserLayout = () => {
     );
   }, []);
 
+  //center값 변경시 center기준으로 poi재검색후 poilist재설정
   useEffect(() => {
     const fetchPOIs = async () => {
       if (!center.lat || !center.lon) return;
@@ -77,7 +78,43 @@ const UserLayout = () => {
           `https://apis.openapi.sk.com/tmap/pois?version=1&searchKeyword=전기차 충전소&centerLat=${center.lat}&centerLon=${center.lon}&radius=5&count=20&resCoordType=WGS84GEO&reqCoordType=WGS84GEO&appKey=WGS84GEO&reqCoordType=WGS84GEO&appKey=YgInMIl2n421NwwwG3XOrf0oQSE1paEFRCFbejc0`
         );
         const data = await res.json();
-        setPoiList(data?.searchPoiInfo?.pois?.poi ?? []);
+        // setPoiList(data?.searchPoiInfo?.pois?.poi ?? []);
+        const pois = data?.searchPoiInfo?.pois?.poi ?? [];
+
+        // poi.id + frontLat/frontLon만 추출
+        const trimmedPOIs = pois.map(poi => ({
+          id: poi.pkey,
+          lat: parseFloat(poi.frontLat),
+          lng: parseFloat(poi.frontLon),
+        }));
+
+        // 백엔드에서 parkingId를 달아서 돌려주는 요청
+        const parkingRes = await fetch('/api/charger/match-parking', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(trimmedPOIs),
+        });
+
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(`API 에러: ${res.status} - ${text}`);
+        }
+
+        const matched = await parkingRes.json(); // { poiId, parkingId }[]
+
+        // 원본 pois에 parkingId를 매핑해서 새 리스트 생성
+        const parkingPois = pois.map(poi => {
+          const match = matched.find(m => m.poiId === poi.pkey);
+          return {
+            ...poi,
+            parkingId: match?.parkingId ?? null,
+          };
+        });
+        console.log(parkingPois);
+
+        setPoiList(parkingPois);
       } catch (e) {
         console.error(e);
         setErrorMsg("API 에러 발생");
@@ -85,6 +122,7 @@ const UserLayout = () => {
       setLoading(false);
     };
     fetchPOIs();
+    
   }, [center]);
 
 
@@ -95,18 +133,34 @@ const UserLayout = () => {
   return (
     <div className="container">
       <Sidebar />
+      {!hideUI && isHome && poiList.length > 0 && !hideUI && (
+        <StationListPanel
+          poiList={poiList}
+          selectedPoi={selectedPoi}
+          onSelectPoi={(poi) => {
+            if (poi === null && handleResetMarkers.current) {
+              handleResetMarkers.current(); // ✅ 마커 다시 보이기
+            }
+            setSelectedPoi(poi);
+          }}
+        />
+      )}
       <Tmap
-        // tmapObjRef={tmapObjRef}
         poiList={poiList}
         onMarkerClick={setSelectedPoi}
         mapRef={mapRef}
+        myMarkerRef={myMarkerRef}
         onMapMoved={() => setIsMapMoved(true)}
+        hideUI={hideUI}
+        mapMoved={isMapMoved}
+        onResetMarkers={(fn) => (handleResetMarkers.current = fn)}
+        selectedPoi={selectedPoi}
         />
 
       {!hideUI && (
         <>
           <MyLocationButton
-            tmapObjRef={tmapObjRef}
+            tmapObjRef={mapRef}
             myMarkerRef={myMarkerRef}
           />
           {isMapMoved && (
@@ -120,13 +174,6 @@ const UserLayout = () => {
           )}
 
           <FilterPanel filters={filters} onChange={setFilters} />
-          {isHome && poiList.length > 0 && !hideUI && (
-            <StationListPanel
-              poiList={poiList}
-              selectedPoi={selectedPoi}
-              onSelect={setSelectedPoi}
-            />
-          )}
         </>
       )}
 

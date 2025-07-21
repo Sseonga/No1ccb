@@ -1,12 +1,11 @@
 package fs.human.ecospot.charger.controller;
 
+import fs.human.ecospot.charger.dto.PoiParkingMatchDTO;
+import fs.human.ecospot.charger.dto.PoiRequestDTO;
 import fs.human.ecospot.charger.service.ChargerService;
 import fs.human.ecospot.charger.vo.ChargerVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,5 +20,11 @@ public class ChargerController {
     @GetMapping("")
     public List<ChargerVO> getAllCharger() {
         return chargerService.getAllCharger();
+    }
+
+    @PostMapping("/match-parking")
+    public List<PoiParkingMatchDTO> matchParking(@RequestBody List<PoiRequestDTO> pois) {
+        System.out.println("📥 match-parking 요청 도착: " + pois.size());
+        return chargerService.matchParkingForPOIs(pois);
     }
 }

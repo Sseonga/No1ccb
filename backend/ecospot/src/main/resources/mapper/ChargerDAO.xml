@@ -15,4 +15,24 @@
         PARKING_ADDRESS_D AS parkingAddressD
         FROM PARKING_TABLE
     </select>
+
+
+    <select id="findNearestParkingId" resultType="long">
+        SELECT parking_id FROM (
+        SELECT parking_id, (
+        6371000 * acos(
+        cos(radians(#{lat})) * cos(radians(parking_lat)) *
+        cos(radians(parking_lon) - radians(#{lng})) +
+        sin(radians(#{lat})) * sin(radians(parking_lat))
+        )
+        ) AS distance
+        FROM TB_PARKING
+        WHERE parking_lat BETWEEN #{lat} - 0.001 AND #{lat} + 0.001
+        AND parking_lon BETWEEN #{lng} - 0.001 AND #{lng} + 0.001
+        )
+        WHERE distance &lt;= 100
+        ORDER BY distance
+        FETCH FIRST 1 ROWS ONLY
+    </select>
+
 </mapper>

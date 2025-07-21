@@ -14,16 +14,6 @@ const MyLocationButton = ({ tmapObjRef, myMarkerRef }) => {
         const map = tmapObjRef.current;
         map.setCenter(myLatLng);
         map.setZoom(16);
-
-        if (myMarkerRef.current) {
-          myMarkerRef.current.setMap(null);
-        }
-
-        myMarkerRef.current = new window.Tmapv2.Marker({
-          position: myLatLng,
-          map: map,
-          icon: "https://maps.gstatic.com/mapfiles/ms2/micons/blue-dot.png",
-        });
       },
       (error) => {
         console.error("위치 오류:", error);

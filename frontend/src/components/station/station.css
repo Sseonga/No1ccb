@@ -1,10 +1,21 @@
 /* station.css */
 
 .station-list-panel {
-  position: absolute;
-  left: 8%; /* Sidebar 오른쪽으로 살짝 띄우기 */
+  flex: 0 0 400px;
+  height: 100%;
+  background: white;
+  padding: 16px;
+  overflow-y: auto;
+  border-right: 1px solid #ddd;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* position: absolute;
+  left: 8%;
   top: 0px;
-  width: 300px;
+  width: 400px;
   background: white;
   padding-top: 15px;
   padding-left: 15px;
@@ -19,7 +30,7 @@
   padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 10px; */
 }
 
 .station-card.selected {
@@ -49,6 +60,10 @@
 .station-list-card.selected {
   border-color: #007aff;
   background-color: #e6f0ff;
+}
+
+.station-detail-panel {
+  animation: slide-up 0.3s ease;
 }
 
 .filter-panel {
@@ -89,5 +104,16 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
 }

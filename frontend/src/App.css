@@ -1,11 +1,24 @@
 html,
 body,
 #root {
+  width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
 }
 
 .container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
   height: 100%;
+  overflow: hidden;
+}
+
+.sidebar-section {
+  width:100px; /* 너비는 패널/사이드바 크기만큼 고정 */
+  display: flex;
+  flex-direction: column;
+  background-color: #fff; /* 원하는 배경색 */
+  z-index: 100; /* 맵 위에 올라오게 */
 }
