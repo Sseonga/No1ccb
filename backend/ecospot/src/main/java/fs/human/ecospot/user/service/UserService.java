@@ -148,6 +148,72 @@ public class UserService {
     }
 
     /**
+     * 비밀번호 찾기용 인증 코드 확인 (코드 삭제하지 않음)
+     */
+    public boolean verifyPasswordResetCode(String email, String inputCode) {
+        System.out.println("=== 비밀번호 찾기 인증 코드 확인 시작 ===");
+        System.out.println("이메일: " + email);
+        System.out.println("입력된 코드: " + inputCode);
+        
+        VerificationData data = verificationCodes.get(email);
+        
+        if (data == null) {
+            System.out.println("❌ 저장된 인증 코드가 없음");
+            return false; // 인증 코드가 존재하지 않음
+        }
+        
+        System.out.println("저장된 코드: " + data.code);
+        System.out.println("현재 시간: " + System.currentTimeMillis());
+        System.out.println("만료 시간: " + data.expireTime);
+        
+        if (System.currentTimeMillis() > data.expireTime) {
+            System.out.println("❌ 인증 코드 만료됨");
+            verificationCodes.remove(email); // 만료된 코드 삭제
+            return false; // 인증 코드가 만료됨
+        }
+        
+        if (data.code.equals(inputCode)) {
+            System.out.println("✅ 인증 코드 일치 (코드 유지)");
+            // 코드 삭제하지 않음! 비밀번호 변경에서 사용해야 함
+            return true; // 인증 성공
+        }
+        
+        System.out.println("❌ 인증 코드 불일치");
+        return false; // 인증 코드가 일치하지 않음
+    }
+
+    /**
+     * 비밀번호 변경 시 인증 코드 확인 및 삭제
+     */
+    public boolean verifyAndConsumeCode(String email, String inputCode) {
+        System.out.println("=== 비밀번호 변경 인증 코드 확인 및 삭제 ===");
+        System.out.println("이메일: " + email);
+        System.out.println("입력된 코드: " + inputCode);
+        
+        VerificationData data = verificationCodes.get(email);
+        
+        if (data == null) {
+            System.out.println("❌ 저장된 인증 코드가 없음");
+            return false;
+        }
+        
+        if (System.currentTimeMillis() > data.expireTime) {
+            System.out.println("❌ 인증 코드 만료됨");
+            verificationCodes.remove(email);
+            return false;
+        }
+        
+        if (data.code.equals(inputCode)) {
+            System.out.println("✅ 인증 코드 일치 - 코드 삭제");
+            verificationCodes.remove(email); // 사용 후 삭제
+            return true;
+        }
+        
+        System.out.println("❌ 인증 코드 불일치");
+        return false;
+    }
+
+    /**
      * 이메일 존재 여부 확인
      */
     public boolean isEmailExists(String email) {

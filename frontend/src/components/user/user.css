@@ -1,219 +1,180 @@
-
-
-.h2{
-    text-align:center;
-    margin-bottom:40px;
+.h2 {
+  text-align: center;
+  margin-bottom: 40px;
 }
 
 .login-container {
-      position: absolute;
-      left: 8%; /* Sidebar 오른쪽으로 살짝 띄우기 */
-      top: 0px;
-      width: 93%;
-      background: white;
-      padding-top: 15px;
+  position: absolute;
+  left: 8%; /* Sidebar 오른쪽으로 살짝 띄우기 */
+  top: 0px;
+  width: 93%;
+  background: white;
+  padding-top: 15px;
 
-
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      z-index: 10;
-      min-height:100%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  min-height: 100%;
 }
 
-.login-form-box{
+.login-form-box {
+  width: 55%;
 
-
-    width:55%;
-
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    margin: 70px auto;
-    border-radius:15px;
-
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  margin: 70px auto;
+  border-radius: 15px;
 }
 
-.login-form{
-    flex-direction: column;
-    display: flex;
-    padding-top:40px;
-
-
-
+.login-form {
+  flex-direction: column;
+  display: flex;
+  padding-top: 40px;
 }
 
-.login-form input{
-    width:70%;
-    margin: 13px auto;
-    font-size:17px;
-    height:60px;
-    border-radius:10px;
+.login-form input {
+  width: 70%;
+  margin: 13px auto;
+  font-size: 17px;
+  height: 60px;
+  border-radius: 10px;
 
-    border:2px #e5e5e5 solid;
-
+  border: 2px #e5e5e5 solid;
 }
 
-.auth-tab-menu{
-     display:flex;
-     justify-content: center;
-
+.auth-tab-menu {
+  display: flex;
+  justify-content: center;
 }
 
-.auth-tab-menu button{
-   text-decoration:none;
-   color:black;
-   padding:3px 80px;
-   font-weight:550;
-   background-color:white;
-   border:none;
+.auth-tab-menu button {
+  text-decoration: none;
+  color: black;
+  padding: 3px 80px;
+  font-weight: 550;
+  background-color: white;
+  border: none;
 }
 
-.auth-tab-menu button:hover{
-   color: #80D6FB;
+.auth-tab-menu button:hover {
+  color: #80d6fb;
 }
 
 .auth-tab-menu button.active {
-    border-bottom: #80D6FB solid 1px;
-    color: #80D6FB;
-
+  border-bottom: #80d6fb solid 1px;
+  color: #80d6fb;
 }
 
-.login-form input:focus{
-    border:2px #80D6FB solid;
-    outline: none;
-
+.login-form input:focus {
+  border: 2px #80d6fb solid;
+  outline: none;
 }
 
-.login-btn{
-     width:70%;
-     margin: 20px auto 40px auto;
-     height:60px;
-     font-size:20px;
-     color:white;
-     background-color:#80D6FB;
-     border:none;
-     border-radius:10px;
-
+.login-btn {
+  width: 70%;
+  margin: 20px auto 40px auto;
+  height: 60px;
+  font-size: 20px;
+  color: white;
+  background-color: #80d6fb;
+  border: none;
+  border-radius: 10px;
 }
 
-.login-btn:hover{
-
-    background-color:#FFD600;
-
+.login-btn:hover {
+  background-color: #ffd600;
 }
 
-.join-form{
-    flex-direction: column;
-    display: flex;
-    padding-top:40px;
-
+.join-form {
+  flex-direction: column;
+  display: flex;
+  padding-top: 40px;
 }
 
-.password-reset-container{
-    flex-direction: column;
-    display: flex;
-    padding-top:40px;
-    justify-content: center;
+.password-reset-container {
+  flex-direction: column;
+  display: flex;
+  padding-top: 40px;
+  justify-content: center;
 }
 
+.input-group input {
+  width: 70%;
 
+  font-size: 17px;
+  height: 60px;
+  border-radius: 10px;
 
-
-
-.input-group input{
-    width:70%;
-
-    font-size:17px;
-    height:60px;
-    border-radius:10px;
-
-    border:2px #e5e5e5 solid;
-
+  border: 2px #e5e5e5 solid;
 }
 
-.input-with-button{
-
-    width:100%;
-    display: flex;
-    justify-content: center;
-
+.input-with-button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
-.send-button{
-    width:80px;
-    height:50px;
-    font-size:14px;
-    margin:auto 0px;
-    border-radius: 10px;
-    border:none;
-    background-color:#80D6FB;
-    color:white;
-    font-weight:bold;
-
+.send-button {
+  width: 80px;
+  height: 50px;
+  font-size: 14px;
+  margin: auto 0px;
+  border-radius: 10px;
+  border: none;
+  background-color: #80d6fb;
+  color: white;
+  font-weight: bold;
 }
 
-.send-button:hover{
-
-    background-color:#FFD600;
-
+.send-button:hover {
+  background-color: #ffd600;
 }
 
-.check{
-     width:80px;
-     height:50px;
-     font-size:14px;
-     margin:auto 0px;
-     border-radius: 10px;
-     border:none;
-     background-color:#80D6FB;
-     color:white;
-     font-weight:bold;
+.check {
+  width: 80px;
+  height: 50px;
+  font-size: 14px;
+  margin: auto 0px;
+  border-radius: 10px;
+  border: none;
+  background-color: #80d6fb;
+  color: white;
+  font-weight: bold;
 }
 
-.check:hover{
-
-    background-color:#FFD600;
-
+.check:hover {
+  background-color: #ffd600;
 }
 
-.input-with-button input{
-
-    width:65%;
-    display: flex;
-    justify-content: center;
-    margin:13px;
+.input-with-button input {
+  width: 65%;
+  display: flex;
+  justify-content: center;
+  margin: 13px;
 }
 
-
-.error-message{
-
-    color:red;
-    font-size: 13px;
-    margin-left:15%;
-
-
-
+.error-message {
+  color: red;
+  font-size: 13px;
+  margin-left: 15%;
 }
 
-.reset-button{
-    width:80%;
-    margin: 20px 0px 40px 0px;
-    height:60px;
-    font-size:20px;
-    color:white;
-    background-color:#80D6FB;
-    border:none;
-    border-radius:10px;
-
-
+.reset-button {
+  width: 80%;
+  margin: 20px 0px 40px 0px;
+  height: 60px;
+  font-size: 20px;
+  color: white;
+  background-color: #80d6fb;
+  border: none;
+  border-radius: 10px;
 }
 
-.reset-button:hover{
-
-    background-color:#FFD600;
-
+.reset-button:hover {
+  background-color: #ffd600;
 }
 
-.reset-area{
-    display:flex;
-    justify-content: center;
+.reset-area {
+  display: flex;
+  justify-content: center;
 }
 
 .modal-overlay {
@@ -224,25 +185,20 @@
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
   z-index: 999;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal-content {
-
   background-color: white;
   padding: 10px;
   width: 30%;
 
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   text-align: center;
-  border-radius:30px;
-
-
+  border-radius: 30px;
 }
-
-
 
 .close-button {
   position: absolute;
@@ -252,262 +208,245 @@
   border: none;
   font-size: 20px;
   cursor: pointer;
-  color:white;
+  color: white;
 }
 
-
-
-.temp-password-container{
-    justify-content: center;
-    display:flex;
-    gap:4px;
+.temp-password-container {
+  justify-content: center;
+  display: flex;
+  gap: 4px;
 }
 
-.temp-password{
-
-    font-weight:550;
+.temp-password {
+  font-weight: 550;
 }
 
-
-
-.confirm-button{
-
-    margin-top:10px;
-    background-color:#80D6FB;
-    color:white;
-    border-radius:5px;
-    border:0px;
-    width:100px;
-    height:40px;
-    font-size:18px;
-    font-weight:550;
-    margin-bottom:8px;
-
+.confirm-button {
+  margin-top: 10px;
+  background-color: #80d6fb;
+  color: white;
+  border-radius: 5px;
+  border: 0px;
+  width: 100px;
+  height: 40px;
+  font-size: 18px;
+  font-weight: 550;
+  margin-bottom: 8px;
 }
 
-.confirm-button:hover{
-
-    background-color:#FFD600;
-
+.confirm-button:hover {
+  background-color: #ffd600;
 }
 
-
-
-.input-group{
-
-    justify-content: center;
-    display:flex;
-
-
+.input-group {
+  justify-content: center;
+  display: flex;
 }
 
-.email-input-container{
-
-    width:100%;
-    justify-content: center;
-    display:flex;
-
+.email-input-container {
+  width: 100%;
+  justify-content: center;
+  display: flex;
 }
 
-.email-input-container input{
-
-    margin:13px;
-    width: 65%;
+.email-input-container input {
+  margin: 13px;
+  width: 65%;
 }
 
 .form-input {
-
-    margin:13px 90px 13px 11px;
-
-
-
+  margin: 13px 90px 13px 11px;
 }
 
 input.form-input {
-
-   width:65%;
-
-
+  width: 65%;
 }
 
-.submit-button{
-    width: 80%;
-    margin: 20px auto 40px auto;
-    height: 60px;
-    font-size: 20px;
-    color: white;
-    background-color: #80D6FB;
-    border: none;
-    border-radius: 10px;
+.submit-button {
+  width: 80%;
+  margin: 20px auto 40px auto;
+  height: 60px;
+  font-size: 20px;
+  color: white;
+  background-color: #80d6fb;
+  border: none;
+  border-radius: 10px;
 }
 
-.button-area-user{
-    display:flex;
-    justify-container:center;
-
-
+.button-area-user {
+  display: flex;
+  justify-container: center;
 }
 
-.button-area-user .reset-button{
-
-    margin:20px auto 40px auto;
-
+.button-area-user .reset-button {
+  margin: 20px auto 40px auto;
 }
 
 input.form-input:focus {
-    border:2px #80D6FB solid;
-    outline: none;
+  border: 2px #80d6fb solid;
+  outline: none;
 }
 
-.email-input-container button{
-
-    width: 80px;
-    height: 50px;
-    font-size: 14px;
-    margin: auto 0px;
-    border-radius: 10px;
-    border: none;
-    background-color: #80D6FB;
-    color: white;
-    font-weight: bold;
-
+.email-input-container button {
+  width: 80px;
+  height: 50px;
+  font-size: 14px;
+  margin: auto 0px;
+  border-radius: 10px;
+  border: none;
+  background-color: #80d6fb;
+  color: white;
+  font-weight: bold;
 }
 
-.email-input-container button:hover{
-
-    background-color:#FFD600;
-
+.email-input-container button:hover {
+  background-color: #ffd600;
 }
 
-.terms-section{
-    margin:10px auto;
-    transform: translateX(-40px);
-    width:65%;
-    background-color:#F0F0F0;
-    border-radius:10px;
-
+.terms-section {
+  margin: 10px auto;
+  transform: translateX(-40px);
+  width: 65%;
+  background-color: #f0f0f0;
+  border-radius: 10px;
 }
 
-.checkbox-group{
-
-    width:80%;
-    margin:15px auto 10px auto;
-
+.checkbox-group {
+  width: 80%;
+  margin: 15px auto 10px auto;
 }
 
-.terms-context{
-
-    width:80%;
-    margin:0px auto 15px auto;
-    font-size:14px;
-    background-color:#E5E5E5;
-    display:flex;
-    justify-content:center;
-    border-radius:10px;
-
+.terms-context {
+  width: 80%;
+  margin: 0px auto 15px auto;
+  font-size: 14px;
+  background-color: #e5e5e5;
+  display: flex;
+  justify-content: center;
+  border-radius: 10px;
 }
 
-.terms-context p{
-
-    width:95%;
-
-
-
+.terms-context p {
+  width: 95%;
 }
 
-.sumbit-btn{
-
-    width:100%;
-    display:flex;
-    justify-content:center;
-
+.sumbit-btn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
-.sumbit-btn button{
-
-    width: 80%;
-    margin:26px 0px 40px 0px;
-    height: 60px;
-    font-size: 20px;
-    color: white;
-    background-color: #80D6FB;
-    border: none;
-    border-radius: 10px;
-
+.sumbit-btn button {
+  width: 80%;
+  margin: 26px 0px 40px 0px;
+  height: 60px;
+  font-size: 20px;
+  color: white;
+  background-color: #80d6fb;
+  border: none;
+  border-radius: 10px;
 }
 
-.sumbit-btn button:hover{
-
-    background-color:#FFD600;
-
+.sumbit-btn button:hover {
+  background-color: #ffd600;
 }
 
-.password-input-group{
-    display:flex;
-    height:50px;
-
-
-
+.password-input-group {
+  display: flex;
+  height: 50px;
 }
 
-.password-input-group label{
-    font-weight:550;
-    font-size:14px;
-    width:90px;
-    line-height: 50px;
-    margin-left:10px;
-
+.password-input-group label {
+  font-weight: 550;
+  font-size: 14px;
+  width: 90px;
+  line-height: 50px;
+  margin-left: 10px;
 }
 
-.password-input-group input{
-    width:200px;
+.password-input-group input {
+  width: 200px;
 }
 
-.notice{
-    font-size:15px;
-    color:#c0c0c0;
-
+.notice {
+  font-size: 15px;
+  color: #c0c0c0;
 }
 
-button.confirm-button{
-    font-size:14px;
-    width:100px;
-    height:30px;
-    margin:10px auto;
+button.confirm-button {
+  font-size: 14px;
+  width: 100px;
+  height: 30px;
+  margin: 10px auto;
 }
 
-
-
-.confirm-button{
+.confirm-button {
   display: flex;
   flex-direction: column;
-  justify-content:center;
-
+  justify-content: center;
 }
 
-.verification-input-container{
-    width:100%;
-    justify-content: center;
-    display:flex;
-
+.verification-input-container {
+  width: 100%;
+  justify-content: center;
+  display: flex;
 }
 
-.verification-input-container input{
-
-    margin:13px;
-
+.verification-input-container input {
+  margin: 13px;
 }
 
-.verification-input-container button{
+.verification-input-container button {
+  width: 80px;
+  height: 50px;
+  font-size: 14px;
+  margin: auto 0px;
+  border-radius: 10px;
+  border: none;
+  background-color: #80d6fb;
+  color: white;
+  font-weight: bold;
+}
 
-    width: 80px;
-    height: 50px;
-    font-size: 14px;
-    margin: auto 0px;
-    border-radius: 10px;
-    border: none;
-    background-color: #80D6FB;
-    color: white;
-    font-weight: bold;
+/* 구글 로그인 관련 스타일 */
+.login-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #ddd;
+}
+
+.divider span {
+  padding: 0 15px;
+  color: #666;
+  font-size: 14px;
+}
+
+.google-login-section {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+#google-signin-button {
+  display: flex;
+  justify-content: center;
+}
+
+#google-signin-button iframe {
+  border-radius: 8px !important;
 }

@@ -105,7 +105,8 @@ public class UserController {
             System.out.println("요청 이메일: " + request.getEmail());
             System.out.println("인증 코드: " + request.getVerificationCode());
             
-            boolean isValid = userService.verifyCode(request.getEmail(), request.getVerificationCode());
+            // 비밀번호 찾기용 검증 (코드를 삭제하지 않음)
+            boolean isValid = userService.verifyPasswordResetCode(request.getEmail(), request.getVerificationCode());
             
             if (isValid) {
                 return ResponseEntity.ok(Map.of("message", "인증 코드가 확인되었습니다."));
@@ -164,8 +165,8 @@ public class UserController {
             System.out.println("요청 이메일: " + request.getEmail());
             System.out.println("인증 코드: " + request.getVerificationCode());
             
-            // 1. 인증 코드 확인
-            boolean isValid = userService.verifyCode(request.getEmail(), request.getVerificationCode());
+            // 1. 인증 코드 확인 및 삭제 (비밀번호 변경 완료 후 코드 사용)
+            boolean isValid = userService.verifyAndConsumeCode(request.getEmail(), request.getVerificationCode());
             
             if (!isValid) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -251,6 +252,65 @@ public class UserController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("message", "로그인 처리 중 오류가 발생했습니다."));
+        }
+    }
+
+    /**
+     * 구글 로그인 API
+     */
+    @PostMapping("/google-login")
+    public ResponseEntity<?> googleLogin(@RequestBody Map<String, String> request) {
+        try {
+            String token = request.get("token");
+            String email = request.get("email");
+            String name = request.get("name");
+            String googleId = request.get("googleId");
+            
+            System.out.println("=== 구글 로그인 시도 ===");
+            System.out.println("이메일: " + email);
+            System.out.println("이름: " + name);
+            System.out.println("구글 ID: " + googleId);
+            
+            // 기존 사용자 확인
+            UserVO existingUser = null;
+            try {
+                existingUser = userService.findUserByEmail(email);
+            } catch (Exception e) {
+                // 사용자가 없으면 새로 생성
+            }
+            
+            if (existingUser == null) {
+                // 새 사용자 생성 (구글 회원가입)
+                UserVO newUser = new UserVO();
+                newUser.setUserEmail(email);
+                newUser.setUserPassword("GOOGLE_USER"); // 구글 사용자는 비밀번호 없음
+                newUser.setIsAdmin("N");
+                
+                userService.registerUser(newUser);
+                
+                System.out.println("구글 신규 사용자 생성 완료: " + email);
+                
+                return ResponseEntity.ok(Map.of(
+                    "message", "구글 회원가입 및 로그인 성공",
+                    "email", email,
+                    "isAdmin", false
+                ));
+            } else {
+                // 기존 사용자 로그인
+                System.out.println("기존 구글 사용자 로그인: " + email);
+                
+                return ResponseEntity.ok(Map.of(
+                    "message", "구글 로그인 성공",
+                    "email", email,
+                    "isAdmin", "Y".equals(existingUser.getIsAdmin())
+                ));
+            }
+            
+        } catch (Exception e) {
+            System.err.println("구글 로그인 실패: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("message", "구글 로그인 처리 중 오류가 발생했습니다."));
         }
     }
 

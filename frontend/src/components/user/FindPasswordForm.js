@@ -246,6 +246,13 @@ const FindPasswordForm = () => {
     } catch (error) {
       console.log('❌ API 호출 실패:', error);
       console.log('에러 상세:', error.response?.data);
+      console.log('에러 상태 코드:', error.response?.status);
+      console.log('에러 메시지:', error.message);
+      console.log('요청 데이터:', {
+        email: formData.email,
+        verificationCode: formData.verificationCode,
+        newPassword: formData.newPassword,
+      });
 
       if (error.response?.status === 400) {
         setErrors({
@@ -285,12 +292,9 @@ const FindPasswordForm = () => {
               {isLoading ? '발송중...' : isCodeSent ? '재발송' : '발송'}
             </button>
           </div>
-
         </div>
 
-         {errors.email && (
-                     <span className="error-message">{errors.email}</span>
-                   )}
+        {errors.email && <span className="error-message">{errors.email}</span>}
 
         {/* 인증코드 입력 + 인증확인 */}
         <div className="input-group">
@@ -313,23 +317,22 @@ const FindPasswordForm = () => {
               {isLoading ? '확인중...' : isVerified ? '인증완료' : '인증확인'}
             </button>
           </div>
-
         </div>
 
         {errors.verificationCode && (
-                    <span className="error-message">{errors.verificationCode}</span>
-                  )}
+          <span className="error-message">{errors.verificationCode}</span>
+        )}
 
         {/* 새 비밀번호 설정 버튼 */}
         <div className="button-area-user">
-            <button
-              type="button"
-              className="reset-button"
-              onClick={handlePasswordReset}
-              disabled={isLoading || !isVerified}
-            >
-              {isLoading ? '처리중...' : '새 비밀번호 설정'}
-            </button>
+          <button
+            type="button"
+            className="reset-button"
+            onClick={handlePasswordReset}
+            disabled={isLoading || !isVerified}
+          >
+            {isLoading ? '처리중...' : '새 비밀번호 설정'}
+          </button>
         </div>
       </div>
 
@@ -344,8 +347,6 @@ const FindPasswordForm = () => {
               </button>
             </div>
             <div className="modal-body">
-
-
               {/* 새 비밀번호 입력 */}
               <div className="password-input-group">
                 <label>새 비밀번호</label>
@@ -392,7 +393,6 @@ const FindPasswordForm = () => {
               >
                 {isLoading ? '변경중...' : '비밀번호 변경'}
               </button>
-
             </div>
           </div>
         </div>

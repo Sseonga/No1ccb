@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './user.css'; // CSS 그대로 유지
+import './user.css';
 
 function LoginForm() {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -9,11 +9,47 @@ function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Google Identity Services 초기화
+  useEffect(() => {
+    // Google Identity Services 스크립트 로드
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+
+    script.onload = () => {
+      if (window.google) {
+        window.google.accounts.id.initialize({
+          client_id:
+            '683525870756-p68k1e2o26m0nde7tp1em5uq2p47oio2.apps.googleusercontent.com',
+          callback: handleGoogleLogin,
+        });
+
+        window.google.accounts.id.renderButton(
+          document.getElementById('google-signin-button'),
+          {
+            theme: 'outline',
+            size: 'large',
+            width: 350,
+            text: 'signin_with',
+            locale: 'ko',
+          }
+        );
+      }
+    };
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // 🔵 일반 로그인 처리
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -47,21 +83,18 @@ function LoginForm() {
 
       const { email, isAdmin, userId  } = response.data;
 
-      // ✅ 세션 스토리지에 저장 (탭 종료 시 자동 삭제)
       sessionStorage.setItem('email', email);
       sessionStorage.setItem("userId", userId);
       sessionStorage.setItem('isAdmin', isAdmin ? 'Y' : 'N');
 
       alert('로그인 성공! 환영합니다.');
 
-      // ✅ 리다이렉트
       if (isAdmin) {
-        window.location.href = '/admin/accommodation'; // 관리자 페이지로
+        window.location.href = '/admin/accommodation';
       } else {
-        navigate('/'); // 일반 사용자 홈
+        navigate('/');
       }
 
-      // 폼 초기화
       setFormData({ email: '', password: '' });
     } catch (error) {
       if (error.response?.status === 401) {
@@ -78,38 +111,94 @@ function LoginForm() {
     }
   };
 
+  // 🔵 구글 로그인 처리 (최신 방식)
+  const handleGoogleLogin = async (response) => {
+    console.log('=== 구글 로그인 성공 ===');
+    console.log('구글 JWT 토큰:', response.credential);
+
+    setIsLoading(true);
+
+    try {
+      // JWT 토큰을 디코딩해서 사용자 정보 추출
+      const payload = JSON.parse(atob(response.credential.split('.')[1]));
+      console.log('사용자 정보:', payload);
+
+      // 백엔드로 구글 토큰 전송
+      const backendResponse = await axios.post(
+        'http://localhost:18090/api/user/google-login',
+        {
+          token: response.credential,
+          email: payload.email,
+          name: payload.name,
+          googleId: payload.sub,
+        }
+      );
+
+      const { email, isAdmin } = backendResponse.data;
+
+      sessionStorage.setItem('email', email);
+      sessionStorage.setItem('isAdmin', isAdmin ? 'Y' : 'N');
+
+      alert('구글 로그인 성공! 환영합니다.');
+
+      if (isAdmin) {
+        window.location.href = '/admin/accommodation';
+      } else {
+        navigate('/');
+      }
+    } catch (error) {
+      console.error('구글 로그인 처리 실패:', error);
+      alert('구글 로그인 처리 중 오류가 발생했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <form className="login-form" onSubmit={handleSubmit}>
-      <div className="input-group">
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleInputChange}
-          placeholder="이메일"
-          className={errors.email ? 'error' : ''}
-        />
-
-      </div>
+    <div className="login-form-container">
+      {/* 일반 로그인 폼 */}
+      <form className="login-form" onSubmit={handleSubmit}>
+        <div className="input-group">
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            placeholder="이메일"
+            className={errors.email ? 'error' : ''}
+          />
+        </div>
         {errors.email && <span className="error-message">{errors.email}</span>}
-      <div className="input-group">
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleInputChange}
-          placeholder="비밀번호"
-          className={errors.password ? 'error' : ''}
-        />
 
-      </div>
+        <div className="input-group">
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleInputChange}
+            placeholder="비밀번호"
+            className={errors.password ? 'error' : ''}
+          />
+        </div>
         {errors.password && (
-                  <span className="error-message">{errors.password}</span>
-                )}
-      <button type="submit" className="login-btn" disabled={isLoading}>
-        {isLoading ? '로그인 중...' : '로그인'}
-      </button>
-    </form>
+          <span className="error-message">{errors.password}</span>
+        )}
+
+        <button type="submit" className="login-btn" disabled={isLoading}>
+          {isLoading ? '로그인 중...' : '로그인'}
+        </button>
+      </form>
+
+      {/* 구분선 */}
+      <div className="divider">
+        <span>또는</span>
+      </div>
+
+      {/* 구글 로그인 버튼 (최신 방식) */}
+      <div className="google-login-section">
+        <div id="google-signin-button"></div>
+      </div>
+    </div>
   );
 }
 
