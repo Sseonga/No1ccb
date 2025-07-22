@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fs.human.ecospot.accommodationPanel.dao.AccomDAO">
+    <select id="getAccomList" resultType="fs.human.ecospot.accommodationPanel.vo.AccommodationVO">
+        SELECT
+        ACCOM_ID as accomId,
+        ACCOM_NAME as accomName,
+        ACCOM_DESC as accomDesc,
+        ACCOM_CHECKIN as accomCheckin,
+        ACCOM_CHECKOUT as accomCheckout,
+        ACCOM_ADDRESS as accomAddress,
+        ACCOM_ADDRESS_D as accomAddressD,
+        ACCOM_LAT as accomLat,
+        ACCOM_LON as accomLon,
+        ACCOM_PHONE as accomPhone,
+        ACCOM_URL as accomUrl,
+        ACCOM_IMG_MAIN1 as accomImgMain1,
+        CREATED_DATE as createdDate,
+        CREATED_ID as createdId,
+        UPDATED_DATE as updatedDate,
+        UPDATED_ID as updatedId
+        FROM TB_ACCOMMODATION
+        ORDER BY ACCOM_ID DESC
+    </select>
+</mapper>
