@@ -1,3 +1,5 @@
+// src/App.js
+
 import React, { useEffect, useRef, useState } from "react";
 import {
   BrowserRouter,
@@ -22,11 +24,7 @@ import FilterPanel from "./components/station/Filterpanel";
 import RouteSearchPanel from "./components/route/RouteSearchPanel";
 import IntroCar from "./components/intro/IntroCar";
 import LoginPanel from "./components/user/LoginPanel";
-
-// 숙소(충전숙소) 컴포넌트
 import AccommodationPanel from "./components/accommodation/AccommodationPanel";
-
-// 마이페이지 컴포넌트
 import FavoriteListPanel from "./components/user/FavoriteListPanel";
 import PasswordChangeForm from "./components/user/PasswordChangeForm";
 import MyReview from "./components/user/MyReview";
@@ -37,7 +35,7 @@ import SearchAgainButton from "./components/common/SearchAgainButton";
 // 관리자 여부 확인
 const isAdmin = sessionStorage.getItem("isAdmin") === "Y";
 
-// 사용자용 레이아웃 분리 (중복 로직X, 분기만!)
+// 사용자 레이아웃 (Sidebar + 각 패널 + 지도)
 const UserLayout = () => {
   const [filters, setFilters] = useState({ type: [], parking: [], brand: [] });
   const myMarkerRef = useRef(null);
@@ -45,16 +43,16 @@ const UserLayout = () => {
   const handleResetMarkers = useRef(null);
 
   const isHome = location.pathname === "/";
+  const isRoute = location.pathname === "/route";
   const [poiList, setPoiList] = useState([]);
   const [selectedPoi, setSelectedPoi] = useState(null);
   const [center, setCenter] = useState({});
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-
   const mapRef = useRef(null);
   const [isMapMoved, setIsMapMoved] = useState(false);
 
-  // 위치 초기화
+  // 위치 초기화 (처음 한번만)
   useEffect(() => {
     if (!navigator.geolocation) return;
     navigator.geolocation.getCurrentPosition(
@@ -63,13 +61,12 @@ const UserLayout = () => {
         setCenter({ lat: latitude, lon: longitude });
       },
       (err) => {
-        console.warn("현재위치 조회 실패, 기본값 사용", err);
         setCenter({ lat: 36.81023, lon: 127.14644 });
       }
     );
   }, []);
 
-  // POI 불러오기 (메인화면에서만)
+  // POI 불러오기 (메인/길찾기에서만)
   useEffect(() => {
     const fetchPOIs = async () => {
       if (!center.lat || !center.lon) return;
@@ -88,12 +85,10 @@ const UserLayout = () => {
           lng: parseFloat(poi.frontLon),
         }));
 
-        // 백엔드에서 parkingId 매칭
+        // parkingId 매칭 (백엔드 연동)
         const parkingRes = await fetch('/api/charger/match-parking', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(trimmedPOIs),
         });
 
@@ -101,8 +96,7 @@ const UserLayout = () => {
           const text = await res.text();
           throw new Error(`API 에러: ${res.status} - ${text}`);
         }
-
-        const matched = await parkingRes.json(); // { poiId, parkingId }[]
+        const matched = await parkingRes.json();
 
         // 원본 pois에 parkingId 매핑
         const parkingPois = pois.map(poi => {
@@ -114,64 +108,68 @@ const UserLayout = () => {
         });
         setPoiList(parkingPois);
       } catch (e) {
-        console.error(e);
         setErrorMsg("API 에러 발생");
       }
       setLoading(false);
     };
-    // AccommodationPanel이 아닐 때만 실행!
-    if (location.pathname === "/" || location.pathname === "/route") {
+    if (isHome || isRoute) {
       fetchPOIs();
     }
   }, [center, location.pathname]);
 
-  // AccommodationPanel에서만 전용화면, 그 외에는 기존 메인화면
+  // 숙소(충전숙소) 화면
   if (location.pathname === "/hotel") {
     return (
-      <div className="container">
+      <div className="container" style={{ display: "flex", height: "100vh" }}>
         <Sidebar />
         <AccommodationPanel />
       </div>
     );
   }
 
-  // 기존 메인/길찾기 등
-  const hideOn = ["/info", "/user", "/user/*", "/mypage/info", "/mypage/favorites", "/mypage/reviews"];
-  const hideUI = hideOn.includes(location.pathname);
+  // 메인(/) 또는 길찾기(/route) 화면: 검색 패널 + 지도 (flex)
+  if (isHome || isRoute) {
+    return (
+      <div className="container" style={{ display: "flex", height: "100vh" }}>
+        <Sidebar />
 
-  return (
-    <div className="container">
-      <Sidebar />
-      {!hideUI && isHome && poiList.length > 0 && (
-        <StationListPanel
-          poiList={poiList}
-          selectedPoi={selectedPoi}
-          onSelectPoi={(poi) => {
-            if (poi === null && handleResetMarkers.current) {
-              handleResetMarkers.current();
-            }
-            setSelectedPoi(poi);
-          }}
-        />
-      )}
-      <Tmap
-        poiList={poiList}
-        onMarkerClick={setSelectedPoi}
-        mapRef={mapRef}
-        myMarkerRef={myMarkerRef}
-        onMapMoved={() => setIsMapMoved(true)}
-        hideUI={hideUI}
-        mapMoved={isMapMoved}
-        onResetMarkers={(fn) => (handleResetMarkers.current = fn)}
-        selectedPoi={selectedPoi}
-      />
-
-      {!hideUI && (
-        <>
-          <MyLocationButton
-            tmapObjRef={mapRef}
-            myMarkerRef={myMarkerRef}
+        {/* 검색패널: / -> StationListPanel, /route -> RouteSearchPanel */}
+        {isHome && (
+          <StationListPanel
+            poiList={poiList}
+            selectedPoi={selectedPoi}
+            onSelectPoi={(poi) => {
+              if (poi === null && handleResetMarkers.current) {
+                handleResetMarkers.current();
+              }
+              setSelectedPoi(poi);
+            }}
           />
+        )}
+        {isRoute && (
+          <div className="route-panel" style={{
+            width: 1000, minWidth: 330, maxWidth: 1000, background: "#fff",
+            borderRight: "1px solid #eee", zIndex: 10, height: "100vh"
+          }}>
+            <RouteSearchPanel />
+          </div>
+        )}
+
+        {/* 지도 (항상 flex: 1, 나머지 공간) */}
+        <div style={{ flex: 1, position: "relative" }}>
+          <Tmap
+            poiList={poiList}
+            onMarkerClick={setSelectedPoi}
+            mapRef={mapRef}
+            myMarkerRef={myMarkerRef}
+            onMapMoved={() => setIsMapMoved(true)}
+            hideUI={false}
+            mapMoved={isMapMoved}
+            onResetMarkers={(fn) => (handleResetMarkers.current = fn)}
+            selectedPoi={selectedPoi}
+          />
+          {/* 각종 버튼/필터 */}
+          <MyLocationButton tmapObjRef={mapRef} myMarkerRef={myMarkerRef} />
           {isMapMoved && (
             <SearchAgainButton
               onClick={() => {
@@ -182,29 +180,39 @@ const UserLayout = () => {
             />
           )}
           <FilterPanel filters={filters} onChange={setFilters} />
-        </>
-      )}
+        </div>
+        {/* 아래 Routes는 화면만 변경 (모달/레이어용) */}
+        <Routes>
+          <Route path="/" element={<></>} />
+          <Route path="/route" element={<></>} />
+        </Routes>
+      </div>
+    );
+  }
 
+  // 기타 페이지(소개, 로그인, 마이페이지 등)
+  return (
+    <div className="container" style={{ display: "flex", height: "100vh" }}>
+      <Sidebar />
       <Routes>
-        <Route path="/" element={<></>} />
-        <Route path="/route" element={<RouteSearchPanel />} />
         <Route path="/rank" element={<div>랭킹 패널</div>} />
         <Route path="/info" element={<IntroCar />} />
         <Route path="/user/*" element={<LoginPanel />} />
-
         {/* 마이페이지 모달 라우팅 */}
         <Route path="/mypage" element={<MyPageLayout />}>
-          <Route path="info" element={< PasswordChangeForm />} />
+          <Route path="info" element={<PasswordChangeForm />} />
           <Route path="favorites" element={<FavoriteListPanel />} />
           <Route path="reviews" element={<MyReview />} />
           <Route index element={<Navigate to="info" replace />} />
         </Route>
+        {/* 기타 라우트 */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
   );
 };
 
-// App 컴포넌트
+// App 컴포넌트 (관리자/사용자 전체 라우팅)
 const App = () => {
   return (
     <BrowserRouter>
@@ -212,13 +220,11 @@ const App = () => {
         {/* 관리자 라우팅 */}
         {isAdmin ? (
           <Route path="/admin" element={<AdminLayout />}>
-            <Route path="/admin/report" element={<ReportReviewTable />} />
-            <Route path="/admin/userCare" element={<UserManageTable />} />
+            <Route path="report" element={<ReportReviewTable />} />
+            <Route path="userCare" element={<UserManageTable />} />
           </Route>
         ) : (
-          <>
-            <Route path="/admin/*" element={<Navigate to="/" replace />} />
-          </>
+          <Route path="/admin/*" element={<Navigate to="/" replace />} />
         )}
         {/* 사용자 기본 레이아웃 */}
         <Route path="/*" element={<UserLayout />} />
