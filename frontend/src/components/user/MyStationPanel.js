@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import './MyStationPanel.css';
+
 
 // API 기본 URL 자동 감지 함수
 const getApiBaseUrl = () => {
