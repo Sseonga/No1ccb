@@ -77,7 +77,7 @@ const Tmap = ({ poiList, onMarkerClick, mapRef, myMarkerRef, onMapMoved, hideUI,
 
   //poiList 변경 시 마커 전부 다시 그리기
   useEffect(() => {
-    if (!window.Tmapv2 || !poiList.length || !mapRef.current) return;
+    if (!window.Tmapv2 || !mapRef.current) return;
 
     console.log(poiList);
     const map = mapRef.current;

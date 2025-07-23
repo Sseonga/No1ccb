@@ -15,10 +15,10 @@ body,
   overflow: hidden;
 }
 
-.sidebar-section {
-  width:100px; /* 너비는 패널/사이드바 크기만큼 고정 */
+/* .sidebar-section {
+  width:100px;
   display: flex;
   flex-direction: column;
-  background-color: #fff; /* 원하는 배경색 */
-  z-index: 100; /* 맵 위에 올라오게 */
-}
+  background-color: #fff;
+  z-index: 100;
+} */

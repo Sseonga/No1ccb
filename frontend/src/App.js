@@ -31,23 +31,47 @@ import MyReview from "./components/user/MyReview";
 import MyPageLayout from "./components/user/MyPageLayout";
 import StationListPanel from "./components/station/StationListPanel";
 import SearchAgainButton from "./components/common/SearchAgainButton";
+import StationDetailPanel from "./components/station/StationDetailPanel";
+import SpotListPanel from "./components/station/SpotListPanel";
 
 // 관리자 여부 확인
 const isAdmin = sessionStorage.getItem("isAdmin") === "Y";
 
 // 사용자용 레이아웃
 const UserLayout = () => {
-  const [filters, setFilters] = useState({ type: [], parking: [], brand: [] });
+  //DB 코드테이블 연동 필터 맵
+  const [chargerTypeMap, setChargerTypeMap] = useState({});
+  const [operatorMap, setOperatorMap] = useState({});
+
+  useEffect(() => {
+    fetch("/api/code/map")
+      .then(res => res.json())
+      .then(data => {
+        setChargerTypeMap(data.CHARGER_TYPE || {});
+        setOperatorMap(data.OPERATOR || {});
+      })
+      .catch(err => console.error("공통코드 로딩 실패", err));
+  }, []);
+
+  const [filters, setFilters] = useState({
+    type: [],
+    parking: [],
+    operator: [],
+  });
   const myMarkerRef = useRef(null);
   const location = useLocation();
   const handleResetMarkers = useRef(null);
   //홈(전기차충전소 찾기 맵)
   const isHome = location.pathname === "/";
   const [poiList, setPoiList] = useState([]);
-  const [selectedPoi, setSelectedPoi] = useState(null);
+  const [filteredPoiList, setFilteredPoiList] = useState([]);
+  const [selectedPoi, setSelectedPoi] = useState(null); // 충전소 선택됨
+  const [showSpotList, setShowSpotList] = useState(false); // 주변 편의시설 보기 모드
   const [center, setCenter] = useState({});
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+
+  
 
   const mapRef = useRef(null); // Tmap Map 객체 보관용
   const [isMapMoved, setIsMapMoved] = useState(false);
@@ -88,7 +112,7 @@ const UserLayout = () => {
           lng: parseFloat(poi.frontLon),
         }));
 
-        // 백엔드에서 parkingId를 달아서 돌려주는 요청
+        // 백엔드에서 parkingId, parkingFee를 달아서 돌려주는 요청
         const parkingRes = await fetch('/api/charger/match-parking', {
           method: 'POST',
           headers: {
@@ -110,6 +134,7 @@ const UserLayout = () => {
           return {
             ...poi,
             parkingId: match?.parkingId ?? null,
+            parkingFee: match?.parkingFee ?? null,
           };
         });
         console.log(parkingPois);
@@ -125,6 +150,42 @@ const UserLayout = () => {
     
   }, [center]);
 
+  useEffect(() => {
+    const applyFilters = () => {
+      const filtered = poiList.filter((poi) => {
+        const chargers = poi.evChargers?.evCharger ?? [];
+        console.log(filters);
+        console.log(chargers);
+
+        // 🔌 충전 타입 필터
+        if (filters.type.length > 0) {
+          const hasMatchingCharger = chargers.some((ch) => {
+            return filters.type.includes(ch.type); // 예: "CHARGER_TYPE_01"
+          });
+          if (!hasMatchingCharger) return false;
+        }
+
+        // 🅿️ 주차 필터
+        if (filters.parking.length > 0 && !filters.parking.includes(poi.parkingFee)) {
+          return false;
+        }
+
+        // ⚡️ 운영사 필터
+        if (filters.operator.length > 0) {
+          const hasMatchingOperator = chargers.some((ch) =>
+            filters.operator.includes(ch.operatorId)
+          );
+          if (!hasMatchingOperator) return false;
+        }
+
+        return true;
+      });
+
+      setFilteredPoiList(filtered);
+    };
+
+    applyFilters();
+  }, [filters, poiList]);
 
 
   const hideOn = ["/info", "/user", "/user/*", "/mypage/info", "/mypage/favorites", "/mypage/reviews"];
@@ -133,9 +194,9 @@ const UserLayout = () => {
   return (
     <div className="container">
       <Sidebar />
-      {!hideUI && isHome && poiList.length > 0 && !hideUI && (
+      {!hideUI && isHome && poiList.length > 0 && !selectedPoi && (
         <StationListPanel
-          poiList={poiList}
+          poiList={filteredPoiList}
           selectedPoi={selectedPoi}
           onSelectPoi={(poi) => {
             if (poi === null && handleResetMarkers.current) {
@@ -145,8 +206,37 @@ const UserLayout = () => {
           }}
         />
       )}
+      {/* {selectedPoi && (
+        <div className="station-list-panel">
+          <button className="back-button" onClick={() => {
+            setSelectedPoi(null)
+            handleResetMarkers.current();
+            }}>← 목록으로</button>
+          <StationDetailPanel poi={selectedPoi} />
+        </div>
+      )} */}
+      {selectedPoi && (
+        showSpotList ? (
+          <SpotListPanel
+            center={{ lat: selectedPoi.frontLat, lon: selectedPoi.frontLon }}
+            onClose={() => setShowSpotList(false)}
+            onBackToStation={() => setShowSpotList(false)}
+          />
+        ) : (
+          <div className="station-list-panel">
+            <button className="back-button" onClick={() => {
+              setSelectedPoi(null)
+              handleResetMarkers.current();
+              }}>← 목록으로</button>
+            <StationDetailPanel
+              poi={selectedPoi}
+              onShowSpots={() => setShowSpotList(true)} // 주변 편의시설 버튼용
+            />
+          </div>
+        )
+      )}
       <Tmap
-        poiList={poiList}
+        poiList={filteredPoiList}
         onMarkerClick={setSelectedPoi}
         mapRef={mapRef}
         myMarkerRef={myMarkerRef}
@@ -173,7 +263,13 @@ const UserLayout = () => {
             />
           )}
 
-          <FilterPanel filters={filters} onChange={setFilters} />
+          <FilterPanel
+            filters={filters}
+            onChange={setFilters}
+            poiList={poiList}
+            chargerTypeMap={chargerTypeMap}
+            operatorMap={operatorMap}
+          />
         </>
       )}
 
