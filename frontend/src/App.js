@@ -33,6 +33,7 @@ import MyReview from "./components/user/MyReview";
 import MyPageLayout from "./components/user/MyPageLayout";
 import StationListPanel from "./components/station/StationListPanel";
 import SearchAgainButton from "./components/common/SearchAgainButton";
+import ChargePayCalc from "./components/calc/ChargePayCalc";
 
 // 관리자 여부 확인
 const isAdmin = sessionStorage.getItem("isAdmin") === "Y";
@@ -136,7 +137,7 @@ const UserLayout = () => {
   }
 
   // 기존 메인/길찾기 등
-  const hideOn = ["/info", "/user", "/user/*", "/mypage/info", "/mypage/favorites", "/mypage/reviews"];
+  const hideOn = ["/info", "/user", "/user/*", "/mypage/info", "/mypage/favorites", "/mypage/reviews", "/calc"];
   const hideUI = hideOn.includes(location.pathname);
 
   return (
@@ -188,8 +189,9 @@ const UserLayout = () => {
       <Routes>
         <Route path="/" element={<></>} />
         <Route path="/route" element={<RouteSearchPanel />} />
-        <Route path="/rank" element={<div>랭킹 패널</div>} />
+
         <Route path="/info" element={<IntroCar />} />
+        <Route path="/calc" element={<ChargePayCalc />} />
         <Route path="/user/*" element={<LoginPanel />} />
 
         {/* 마이페이지 모달 라우팅 */}

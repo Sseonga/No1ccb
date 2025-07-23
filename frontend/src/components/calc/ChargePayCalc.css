@@ -1,0 +1,254 @@
+
+.chargepay-area{
+
+
+  min-width: 450px;
+
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  padding: 30px 28px 24px 28px;
+
+
+}
+
+.calcinput{
+
+    width:200px !important;
+
+
+}
+
+.chargepay-wrap {
+    background-color: #f7f9fb !important;
+    position: absolute;
+    left: 8%;
+    top: 0px;
+    width: 93%;
+    background: white;
+    min-height: 100%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.chargepay-wrap h2 {
+  margin-bottom: 22px;
+  font-size: 1.52rem;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
+.vehicle-box {
+  background: #f8fafb;
+  border: 1.2px solid #e0e5ea;
+  border-radius: 12px;
+  padding: 18px 16px 12px 16px;
+  margin-bottom: 24px;
+  transition: background 0.25s;
+}
+.vehicle-box.dimmed {
+  opacity: 0.68;
+  background: #f5f6f7;
+}
+.input-header {
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 1.05rem;
+  color: #404348;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.vehicle-inputs {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+.vehicle-inputs > div {
+  flex: 1;
+}
+.vehicle-inputs label {
+  font-size: 0.95rem;
+  color: #888;
+  margin-bottom: 3px;
+  display: block;
+}
+.vehicle-inputs input {
+  width: 100%;
+  padding: 7px 10px;
+  font-size: 1rem;
+  border: 1.1px solid #c7d2e1;
+  border-radius: 8px;
+  background: #fff;
+  margin-bottom: 3px;
+  outline: none;
+  transition: border 0.16s;
+}
+.vehicle-inputs input:focus {
+  border-color: #2a88f7;
+}
+.recommend-charge {
+  color: #3777e7;
+  font-weight: 600;
+  font-size: 1.01rem;
+  margin-bottom: 2px;
+  margin-top: 3px;
+}
+.recommend-charge b {
+  color: #2175d1;
+  font-size: 1.08em;
+  margin-left: 1px;
+}
+
+/* 브랜드 선택 - 검색+셀렉트 한 줄로 */
+.brand-search-select-wrap {
+  display: flex;
+  gap: 9px;
+  margin-bottom: 8px;
+}
+.brand-search {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 40px;
+  border: 1.1px solid #d7dde7;
+  border-radius: 8px;
+  padding: 0 13px;
+  background: #f8fafb;
+  font-size: 1rem;
+  transition: border 0.17s;
+}
+.brand-select {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 40px;
+  border: 1.1px solid #d7dde7;
+  border-radius: 8px;
+  padding: 0 13px;
+  background: #f8fafb;
+  font-size: 1rem;
+  transition: border 0.17s;
+}
+.brand-search:focus,
+.brand-select:focus {
+  border-color: #3c8def;
+  background: #fff;
+}
+
+.field-group {
+  margin-bottom: 16px;
+}
+.field-group label {
+  display: block;
+  font-size: 1.01rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: #25282d;
+}
+.charge-types {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.type-btn {
+  flex: 1 1 0;
+  padding: 13px 2px 10px 2px;
+  border: 1.5px solid #e0e5ec;
+  background: #f8fafb;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #49505c;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.16s;
+  min-width: 0;
+  min-height: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.type-btn .desc {
+  font-size: 0.97em;
+  font-weight: 400;
+  color: #6e7896;
+  margin-top: 2px;
+}
+.type-btn.active {
+  border: 2px solid #308cf6;
+  background: #eaf3ff;
+  color: #2266cd;
+}
+.charge-amount-input {
+  width: 100%;
+  font-size: 1rem;
+  padding: 7px 10px;
+  border: 1.1px solid #c7d2e1;
+  border-radius: 8px;
+  background: #fff;
+  outline: none;
+  transition: border 0.14s;
+}
+.charge-amount-input:focus {
+  border-color: #2a88f7;
+}
+
+.member-radio-wrap label {
+  font-weight: 400;
+  margin-right: 17px;
+  font-size: 1em;
+}
+.member-radio-wrap input[type="radio"] {
+  accent-color: #3496f8;
+}
+
+.calc-btn {
+  width: 100%;
+  background: #3696fa;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 13px 0 12px 0;
+  border: none;
+  border-radius: 8px;
+  margin: 12px 0 0 0;
+  cursor: pointer;
+  box-shadow: 0 1.5px 7px rgba(40,90,190,0.07);
+  transition: background 0.18s;
+}
+.calc-btn:disabled {
+  background: #bed8f6;
+  color: #ffffff;
+  cursor: not-allowed;
+}
+
+.result-box {
+  margin-top: 28px;
+  background: #f8fafb;
+  border-radius: 12px;
+  padding: 19px 12px 13px 12px;
+  box-shadow: 0 1px 6px rgba(60,110,210,0.04);
+}
+.result-box table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.97rem;
+}
+.result-box th, .result-box td {
+  text-align: center;
+  padding: 8px 6px;
+  border-bottom: 1px solid #ececec;
+}
+.result-box th {
+  font-size: 1.02em;
+  color: #203b60;
+  font-weight: 700;
+  background: #f2f5fb;
+}
+.result-box tr:last-child td {
+  border-bottom: none;
+}

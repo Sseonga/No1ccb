@@ -3,7 +3,7 @@
   left: 8%; /* Sidebar 오른쪽으로 살짝 띄우기 */
   top: 0px;
   width: 93%;
-  background: white;
+  background-color: #f7f9fb;
   min-height:100%;
 
 
@@ -32,6 +32,7 @@
     width:80%;
     border-radius:30px;
     margin: 0px auto 30px auto;
+    background-color:white;
 
 }
 
