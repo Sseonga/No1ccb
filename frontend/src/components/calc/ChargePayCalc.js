@@ -88,7 +88,7 @@ function ChargePayCalc() {
                   <span role="img" aria-label="car">🚗</span> 차량 정보 입력
                 </div>
                 <div className="vehicle-inputs">
-                  <div>
+                  <div className="set">
                     <label>배터리 용량(kWh)</label>
                     <input
                       className="calcinput"
@@ -100,7 +100,7 @@ function ChargePayCalc() {
                       placeholder="예) 100"
                     />
                   </div>
-                  <div>
+                  <div className="set">
                     <label>남은 전력량(%)</label>
                     <input
                       className="calcinput"

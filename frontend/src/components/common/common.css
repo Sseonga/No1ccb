@@ -180,3 +180,132 @@ button.loginbtn{
 
 
 }
+
+@media (max-width: 600px) {
+
+.sidebar{
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100vw;
+        height: 50px;
+        flex-direction: row;      /* 가로로 */
+        align-items: center;
+        justify-content: space-around;
+        box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+        padding-top: 0;
+        padding-bottom: 0;
+
+ }
+
+.sidebar .logo {
+
+      position: fixed;
+      right: 0px;
+      top: 0px; /* 사이드바 위 */
+      width: 100%;
+      height: 54px;
+      border-bottom: 1px solid #eee;
+      background-color: white;
+      color: #fff;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 23px;
+      z-index: 1000;
+
+  }
+
+.sidebar .logo img{
+
+    width:70px;
+    height:70px;
+
+
+  }
+
+.sidebar a{
+
+    font-size:12px;
+
+
+}
+
+.sidebar i{
+
+    font-size:18px;
+
+}
+
+.sidebar a.active {
+  background-color: transparent;
+  color: #80d6fb;
+}
+
+
+
+.my-location-button{
+  position: fixed;
+  bottom: 210px;     /* 패널 높이(320px) + 탭 높이(60px) + 여유(예: 10px) */
+  right: 8px;
+  width: 40px;
+  height: 40px;
+  background: white;
+  z-index: 1000;
+
+
+}
+
+.my-location-button i {
+
+  font-size:20px;
+
+
+}
+
+.login-area{
+
+      position: fixed;
+      right: 10px;
+      top: 12px; /* 사이드바 위 */
+
+
+      padding:0px;
+      color: #fff;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      z-index: 3000;
+
+}
+
+
+.login-area a{
+
+    font-size:10px !important;
+    width:40px;
+}
+
+
+.filter-panel{
+
+    display:none;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

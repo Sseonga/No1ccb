@@ -14,11 +14,13 @@ const Sidebar = () => {
   };
 
   return (
+
     <div className="sidebar">
+    <div className="logo">
       <Link to="/">
         <img src={logo} alt="로고" width="100" height="100" />
       </Link>
-
+    </div>
       <NavLink to="/" className={({ isActive }) => (isActive ? "tab active" : "tab")}>
         <i className="fa-solid fa-location-dot"></i><br />주변충전소
       </NavLink>

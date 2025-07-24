@@ -72,3 +72,45 @@ p{
     margin-bottom:5px;
 
 }
+
+@media (max-width: 600px) {
+
+.introPanel{
+
+    position: absolute;
+    left:0;
+    width:100%;
+    top:54px;
+    bottom:50px;
+    overflow-y: auto;
+
+}
+
+.introArea{
+
+    width:100%;
+    border-radius:0px;
+    box-shadow: none !important;
+}
+
+.feature-list{
+
+    font-size:14px;
+
+}
+
+.echo-spot{
+
+    font-size: 20px;
+    padding: 10px 0px 5px 0px;
+
+}
+
+.intro-title h2{
+    margin-bottom: 20px !important;
+    font-size:20px;
+
+}
+
+
+}
