@@ -34,6 +34,8 @@ import SearchAgainButton from "./components/common/SearchAgainButton";
 import StationDetailPanel from "./components/station/StationDetailPanel";
 import SpotListPanel from "./components/station/SpotListPanel";
 import MyStationPanel from "./components/user/MyStationPanel";
+import AccomMap from "./components/accommodation/AccomMap";
+import AccommodationPanel from "./components/accommodation/AccommodationPanel";
 
 // 관리자 여부 확인
 const isAdmin = sessionStorage.getItem("isAdmin") === "Y";
@@ -249,17 +251,27 @@ const UserLayout = () => {
             />
           </div>
         ))}
-      <Tmap
-        poiList={filteredPoiList}
-        onMarkerClick={setSelectedPoi}
-        mapRef={mapRef}
-        myMarkerRef={myMarkerRef}
-        onMapMoved={() => setIsMapMoved(true)}
-        hideUI={hideUI}
-        mapMoved={isMapMoved}
-        onResetMarkers={(fn) => (handleResetMarkers.current = fn)}
-        selectedPoi={selectedPoi}
-      />
+
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Tmap
+              poiList={filteredPoiList}
+              onMarkerClick={setSelectedPoi}
+              mapRef={mapRef}
+              myMarkerRef={myMarkerRef}
+              onMapMoved={() => setIsMapMoved(true)}
+              hideUI={hideUI}
+              mapMoved={isMapMoved}
+              onResetMarkers={(fn) => (handleResetMarkers.current = fn)}
+              selectedPoi={selectedPoi}
+            />
+          }
+        />
+
+       <Route path="/hotel" element={<AccommodationPanel />} />
+      </Routes>
 
       {isHome && (
         <>
@@ -287,7 +299,7 @@ const UserLayout = () => {
       <Routes>
         <Route path="/" element={<></>} />
         <Route path="/route" element={<RouteSearchPanel />} />
-
+        <Route path="/hotel" element={<AccommodationPanel />} />
         <Route path="/calc" element={<ChargePayCalc />} />
         <Route path="/info" element={<IntroCar />} />
         <Route path="/user/*" element={<LoginPanel />} />
