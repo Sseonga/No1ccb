@@ -7,7 +7,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import "./App.css"
+import "./App.css";
 
 // 관리자 컴포넌트
 import AdminLayout from "./components/admin/AdminLayout";
@@ -47,12 +47,12 @@ const UserLayout = () => {
 
   useEffect(() => {
     fetch("/api/code/map")
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         setChargerTypeMap(data.CHARGER_TYPE || {});
         setOperatorMap(data.OPERATOR || {});
       })
-      .catch(err => console.error("공통코드 로딩 실패", err));
+      .catch((err) => console.error("공통코드 로딩 실패", err));
   }, []);
 
   const [filters, setFilters] = useState({
@@ -73,16 +73,17 @@ const UserLayout = () => {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  
+  const [spotMarkers, setSpotMarkers] = useState([]);
+  const [selectedSpotId, setSelectedSpotId] = useState(null); // 리스트 하이라이트용
 
   const mapRef = useRef(null); // Tmap Map 객체 보관용
   const [isMapMoved, setIsMapMoved] = useState(false);
 
   //현재 위치 받을수있으면 현재위치로 지도센터 설정
   useEffect(() => {
-  if (!navigator.geolocation) return;
+    if (!navigator.geolocation) return;
 
-  navigator.geolocation.getCurrentPosition(
+    navigator.geolocation.getCurrentPosition(
       (pos) => {
         const { latitude, longitude } = pos.coords;
         setCenter({ lat: latitude, lon: longitude }); // 중심 좌표 상태 업데이트
@@ -108,17 +109,17 @@ const UserLayout = () => {
         const pois = data?.searchPoiInfo?.pois?.poi ?? [];
 
         // poi.id + frontLat/frontLon만 추출
-        const trimmedPOIs = pois.map(poi => ({
+        const trimmedPOIs = pois.map((poi) => ({
           id: poi.pkey,
           lat: parseFloat(poi.frontLat),
           lng: parseFloat(poi.frontLon),
         }));
 
         // 백엔드에서 parkingId, parkingFee를 달아서 돌려주는 요청
-        const parkingRes = await fetch('/api/charger/match-parking', {
-          method: 'POST',
+        const parkingRes = await fetch("/api/charger/match-parking", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(trimmedPOIs),
         });
@@ -131,8 +132,8 @@ const UserLayout = () => {
         const matched = await parkingRes.json(); // { poiId, parkingId }[]
 
         // 원본 pois에 parkingId를 매핑해서 새 리스트 생성
-        const parkingPois = pois.map(poi => {
-          const match = matched.find(m => m.poiId === poi.pkey);
+        const parkingPois = pois.map((poi) => {
+          const match = matched.find((m) => m.poiId === poi.pkey);
           return {
             ...poi,
             parkingId: match?.parkingId ?? null,
@@ -149,7 +150,6 @@ const UserLayout = () => {
       setLoading(false);
     };
     fetchPOIs();
-    
   }, [center]);
 
   useEffect(() => {
@@ -168,7 +168,10 @@ const UserLayout = () => {
         }
 
         // 🅿️ 주차 필터
-        if (filters.parking.length > 0 && !filters.parking.includes(poi.parkingFee)) {
+        if (
+          filters.parking.length > 0 &&
+          !filters.parking.includes(poi.parkingFee)
+        ) {
           return false;
         }
 
@@ -189,6 +192,46 @@ const UserLayout = () => {
     applyFilters();
   }, [filters, poiList]);
 
+  //SpotListPanel 요청 편의시설 마커생성
+  const addSpotMarkers = (spots) => {
+    clearSpotMarkers(); // 기존 마커 제거
+
+    const newMarkers = spots.map((spot) => {
+      const marker = new window.Tmapv2.Marker({
+        position: new window.Tmapv2.LatLng(spot.frontLat, spot.frontLon),
+        map: mapRef.current,
+        icon: getSpotIconByCategory(spot.category),
+        title: spot.name,
+      });
+
+      marker.addListener("click", () => {
+        setSelectedSpotId(spot.id || spot.pkey); // 마커 클릭 시 리스트 highlight
+      });
+
+      return marker;
+    });
+
+    setSpotMarkers(newMarkers);
+  };
+
+  const clearSpotMarkers = () => {
+    spotMarkers.forEach((m) => m.setMap(null));
+    setSpotMarkers([]);
+  };
+
+  const getSpotIconByCategory = (category) => {
+    switch (category) {
+      case "cafe":
+        return "/icons/marker-cafe.png";
+      case "store":
+        return "/icons/marker-store.png";
+      case "food":
+        return "/icons/marker-food.png";
+      default:
+        return "http://maps.google.com/mapfiles/ms/icons/grey-dot.png";
+    }
+  };
+
   const hideOn = [
     "/info",
     "/user",
@@ -198,7 +241,7 @@ const UserLayout = () => {
     "/mypage/reviews",
     "/calc",
     "/route",
-    "/hotel"
+    "/hotel",
   ];
   const hideUI = hideOn.includes(location.pathname);
 
@@ -217,22 +260,23 @@ const UserLayout = () => {
           }}
         />
       )}
-      {/* {selectedPoi && (
-        <div className="station-list-panel">
-          <button className="back-button" onClick={() => {
-            setSelectedPoi(null)
-            handleResetMarkers.current();
-            }}>← 목록으로</button>
-          <StationDetailPanel poi={selectedPoi} />
-        </div>
-      )} */}
-      {selectedPoi && (
-        showSpotList ? (
+      {selectedPoi &&
+        (showSpotList ? (
           <SpotListPanel
             selectedPoiName={selectedPoi.name}
             center={{ lat: selectedPoi.frontLat, lon: selectedPoi.frontLon }}
-            onClose={() => setShowSpotList(false)}
-            onBackToStation={() => setShowSpotList(false)}
+            onClose={() => {
+              setShowSpotList(false);
+              clearSpotMarkers(); // 닫을 때 마커 제거
+            }}
+            onSpotsFetched={(spots) => {
+              addSpotMarkers(spots); // 마커 추가
+            }}
+            selectedSpotId={selectedSpotId}
+            onSelectSpot={(id, lat, lon) => {
+              setSelectedSpotId(id); // 리스트 클릭 → highlight
+              mapRef.current.setCenter(new window.Tmapv2.LatLng(lat, lon)); // 지도 이동
+            }}
           />
         ) : (
           <div className="station-list-panel">
@@ -264,14 +308,11 @@ const UserLayout = () => {
             />
           }
         />
-       <Route path="/hotel" element={<AccommodationPanel />} />
-       </Routes>
+        <Route path="/hotel" element={<AccommodationPanel />} />
+      </Routes>
       {isHome && (
         <>
-          <MyLocationButton
-            tmapObjRef={mapRef}
-            myMarkerRef={myMarkerRef}
-          />
+          <MyLocationButton tmapObjRef={mapRef} myMarkerRef={myMarkerRef} />
           {isMapMoved && (
             <SearchAgainButton
               onClick={() => {
@@ -302,9 +343,9 @@ const UserLayout = () => {
 
         {/* ✅ 마이페이지 모달 라우팅 */}
         <Route path="/mypage" element={<MyPageLayout />}>
-          <Route path="info" element={< PasswordChangeForm />} />
+          <Route path="info" element={<PasswordChangeForm />} />
           <Route path="favorites" element={<FavoriteListPanel />} />
-          <Route path="stations" element={<MyStationPanel  />} />
+          <Route path="stations" element={<MyStationPanel />} />
 
           <Route index element={<Navigate to="info" replace />} />
         </Route>

@@ -20,9 +20,15 @@ const types = [
   },
 ];
 
-const SpotListPanel = ({ selectedPoiName, center, onClose }) => {
+const SpotListPanel = ({
+  selectedPoiName,
+  center,
+  onClose,
+  onSpotsFetched,
+  selectedSpotId,
+  onSelectSpot,
+}) => {
   const [spotsByType, setSpotsByType] = useState({});
-  const [selectedSpotId, setSelectedSpotId] = useState(null);
 
   useEffect(() => {
     const fetchSpots = async () => {
@@ -51,7 +57,6 @@ const SpotListPanel = ({ selectedPoiName, center, onClose }) => {
             const pois = json?.searchPoiInfo?.pois?.poi ?? [];
 
             const filtered = pois.filter((poi) => !poi.name.includes("주차장"));
-
             collected = [...collected, ...filtered];
           } catch (err) {
             console.error(`${type.keyword} 불러오기 실패`, err);
@@ -61,11 +66,11 @@ const SpotListPanel = ({ selectedPoiName, center, onClose }) => {
           page += 1;
         }
 
-        fetched[type.key] = collected.slice(0, 6); // 최대 6개까지만 저장
+        fetched[type.key] = collected.slice(0, 6);
       }
 
       setSpotsByType(fetched);
-      console.log(fetched);
+      onSpotsFetched?.(Object.values(fetched).flat()); // ✅ 마커 등록
     };
 
     fetchSpots();
@@ -88,11 +93,12 @@ const SpotListPanel = ({ selectedPoiName, center, onClose }) => {
                 key={poi.pkey}
                 poi={poi}
                 isOpen={selectedSpotId === poi.pkey}
-                onClick={() =>
-                  setSelectedSpotId(
-                    selectedSpotId === poi.pkey ? null : poi.pkey
-                  )
-                }
+                onClick={() => {
+                  const willSelect = selectedSpotId !== poi.pkey;
+                  if (willSelect) {
+                    onSelectSpot?.(poi.pkey, poi.frontLat, poi.frontLon);
+                  }
+                }}
               />
             ))}
           </ul>
