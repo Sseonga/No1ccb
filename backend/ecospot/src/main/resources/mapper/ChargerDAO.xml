@@ -16,10 +16,14 @@
         FROM PARKING_TABLE
     </select>
 
+    <resultMap id="ParkingResultMap" type="fs.human.ecospot.charger.dto.PoiParkingMatchDTO">
+        <result property="parkingId" column="parking_id" />
+        <result property="parkingFee" column="parking_fee" />
+    </resultMap>
 
-    <select id="findNearestParkingId" resultType="long">
-        SELECT parking_id FROM (
-        SELECT parking_id, (
+    <select id="findNearestParkingInfo" resultMap="ParkingResultMap">
+        SELECT parking_id, parking_fee FROM (
+        SELECT parking_id, parking_fee, (
         6371000 * acos(
         cos(radians(#{lat})) * cos(radians(parking_lat)) *
         cos(radians(parking_lon) - radians(#{lng})) +

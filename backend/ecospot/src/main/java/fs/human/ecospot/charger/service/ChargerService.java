@@ -22,8 +22,12 @@ public class ChargerService {
     public List<PoiParkingMatchDTO> matchParkingForPOIs(List<PoiRequestDTO> pois) {
         return pois.stream()
                 .map(poi -> {
-                    Long nearestParkingId = chargerDAO.findNearestParkingId(poi.getLat(), poi.getLng());
-                    return new PoiParkingMatchDTO(poi.getId(), nearestParkingId);
+                    PoiParkingMatchDTO match = chargerDAO.findNearestParkingInfo(poi.getLat(), poi.getLng());
+                    if (match == null) {
+                        return new PoiParkingMatchDTO(poi.getId(), null, null);
+                    } else {
+                        return new PoiParkingMatchDTO(poi.getId(), match.getParkingId(), match.getParkingFee());
+                    }
                 })
                 .collect(Collectors.toList());
     }

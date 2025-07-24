@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="fs.human.ecospot.common.dao.CodeDAO">
+    <select id="findAllCodes" resultType="fs.human.ecospot.common.dto.CodeDTO">
+        SELECT code_detail_id, code_id, code_detail_name
+        FROM TB_CODE_D
+    </select>
+
+    <select id="findByCodeId" resultType="fs.human.ecospot.common.dto.CodeDTO">
+        SELECT code_detail_id, code_id, code_detail_name
+        FROM TB_CODE_D
+        WHERE code_id = #{codeId}
+        ORDER BY code_detail_id
+    </select>
+</mapper>
