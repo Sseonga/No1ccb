@@ -15,7 +15,9 @@ const AccommodationPanel = () => {
       frontLat: item.accomLat,
       frontLon: item.accomLon,
       mainImageUrl: item.accomImgMain1,    // ← VO에 맞게
-      homepageUrl: item.accomUrl           // ← VO에 맞게
+      homepageUrl: item.accomUrl,           // ← VO에 맞게
+      accomCheckin: item.accomCheckin,
+      accomCheckout: item.accomCheckout
     }));
 
   // 숙소 데이터 불러오기

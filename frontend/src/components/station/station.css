@@ -111,6 +111,7 @@
   border: 1px solid #ddd;
   animation: slide-down 0.3s ease;
   margin-bottom: 10%;
+
 }
 
 .station-detail-panel::-webkit-scrollbar {
@@ -119,8 +120,9 @@
 
 .station-detail-top {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   margin-bottom: 10px;
+  gap:4px;
 }
 
 .favorite-btn {
@@ -250,10 +252,10 @@
 
 /* SpotPanel */
 .spot-list-panel {
-  flex: 0 0 400px;
+  flex: 0 0 340px;
   height: 100%;
   background: white;
-  padding: 16px;
+  padding: 12px;
   overflow-y: auto;
   border-right: 1px solid #ddd;
   box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
@@ -261,7 +263,16 @@
   /* display: flex;
   flex-direction: column;
   gap: 10px; */
+  box-sizing: border-box;
 }
+
+.spot-list-panel h3{
+
+    font-size:18px;
+
+}
+
+
 
 .spot-list-panel::-webkit-scrollbar {
   display: none;
@@ -334,6 +345,7 @@
   cursor: pointer;
   font-size: 14px;
   transition: all 0.2s ease;
+  font-weight:bold;
 }
 
 .back-button:hover {
@@ -343,6 +355,7 @@
 
 .back-icon {
   font-size: 16px;
+  font-weight:bold;
 }
 
 .close-btn {

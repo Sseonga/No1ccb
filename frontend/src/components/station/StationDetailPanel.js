@@ -24,7 +24,7 @@ const StationDetailPanel = ({ poi, onShowSpots, onBack }) => {
       {/* 즐겨찾기 & 신고 버튼 */}
       <div className="station-detail-top">
         <button className="back-button" onClick={onBack}>
-          <span className="back-icon">←</span> 목록으로
+          <span className="back-icon"><i className="fa-solid fa-arrow-left" style={{ fontSize: 12 }}></i></span> 목록으로
         </button>
         <div>
           <button
