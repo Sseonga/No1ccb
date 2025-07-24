@@ -1,14 +1,23 @@
-.container {
+.route-layout {
   display: flex;
-  width: 100vw;
   height: 100vh;
 }
-.sidebar-section {
-  width: 90px;
-  flex-shrink: 0;
+.route-panel {
+  width: 360px;
+  min-width: 320px;
+  padding: 28px 22px 22px 22px;
+  background: #fafbfc;
+  border-right: 1px solid #e6e6e6;
+  overflow-y: auto;
 }
-
-.map-area {
+.route-map {
   flex: 1;
-  min-width: 0;
+  background: #eee;
+}
+.category-btns button.active {
+  background: #377ee6;
+  color: #fff;
+}
+.poi-list li.selected {
+  background: #e9f2fe;
 }

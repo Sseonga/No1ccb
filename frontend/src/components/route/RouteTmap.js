@@ -1,91 +1,148 @@
 import React, { useEffect, useRef } from "react";
 
-const TMAP_APPKEY = "YgInMIl2n421NwwwG3XOrf0oQSE1paEFRCFbejc0";
-
-const categoryIcons = {
-  charge: "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
-  cafe: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
-  store: "http://maps.google.com/mapfiles/ms/icons/purple-dot.png",
-  food: "http://maps.google.com/mapfiles/ms/icons/orange-dot.png"
-};
-
-function RouteTmap({ pathCoords, fromPoi, toPoi, nearbyPois, category, selectedPoi, onSelectPoi }) {
-  const mapDivRef = useRef(null);
-  const mapObjRef = useRef(null);
+function RouteTmap({
+  fromPoi,
+  toPoi,
+  pathArr = [],
+  routePois = [],
+  selectedChargePoi,
+  onSelectChargePoi
+}) {
+  const mapRef = useRef(null);
+  const markerMapRef = useRef({}); // {pkey: marker}
+  const baseMarkerKeysRef = useRef([]);
   const polylineRef = useRef(null);
-  const markersRef = useRef({});
 
-  // 지도/경로/마커 렌더링
+  // 1. 지도 초기화(최초 1회)
   useEffect(() => {
-    if (!window.Tmapv2 || !mapDivRef.current) return;
-    // 지도 초기화
-    let map = mapObjRef.current;
-    if (!map) {
-      map = new window.Tmapv2.Map(mapDivRef.current, {
-        center: new window.Tmapv2.LatLng(36.81023, 127.14644), // 천안
+    if (!window.Tmapv2) return;
+    if (!mapRef.current) {
+      mapRef.current = new window.Tmapv2.Map("map_div", {
+        center: new window.Tmapv2.LatLng(36.81023, 127.14644),
         width: "100%",
         height: "100%",
-        zoom: 12
+        zoom: 13,
       });
-      mapObjRef.current = map;
     }
+  }, []);
 
-    // 기존 마커/폴리라인 제거
-    Object.values(markersRef.current).forEach(arr => arr.forEach(m => m.setMap(null)));
-    markersRef.current = {};
+  // 2. POI/경로가 바뀔 때만 마커와 라인 변경
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
 
-    if (polylineRef.current) polylineRef.current.setMap(null);
+    // 출발/도착 마커 새로 그리기
+    baseMarkerKeysRef.current.forEach((k) => {
+      if (markerMapRef.current[k]) {
+        markerMapRef.current[k].setMap(null);
+        delete markerMapRef.current[k];
+      }
+    });
+    baseMarkerKeysRef.current = [];
 
-    // 경로 Polyline
-    if (Array.isArray(pathCoords) && pathCoords.length > 1) {
-      const polylinePath = pathCoords.map(([lon, lat]) => new window.Tmapv2.LatLng(lat, lon));
-      polylineRef.current = new window.Tmapv2.Polyline({
-        path: polylinePath,
-        strokeColor: "#377ee6",
-        strokeWeight: 6,
-        map
-      });
-      // 지도의 중심과 범위 조정
-      const bounds = new window.Tmapv2.LatLngBounds();
-      polylinePath.forEach(pt => bounds.extend(pt));
-      if (!bounds.isEmpty()) map.fitBounds(bounds);
-    }
-
-    // 출발/도착 마커
+    // 출발지
     if (fromPoi) {
-      new window.Tmapv2.Marker({
-        position: new window.Tmapv2.LatLng(fromPoi.lat, fromPoi.lon),
+      const key = "from";
+      const latLng = new window.Tmapv2.LatLng(fromPoi.lat, fromPoi.lon);
+      const marker = new window.Tmapv2.Marker({
+        position: latLng,
         map,
         icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
-        label: "출발"
+        title: "출발지: " + fromPoi.name,
       });
+      markerMapRef.current[key] = marker;
+      baseMarkerKeysRef.current.push(key);
     }
+    // 도착지
     if (toPoi) {
-      new window.Tmapv2.Marker({
-        position: new window.Tmapv2.LatLng(toPoi.lat, toPoi.lon),
+      const key = "to";
+      const latLng = new window.Tmapv2.LatLng(toPoi.lat, toPoi.lon);
+      const marker = new window.Tmapv2.Marker({
+        position: latLng,
         map,
         icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
-        label: "도착"
+        title: "도착지: " + toPoi.name,
       });
+      markerMapRef.current[key] = marker;
+      baseMarkerKeysRef.current.push(key);
     }
 
-    // 카테고리별 POI 마커 (충전소/카페/편의점/음식점)
-    Object.entries(nearbyPois).forEach(([cat, pois]) => {
-      markersRef.current[cat] = pois.map((poi, i) => {
-        if (!poi.frontLat || !poi.frontLon) return null;
-        const marker = new window.Tmapv2.Marker({
-          position: new window.Tmapv2.LatLng(poi.frontLat, poi.frontLon),
-          map: cat === category ? map : null,
-          icon: categoryIcons[cat] || "",
-          label: poi.name
-        });
-        marker.addListener("click", () => onSelectPoi?.(poi));
-        return marker;
-      }).filter(Boolean);
+    // 🔥 기존에 없는 pkey만 새로 만들고, 없는 것만 삭제
+    const currentKeys = routePois.map((cs) => String(cs.poi.pkey));
+    Object.entries(markerMapRef.current).forEach(([k, marker]) => {
+      if (k === "from" || k === "to") return;
+      if (!currentKeys.includes(k)) {
+        marker.setMap(null);
+        delete markerMapRef.current[k];
+      }
     });
-  }, [pathCoords, fromPoi, toPoi, nearbyPois, category, selectedPoi]);
 
-  return <div ref={mapDivRef} style={{ flex: 1, height: "100vh" }} />;
+    routePois.forEach((cs) => {
+      const poi = cs.poi;
+      const key = String(poi.pkey);
+      if (!poi.frontLat || !poi.frontLon) return;
+      if (!markerMapRef.current[key]) {
+        const latLng = new window.Tmapv2.LatLng(poi.frontLat, poi.frontLon);
+        const marker = new window.Tmapv2.Marker({
+          position: latLng,
+          map,
+          icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+          title: poi.name,
+        });
+        marker.addListener("click", () => {
+          if (onSelectChargePoi) onSelectChargePoi(poi);
+        });
+        markerMapRef.current[key] = marker;
+      }
+    });
+
+    // 폴리라인
+    if (polylineRef.current) {
+      polylineRef.current.setMap(null);
+      polylineRef.current = null;
+    }
+    if (pathArr && pathArr.length > 0) {
+      const tmapPathCoords = pathArr.map(([lon, lat]) => new window.Tmapv2.LatLng(lat, lon));
+      polylineRef.current = new window.Tmapv2.Polyline({
+        map,
+        path: tmapPathCoords,
+        strokeColor: "#3366FF",
+        strokeWeight: 6,
+        strokeOpacity: 0.7,
+      });
+
+      // 지도 영역 fitBounds
+      const bounds = new window.Tmapv2.LatLngBounds();
+      tmapPathCoords.forEach((latlng) => bounds.extend(latlng));
+      if (fromPoi) bounds.extend(new window.Tmapv2.LatLng(fromPoi.lat, fromPoi.lon));
+      if (toPoi) bounds.extend(new window.Tmapv2.LatLng(toPoi.lat, toPoi.lon));
+      routePois.forEach((cs) => {
+        const poi = cs.poi;
+        if (poi.frontLat && poi.frontLon)
+          bounds.extend(new window.Tmapv2.LatLng(poi.frontLat, poi.frontLon));
+      });
+      if (!bounds.isEmpty()) map.fitBounds(bounds);
+    }
+  }, [fromPoi, toPoi, pathArr, routePois, onSelectChargePoi]);
+
+  // 3. selectedChargePoi만 바뀔 때 마커 색상만 교체 (사라지지 않음)
+  useEffect(() => {
+    Object.entries(markerMapRef.current).forEach(([k, marker]) => {
+      if (k === "from" || k === "to") return;
+      if (
+        selectedChargePoi &&
+        String(selectedChargePoi.pkey) === String(k)
+      ) {
+        marker.setIcon("http://maps.google.com/mapfiles/ms/icons/cyan-dot.png"); // 선택
+      } else {
+        marker.setIcon("http://maps.google.com/mapfiles/ms/icons/blue-dot.png"); // 일반
+      }
+    });
+  }, [selectedChargePoi]);
+
+  return (
+    <div id="map_div" style={{ width: "100%", height: "100vh", position: "relative" }} />
+  );
 }
 
 export default RouteTmap;
