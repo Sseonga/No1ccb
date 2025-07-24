@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Tmap from "../station/Tmap"; // 기존 Tmap 컴포넌트 재사용!
+import AccomMap from "./AccomMap"; // 기존 Tmap 컴포넌트 재사용!
 import "./Accommodation.css";
 
 
@@ -56,7 +56,7 @@ const AccommodationPanel = () => {
           </div>
           {/* 지도 */}
           <div style={{ flex: 1, height: "100vh" }}>
-            <Tmap
+            <AccomMap
               poiList={poiList}
               selectedPoi={selectedPoi}
               onMarkerClick={(poi) => {
