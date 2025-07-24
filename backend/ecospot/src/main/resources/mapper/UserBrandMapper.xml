@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="fs.human.ecospot.user.dao.UserBrandDAO">
+
+    <!-- 사용자 브랜드 선호도 조회 (단순화) -->
+    <select id="selectUserBrands" parameterType="String" resultType="fs.human.ecospot.user.vo.UserBrandVO">
+        SELECT 
+        UO.USER_ID as email,
+        UO.OPERATOR_ID as brand_id,
+        CD.CODE_DETAIL_NAME as brand_name,
+        'Y' as is_active,
+        UO.CREATED_DATE as created_at
+    FROM TB_USER_OPERATOR UO
+    LEFT JOIN TB_CODE_D CD
+        ON UO.OPERATOR_ID = CD.CODE_DETAIL_ID
+        AND CD.CODE_ID = 'OPERATOR'
+    WHERE UO.USER_ID = #{email}
+    ORDER BY UO.CREATED_DATE DESC
+</select>
+
+    <!-- 활성화된 사용자 브랜드 선호도 조회 (단순화) -->
+    <select id="selectActiveUserBrands" parameterType="String" resultType="fs.human.ecospot.user.vo.UserBrandVO">
+        SELECT 
+        UO.USER_ID as email,
+        UO.OPERATOR_ID as brand_id,
+        CD.CODE_DETAIL_NAME as brand_name,
+        'Y' as is_active,
+        UO.CREATED_DATE as created_at
+    FROM TB_USER_OPERATOR UO
+    LEFT JOIN TB_CODE_D CD
+        ON UO.OPERATOR_ID = CD.CODE_DETAIL_ID
+        AND CD.CODE_ID = 'OPERATOR'
+    WHERE UO.USER_ID = #{email}
+    ORDER BY UO.CREATED_DATE DESC
+</select>
+
+    <!-- 특정 브랜드 선호도 존재 여부 확인 -->
+    <select id="existsUserBrand" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM TB_USER_OPERATOR
+        WHERE USER_ID = #{email} AND OPERATOR_ID = #{brandId}
+    </select>
+
+    <!-- 사용자 브랜드 선호도 등록 -->
+    <insert id="insertUserBrand" parameterType="fs.human.ecospot.user.vo.UserBrandVO">
+        INSERT INTO TB_USER_OPERATOR (USER_ID, OPERATOR_ID, CREATED_DATE, CREATED_ID)
+        VALUES (#{email}, #{brandId}, CURRENT_TIMESTAMP, #{email})
+    </insert>
+
+    <!-- 사용자 브랜드 선호도 활성화 상태 업데이트 -->
+    <update id="updateBrandActiveStatus" parameterType="map">
+        UPDATE TB_USER_OPERATOR 
+        SET UPDATED_DATE = CURRENT_TIMESTAMP, UPDATED_ID = #{email}
+        WHERE USER_ID = #{email} AND OPERATOR_ID = #{brandId}
+    </update>
+
+    <!-- 사용자 브랜드 선호도 삭제 -->
+    <delete id="deleteUserBrand" parameterType="map">
+        DELETE FROM TB_USER_OPERATOR
+        WHERE USER_ID = #{email} AND OPERATOR_ID = #{brandId}
+    </delete>
+
+    <!-- 사용자의 모든 브랜드 선호도 삭제 -->
+    <delete id="deleteAllUserBrands" parameterType="String">
+        DELETE FROM TB_USER_OPERATOR
+        WHERE USER_ID = #{email}
+    </delete>
+
+    <!-- 브랜드별 선호도 통계 조회 (단순화) -->
+    <select id="selectBrandPreferenceStats" resultType="map">
+        SELECT 
+            OPERATOR_ID as brand_id,
+            COUNT(*) as user_count
+        FROM TB_USER_OPERATOR
+        GROUP BY OPERATOR_ID
+        ORDER BY user_count DESC
+    </select>
+
+    <!-- 전체 브랜드 목록 조회 (극도로 단순화) -->
+    <select id="selectAllBrands" resultType="map">
+        SELECT 
+            CODE_DETAIL_ID as brand_id,
+            CODE_DETAIL_NAME as brand_name
+        FROM TB_CODE_D
+        WHERE CODE_ID = 'OPERATOR'
+    </select>
+
+</mapper>

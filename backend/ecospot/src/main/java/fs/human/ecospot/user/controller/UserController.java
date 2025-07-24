@@ -261,7 +261,6 @@ public class UserController {
     @PostMapping("/google-login")
     public ResponseEntity<?> googleLogin(@RequestBody Map<String, String> request) {
         try {
-            String token = request.get("token");
             String email = request.get("email");
             String name = request.get("name");
             String googleId = request.get("googleId");

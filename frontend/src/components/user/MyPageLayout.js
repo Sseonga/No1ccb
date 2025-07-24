@@ -1,6 +1,6 @@
-import React from "react";
-import { NavLink, Outlet } from "react-router-dom";
-import "./mypage.css"; // 스타일 유지
+import React from 'react';
+import { NavLink, Outlet } from 'react-router-dom';
+import './mypage.css'; // 스타일 유지
 
 const MyPageLayout = () => {
   return (
@@ -12,21 +12,21 @@ const MyPageLayout = () => {
         <div className="mypage-tabs">
           <NavLink
             to="/mypage/info"
-            className={({ isActive }) => (isActive ? "tab active" : "tab")}
+            className={({ isActive }) => (isActive ? 'tab active' : 'tab')}
           >
             내 정보
           </NavLink>
           <NavLink
             to="/mypage/favorites"
-            className={({ isActive }) => (isActive ? "tab active" : "tab")}
+            className={({ isActive }) => (isActive ? 'tab active' : 'tab')}
           >
             즐겨찾기
           </NavLink>
           <NavLink
-            to="/mypage/reviews"
-            className={({ isActive }) => (isActive ? "tab active" : "tab")}
+            to="/mypage/stations"
+            className={({ isActive }) => (isActive ? 'tab active' : 'tab')}
           >
-            내 평점/댓글
+            내 충전소
           </NavLink>
         </div>
 

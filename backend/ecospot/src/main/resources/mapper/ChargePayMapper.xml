@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="fs.human.ecospot.calc.dao.ChargePayDAO">
+    <select id="getAll" resultType="fs.human.ecospot.calc.vo.ChargePayVO">
+        SELECT
+        id,
+        brand,
+        type,
+        member_price AS memberPrice,
+        nonmember_price AS nonmemberPrice
+        FROM TB_CHARGE_PAY
+        ORDER BY id
+    </select>
+</mapper>

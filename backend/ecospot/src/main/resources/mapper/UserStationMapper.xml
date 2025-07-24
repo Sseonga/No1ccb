@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="fs.human.ecospot.user.dao.UserStationDAO">
+
+    <!-- 사용자의 즐겨찾기 충전소 목록 조회 -->
+    <select id="selectUserStations" parameterType="string" resultType="fs.human.ecospot.user.vo.UserStationVO">
+        SELECT 
+            EMAIL,
+            STATION_ID,
+            STATION_NAME,
+            STATION_ADDRESS,
+            STATION_PROVIDER,
+            CHARGER_TYPE,
+            STATION_LAT,
+            STATION_LON,
+            IS_ACTIVE,
+            TO_CHAR(CREATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS CREATED_AT
+        FROM TB_USER_STATION
+        WHERE EMAIL = #{email}
+        ORDER BY CREATED_AT DESC
+    </select>
+
+    <!-- 사용자의 활성화된 즐겨찾기 충전소 목록 조회 -->
+    <select id="selectActiveUserStations" parameterType="string" resultType="fs.human.ecospot.user.vo.UserStationVO">
+        SELECT 
+            EMAIL,
+            STATION_ID,
+            STATION_NAME,
+            STATION_ADDRESS,
+            STATION_PROVIDER,
+            CHARGER_TYPE,
+            STATION_LAT,
+            STATION_LON,
+            IS_ACTIVE,
+            TO_CHAR(CREATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS CREATED_AT
+        FROM TB_USER_STATION
+        WHERE EMAIL = #{email} AND IS_ACTIVE = 'Y'
+        ORDER BY CREATED_AT DESC
+    </select>
+
+    <!-- 즐겨찾기 충전소 추가 -->
+    <insert id="insertUserStation" parameterType="fs.human.ecospot.user.vo.UserStationVO">
+        INSERT INTO TB_USER_STATION (
+            EMAIL,
+            STATION_ID,
+            STATION_NAME,
+            STATION_ADDRESS,
+            STATION_PROVIDER,
+            CHARGER_TYPE,
+            STATION_LAT,
+            STATION_LON,
+            IS_ACTIVE,
+            CREATED_AT
+        ) VALUES (
+            #{email},
+            #{stationId},
+            #{stationName},
+            #{stationAddress},
+            #{stationProvider},
+            #{chargerType},
+            #{stationLat},
+            #{stationLon},
+            COALESCE(#{isActive}, 'Y'),
+            SYSDATE
+        )
+    </insert>
+
+    <!-- 즐겨찾기 충전소 활성화/비활성화 토글 -->
+    <update id="updateStationActiveStatus">
+        UPDATE TB_USER_STATION 
+        SET IS_ACTIVE = CASE WHEN IS_ACTIVE = 'Y' THEN 'N' ELSE 'Y' END
+        WHERE EMAIL = #{email} AND STATION_ID = #{stationId}
+    </update>
+
+    <!-- 즐겨찾기 충전소 삭제 -->
+    <delete id="deleteUserStation">
+        DELETE FROM TB_USER_STATION
+        WHERE EMAIL = #{email} AND STATION_ID = #{stationId}
+    </delete>
+
+    <!-- 특정 충전소가 이미 즐겨찾기에 등록되어 있는지 확인 -->
+    <select id="checkStationExists" resultType="int">
+        SELECT COUNT(*)
+        FROM TB_USER_STATION
+        WHERE EMAIL = #{email} AND STATION_ID = #{stationId}
+    </select>
+
+</mapper>

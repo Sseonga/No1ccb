@@ -24,9 +24,14 @@ const Sidebar = () => {
       </NavLink>
       <NavLink to="/route" className={({ isActive }) => (isActive ? "tab active" : "tab")}>
         <i className="fa-solid fa-diamond-turn-right"></i><br />길찾기
+
       </NavLink>
       <NavLink to="/hotel" className={({ isActive }) => (isActive ? "tab active" : "tab")}>
         <i className="fa-solid fa-hotel"></i><br />충전숙소
+      </NavLink>
+
+      <NavLink to="/calc" className={({ isActive }) => (isActive ? "tab active" : "tab")}>
+        <i className="fa-solid fa-calculator"></i><br />충전계산기
       </NavLink>
 
       <NavLink to="/info" className={({ isActive }) => (isActive ? "tab active" : "tab")}>

@@ -1,23 +1,23 @@
-import React from "react";
-import { NavLink, Link } from "react-router-dom";
-import logo from "../logo.png";
-import "./admin.css";
+import React from 'react';
+import { NavLink, Link } from 'react-router-dom';
+import logo from '../logo.png';
+import './admin.css';
 
 const AdminSidebar = () => {
   const handleLogout = () => {
     sessionStorage.clear();
-    window.location.href = "/"; // 로그아웃 후 홈으로 이동
+    window.location.href = '/'; // 로그아웃 후 홈으로 이동
   };
 
   return (
-    <div className="sidebar">
+    <div className="admin-sidebar">
       <Link to="/admin/accommodation">
         <img src={logo} alt="로고" width="100" height="100" />
       </Link>
 
       <NavLink
         to="/admin/accommodation"
-        className={({ isActive }) => (isActive ? "tab active" : "tab")}
+        className={({ isActive }) => (isActive ? 'tab active' : 'tab')}
       >
         <i className="fa-solid fa-hotel"></i>
         <br />
@@ -26,7 +26,7 @@ const AdminSidebar = () => {
 
       <NavLink
         to="/admin/report"
-        className={({ isActive }) => (isActive ? "tab active" : "tab")}
+        className={({ isActive }) => (isActive ? 'tab active' : 'tab')}
       >
         <i className="fa-solid fa-star"></i>
         <br />
@@ -35,7 +35,7 @@ const AdminSidebar = () => {
 
       <NavLink
         to="/admin/userCare"
-        className={({ isActive }) => (isActive ? "tab active" : "tab")}
+        className={({ isActive }) => (isActive ? 'tab active' : 'tab')}
       >
         <i className="fa-solid fa-user-gear"></i>
         <br />
