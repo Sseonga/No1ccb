@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import SpotDetailPanel from "./SpotDetailPanel";
 import SpotListCard from "./SpotListCard";
 
@@ -29,6 +29,17 @@ const SpotListPanel = ({
   onSelectSpot,
 }) => {
   const [spotsByType, setSpotsByType] = useState({});
+  const cardRefs = useRef({}); // 각 카드에 대한 ref 저장소
+
+  // 선택된 카드로 스크롤
+  useEffect(() => {
+    if (selectedSpotId && cardRefs.current[selectedSpotId]) {
+      cardRefs.current[selectedSpotId].scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }, [selectedSpotId]);
 
   useEffect(() => {
     const fetchSpots = async () => {
@@ -56,7 +67,12 @@ const SpotListPanel = ({
             const json = await res.json();
             const pois = json?.searchPoiInfo?.pois?.poi ?? [];
 
-            const filtered = pois.filter((poi) => !poi.name.includes("주차장"));
+            const filtered = pois
+                .filter((poi) => !poi.name.includes("주차장"))
+                .map((poi) => ({
+                    ...poi,
+                    category: type.key, // ← 카테고리 주입
+                }));
             collected = [...collected, ...filtered];
           } catch (err) {
             console.error(`${type.keyword} 불러오기 실패`, err);
@@ -91,13 +107,18 @@ const SpotListPanel = ({
             {spotsByType[type.key]?.map((poi) => (
               <SpotListCard
                 key={poi.pkey}
+                ref={(el) => {
+                  if (el) cardRefs.current[poi.pkey] = el;
+                }}
                 poi={poi}
                 isOpen={selectedSpotId === poi.pkey}
                 onClick={() => {
-                  const willSelect = selectedSpotId !== poi.pkey;
-                  if (willSelect) {
-                    onSelectSpot?.(poi.pkey, poi.frontLat, poi.frontLon);
-                  }
+                    const isSelected = selectedSpotId === poi.pkey;
+                    if (isSelected) {
+                        onSelectSpot?.(null);
+                    } else {
+                        onSelectSpot?.(poi.pkey, poi.frontLat, poi.frontLon); // 지도 중심 이동 or 마커 상호작용
+                    }
                 }}
               />
             ))}

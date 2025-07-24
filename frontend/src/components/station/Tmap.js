@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 // Tmap: 충전소 리스트(poiList)를 기반으로 Tmap 위에 마커를 표시하고, 마커 클릭 시 동작을 처리하는 컴포넌트
-const Tmap = ({ poiList, onMarkerClick, mapRef, myMarkerRef, onMapMoved, hideUI, mapMoved, onResetMarkers, selectedPoi }) => {
+const Tmap = ({ poiList, onMarkerClick, mapRef, myMarkerRef, onMapMoved, isHome, showSpotList, mapMoved, onResetMarkers, selectedPoi }) => {
   const mapDivRef = useRef(null);                       // Tmap div DOM 참조
   const markersRef = useRef({});                        // 마커들을 pkey 기준으로 저장하는 객체
   const infoWindowRef = useRef(null);                   // infoWindow 참조 (현재 사용 안함)
@@ -156,7 +156,7 @@ const Tmap = ({ poiList, onMarkerClick, mapRef, myMarkerRef, onMapMoved, hideUI,
     <div className="mapContainer">
       <div ref={mapDivRef} />
 
-      {!hideUI && isMapMoved && <div className="center-marker" />}
+      {isHome && isMapMoved && !showSpotList && <div className="center-marker" />}
     </div>
   );
 };
@@ -174,7 +174,7 @@ function markerIconByStatus(status) {
     case "3":
       return "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
     case "9":
-      return "http://maps.google.com/mapfiles/ms/icons/grey-dot.png";
+      return "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
     default:
       return "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
   }

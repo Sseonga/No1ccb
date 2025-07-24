@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   BrowserRouter,
   Route,
@@ -73,8 +73,14 @@ const UserLayout = () => {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  const [spotMarkers, setSpotMarkers] = useState([]);
+  // const [spotMarkers, setSpotMarkers] = useState([]);
+  const spotMarkersRef = useRef([]);
+  const [_, _setSpotMarkers] = useState([]);
   const [selectedSpotId, setSelectedSpotId] = useState(null); // 리스트 하이라이트용
+  const setSpotMarkers = (markers) => {
+    spotMarkersRef.current = markers;
+    _setSpotMarkers(markers); // 기존 상태도 유지
+  };
 
   const mapRef = useRef(null); // Tmap Map 객체 보관용
   const [isMapMoved, setIsMapMoved] = useState(false);
@@ -195,17 +201,20 @@ const UserLayout = () => {
   //SpotListPanel 요청 편의시설 마커생성
   const addSpotMarkers = (spots) => {
     clearSpotMarkers(); // 기존 마커 제거
+      console.log("spots:", spots);
 
     const newMarkers = spots.map((spot) => {
       const marker = new window.Tmapv2.Marker({
-        position: new window.Tmapv2.LatLng(spot.frontLat, spot.frontLon),
+        position: new window.Tmapv2.LatLng(Number(spot.frontLat), Number(spot.frontLon)),
         map: mapRef.current,
         icon: getSpotIconByCategory(spot.category),
+        iconSize: new window.Tmapv2.Size(30, 30),
         title: spot.name,
       });
 
       marker.addListener("click", () => {
-        setSelectedSpotId(spot.id || spot.pkey); // 마커 클릭 시 리스트 highlight
+        setSelectedSpotId(spot.pkey); // 마커 클릭 시 리스트 highlight
+        mapRef.current.setCenter(new window.Tmapv2.LatLng(Number(spot.frontLat), Number(spot.frontLon)));
       });
 
       return marker;
@@ -215,8 +224,9 @@ const UserLayout = () => {
   };
 
   const clearSpotMarkers = () => {
-    spotMarkers.forEach((m) => m.setMap(null));
-    setSpotMarkers([]);
+    spotMarkersRef.current.forEach((m) => m.setMap(null));
+    spotMarkersRef.current = [];
+    _setSpotMarkers([]);
   };
 
   const getSpotIconByCategory = (category) => {
@@ -228,9 +238,17 @@ const UserLayout = () => {
       case "food":
         return "/icons/marker-food.png";
       default:
-        return "http://maps.google.com/mapfiles/ms/icons/grey-dot.png";
+        return "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
     }
   };
+  
+  const spotSearchCenter = useMemo(() => {
+    if (!selectedPoi) return null;
+    return {
+      lat: selectedPoi.frontLat,
+      lon: selectedPoi.frontLon,
+    };
+  }, [selectedPoi]);
 
   const hideOn = [
     "/info",
@@ -264,7 +282,7 @@ const UserLayout = () => {
         (showSpotList ? (
           <SpotListPanel
             selectedPoiName={selectedPoi.name}
-            center={{ lat: selectedPoi.frontLat, lon: selectedPoi.frontLon }}
+            center={spotSearchCenter}
             onClose={() => {
               setShowSpotList(false);
               clearSpotMarkers(); // 닫을 때 마커 제거
@@ -301,8 +319,9 @@ const UserLayout = () => {
               mapRef={mapRef}
               myMarkerRef={myMarkerRef}
               onMapMoved={() => setIsMapMoved(true)}
-              hideUI={hideUI}
+              isHome={isHome}
               mapMoved={isMapMoved}
+              showSpotList={showSpotList}
               onResetMarkers={(fn) => (handleResetMarkers.current = fn)}
               selectedPoi={selectedPoi}
             />
@@ -310,7 +329,7 @@ const UserLayout = () => {
         />
         <Route path="/hotel" element={<AccommodationPanel />} />
       </Routes>
-      {isHome && (
+      {isHome && !showSpotList && (
         <>
           <MyLocationButton tmapObjRef={mapRef} myMarkerRef={myMarkerRef} />
           {isMapMoved && (
