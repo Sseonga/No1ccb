@@ -7,7 +7,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import "./App.css"
+import "./App.css";
 
 // 관리자 컴포넌트
 import AdminLayout from "./components/admin/AdminLayout";
@@ -45,12 +45,12 @@ const UserLayout = () => {
 
   useEffect(() => {
     fetch("/api/code/map")
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         setChargerTypeMap(data.CHARGER_TYPE || {});
         setOperatorMap(data.OPERATOR || {});
       })
-      .catch(err => console.error("공통코드 로딩 실패", err));
+      .catch((err) => console.error("공통코드 로딩 실패", err));
   }, []);
 
   const [filters, setFilters] = useState({
@@ -71,16 +71,14 @@ const UserLayout = () => {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  
-
   const mapRef = useRef(null); // Tmap Map 객체 보관용
   const [isMapMoved, setIsMapMoved] = useState(false);
 
   //현재 위치 받을수있으면 현재위치로 지도센터 설정
   useEffect(() => {
-  if (!navigator.geolocation) return;
+    if (!navigator.geolocation) return;
 
-  navigator.geolocation.getCurrentPosition(
+    navigator.geolocation.getCurrentPosition(
       (pos) => {
         const { latitude, longitude } = pos.coords;
         setCenter({ lat: latitude, lon: longitude }); // 중심 좌표 상태 업데이트
@@ -106,17 +104,17 @@ const UserLayout = () => {
         const pois = data?.searchPoiInfo?.pois?.poi ?? [];
 
         // poi.id + frontLat/frontLon만 추출
-        const trimmedPOIs = pois.map(poi => ({
+        const trimmedPOIs = pois.map((poi) => ({
           id: poi.pkey,
           lat: parseFloat(poi.frontLat),
           lng: parseFloat(poi.frontLon),
         }));
 
         // 백엔드에서 parkingId, parkingFee를 달아서 돌려주는 요청
-        const parkingRes = await fetch('/api/charger/match-parking', {
-          method: 'POST',
+        const parkingRes = await fetch("/api/charger/match-parking", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(trimmedPOIs),
         });
@@ -129,8 +127,8 @@ const UserLayout = () => {
         const matched = await parkingRes.json(); // { poiId, parkingId }[]
 
         // 원본 pois에 parkingId를 매핑해서 새 리스트 생성
-        const parkingPois = pois.map(poi => {
-          const match = matched.find(m => m.poiId === poi.pkey);
+        const parkingPois = pois.map((poi) => {
+          const match = matched.find((m) => m.poiId === poi.pkey);
           return {
             ...poi,
             parkingId: match?.parkingId ?? null,
@@ -147,7 +145,6 @@ const UserLayout = () => {
       setLoading(false);
     };
     fetchPOIs();
-    
   }, [center]);
 
   useEffect(() => {
@@ -166,7 +163,10 @@ const UserLayout = () => {
         }
 
         // 🅿️ 주차 필터
-        if (filters.parking.length > 0 && !filters.parking.includes(poi.parkingFee)) {
+        if (
+          filters.parking.length > 0 &&
+          !filters.parking.includes(poi.parkingFee)
+        ) {
           return false;
         }
 
@@ -187,8 +187,14 @@ const UserLayout = () => {
     applyFilters();
   }, [filters, poiList]);
 
-
-  const hideOn = ["/info", "/user", "/user/*", "/mypage/info", "/mypage/favorites", "/mypage/reviews"];
+  const hideOn = [
+    "/info",
+    "/user",
+    "/user/*",
+    "/mypage/info",
+    "/mypage/favorites",
+    "/mypage/reviews",
+  ];
   const hideUI = hideOn.includes(location.pathname);
 
   return (
@@ -206,35 +212,26 @@ const UserLayout = () => {
           }}
         />
       )}
-      {/* {selectedPoi && (
-        <div className="station-list-panel">
-          <button className="back-button" onClick={() => {
-            setSelectedPoi(null)
-            handleResetMarkers.current();
-            }}>← 목록으로</button>
-          <StationDetailPanel poi={selectedPoi} />
-        </div>
-      )} */}
-      {selectedPoi && (
-        showSpotList ? (
+      {selectedPoi &&
+        (showSpotList ? (
           <SpotListPanel
+            selectedPoiName={selectedPoi.name}
             center={{ lat: selectedPoi.frontLat, lon: selectedPoi.frontLon }}
             onClose={() => setShowSpotList(false)}
             onBackToStation={() => setShowSpotList(false)}
           />
         ) : (
           <div className="station-list-panel">
-            <button className="back-button" onClick={() => {
-              setSelectedPoi(null)
-              handleResetMarkers.current();
-              }}>← 목록으로</button>
             <StationDetailPanel
               poi={selectedPoi}
               onShowSpots={() => setShowSpotList(true)} // 주변 편의시설 버튼용
+              onBack={() => {
+                setSelectedPoi(null);
+                handleResetMarkers.current();
+              }}
             />
           </div>
-        )
-      )}
+        ))}
       <Tmap
         poiList={filteredPoiList}
         onMarkerClick={setSelectedPoi}
@@ -245,14 +242,11 @@ const UserLayout = () => {
         mapMoved={isMapMoved}
         onResetMarkers={(fn) => (handleResetMarkers.current = fn)}
         selectedPoi={selectedPoi}
-        />
+      />
 
-      {!hideUI && (
+      {isHome && (
         <>
-          <MyLocationButton
-            tmapObjRef={mapRef}
-            myMarkerRef={myMarkerRef}
-          />
+          <MyLocationButton tmapObjRef={mapRef} myMarkerRef={myMarkerRef} />
           {isMapMoved && (
             <SearchAgainButton
               onClick={() => {
@@ -283,7 +277,7 @@ const UserLayout = () => {
 
         {/* ✅ 마이페이지 모달 라우팅 */}
         <Route path="/mypage" element={<MyPageLayout />}>
-          <Route path="info" element={< PasswordChangeForm />} />
+          <Route path="info" element={<PasswordChangeForm />} />
           <Route path="favorites" element={<FavoriteListPanel />} />
           <Route path="reviews" element={<MyReview />} />
           <Route index element={<Navigate to="info" replace />} />
@@ -301,7 +295,10 @@ const App = () => {
         {/* 관리자 라우팅 */}
         {isAdmin ? (
           <Route path="/admin" element={<AdminLayout />}>
-            <Route path="/admin/accommodation" element={<AccommodationAddForm />} />
+            <Route
+              path="/admin/accommodation"
+              element={<AccommodationAddForm />}
+            />
             <Route path="/admin/report" element={<ReportReviewTable />} />
             <Route path="/admin/userCare" element={<UserManageTable />} />
           </Route>
