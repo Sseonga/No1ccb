@@ -22,39 +22,25 @@ function RoutePage() {
   const [fromPoi, setFromPoi] = useState(null);
   const [toPoi, setToPoi] = useState(null);
   const [poiByCat, setPoiByCat] = useState({ charge: [], cafe: [], store: [], food: [] });
-  const [selectedCharger, setSelectedCharger] = useState(null);
+  const [selectedCharger, setSelectedCharger] = useState(null); // 현재 선택된 poi 전체 객체
+  const [selectedChargerIdx, setSelectedChargerIdx] = useState(null); // 충전소 idx
   const [totalDistance, setTotalDistance] = useState(null);
 
   const [routeOption, setRouteOption] = useState("0");
   const [trafficOption, setTrafficOption] = useState("N");
 
   const poiList = poiByCat[category] || [];
-  const chargeList = poiByCat.charge || [];
-
-  // ① 카페/편의점/음식점에서도 지도에 충전소(5개)도 항상 같이 표시 & 클릭
-  //     - tmapPoiList는 현재탭 POI + 충전소5개 (중복 X)
-  const tmapPoiList = [
-    ...poiList,
-    ...chargeList.filter(
-      c =>
-        c &&
-        c.frontLat &&
-        c.frontLon &&
-        !poiList.some(p => p.pkey === c.pkey || p.id === c.id)
-    ),
-  ];
 
   async function handleSearch() {
     setLoading(true);
     setErrorMsg("");
     setSelectedCharger(null);
-
+    setSelectedChargerIdx(null);
     try {
       const result = await searchRouteWithPois(from, to, {
         routeOption,
         trafficOption,
       });
-
       setPathArr(result.pathArr || []);
       setFromPoi(result.fromPoi || null);
       setToPoi(result.toPoi || null);
@@ -67,8 +53,9 @@ function RoutePage() {
     }
   }
 
-  function handleChargerClick(poi) {
+  function handleChargerClick(poi, idx) {
     setSelectedCharger(poi);
+    setSelectedChargerIdx(idx);
   }
 
   return (
@@ -95,7 +82,11 @@ function RoutePage() {
               className={
                 "route-category-btn" + (category === btn.key ? " route-category-btn--active" : "")
               }
-              onClick={() => setCategory(btn.key)}
+              onClick={() => {
+                setCategory(btn.key);
+                setSelectedCharger(null);
+                setSelectedChargerIdx(null);
+              }}
             >{btn.label}</button>
           )}
         </div>
@@ -104,42 +95,43 @@ function RoutePage() {
           <div className="route-list-inner">
             {category === "charge" && (
               <ul className="route-charge-list">
-                {poiList.length === 0 ?
-                  <div className="route-charge-list-empty">충전소 없음</div>
-                  :
-                  poiList.map((poi, i) => (
-                    <li
-                      key={poi.pkey || poi.id || i}
-                      className={
-                        "route-charge-list-item" +
-                        (selectedCharger?.pkey === poi.pkey ? " selected" : "")
+                {poiList.length === 0
+                  ? <div className="route-charge-list-empty">충전소 없음</div>
+                  : poiList.map((poi, i) => (
+                    <React.Fragment key={poi.pkey || poi.id || i}>
+                      <li
+                        className={
+                          "route-charge-list-item" +
+                          (selectedChargerIdx === i ? " selected" : "")
+                        }
+                        onClick={() => handleChargerClick(poi, i)}
+                      >
+                        <span className="route-charge-list-name">{poi.name}</span>
+                        <span className="route-charge-list-addr">
+                          {poi.upperAddrName || ""} {poi.middleAddrName || ""}
+                        </span>
+                      </li>
+                      {selectedChargerIdx === i &&
+                        <div className="route-chargerlist-wrap">
+                          <RouteChargerList poi={poi} />
+                        </div>
                       }
-                      onClick={() => handleChargerClick(poi)}
-                    >
-                      <span className="route-charge-list-name">{poi.name}</span>
-                      <span className="route-charge-list-addr">
-                        {poi.upperAddrName || ""} {poi.middleAddrName || ""}
-                      </span>
-                    </li>
+                    </React.Fragment>
                   ))
                 }
               </ul>
             )}
           </div>
         </div>
-        <div className="route-chargerlist-wrap">
-          {selectedCharger && <RouteChargerList poi={selectedCharger} />}
-        </div>
         {errorMsg && <div className="route-error">{errorMsg}</div>}
       </div>
       <div className="route-maparea">
         <RouteTmap
-          poiList={tmapPoiList}
+          poiList={poiList}
           pathCoords={pathArr}
           fromPoi={fromPoi}
           toPoi={toPoi}
           selectedCharger={selectedCharger}
-          onMarkerClick={handleChargerClick}
         />
         {totalDistance &&
           <div className="route-totaldistance">

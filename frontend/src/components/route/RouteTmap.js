@@ -1,17 +1,14 @@
+// RouteTmap.jsx
 import React, { useEffect, useRef } from "react";
 
-function RouteTmap({ pathCoords, fromPoi, toPoi, poiList, selectedCharger, onMarkerClick }) {
+function RouteTmap({ pathCoords, fromPoi, toPoi, poiList, selectedCharger }) {
   const mapRef = useRef(null);
   const markersRef = useRef([]);
   const polylinesRef = useRef([]);
-  const mapDivId = "map_div"; // id 충돌 방지
+  const mapDivId = "map_div";
 
-  // 최초 1회 map 생성만 따로 분리
   useEffect(() => {
-    if (!window.Tmapv2) {
-      console.warn("Tmapv2 API가 아직 로드되지 않았습니다.");
-      return;
-    }
+    if (!window.Tmapv2) return;
     if (!mapRef.current && document.getElementById(mapDivId)) {
       mapRef.current = new window.Tmapv2.Map(mapDivId, {
         center: new window.Tmapv2.LatLng(37.5665, 126.9780),
@@ -27,66 +24,63 @@ function RouteTmap({ pathCoords, fromPoi, toPoi, poiList, selectedCharger, onMar
   useEffect(() => {
     const map = mapRef.current;
     if (!window.Tmapv2 || !map) return;
-
+    // 이전 마커/폴리라인 제거
     markersRef.current.forEach(m => m?.setMap && m.setMap(null));
     polylinesRef.current.forEach(p => p?.setMap && p.setMap(null));
     markersRef.current = [];
     polylinesRef.current = [];
 
-    function addMarker(lat, lon, iconUrl, poiObj) {
+    // 마커 생성 함수
+    function addMarker(lat, lon, iconUrl) {
       if (!map) return null;
       try {
-        const marker = new window.Tmapv2.Marker({
+        return new window.Tmapv2.Marker({
           position: new window.Tmapv2.LatLng(Number(lat), Number(lon)),
           icon: iconUrl,
           iconSize: new window.Tmapv2.Size(24, 38),
           map,
         });
-        if (onMarkerClick && typeof onMarkerClick === "function" && poiObj) {
-          marker.addListener("click", () => onMarkerClick(poiObj));
-        }
-        return marker;
       } catch (e) {
-        console.error("Marker 생성 오류:", e, lat, lon, iconUrl);
         return null;
       }
     }
 
-    // 출발지/도착지 마커
+    // 출발/도착지 마커
     if (fromPoi && fromPoi.lat && fromPoi.lon) {
-      const m = addMarker(fromPoi.lat, fromPoi.lon, "http://maps.google.com/mapfiles/ms/icons/green-dot.png", null);
+      const m = addMarker(fromPoi.lat, fromPoi.lon, "http://maps.google.com/mapfiles/ms/icons/green-dot.png");
       if (m) markersRef.current.push(m);
     }
     if (toPoi && toPoi.lat && toPoi.lon) {
-      const m = addMarker(toPoi.lat, toPoi.lon, "http://maps.google.com/mapfiles/ms/icons/red-dot.png", null);
+      const m = addMarker(toPoi.lat, toPoi.lon, "http://maps.google.com/mapfiles/ms/icons/red-dot.png");
       if (m) markersRef.current.push(m);
     }
 
-    // POI(충전소, 카페 등) 마커 모두 표시, 클릭 이벤트 연결
+    // POI 마커
     if (poiList && poiList.length > 0) {
       poiList.forEach(poi => {
         if (poi.frontLat && poi.frontLon) {
           let iconUrl;
-          if (poi.status !== undefined) { // 충전소 POI
-            if (selectedCharger && selectedCharger.pkey === poi.pkey) {
-              iconUrl = "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
-            } else {
-              switch (poi.status) {
-                case "1": case "4": case "5":
-                  iconUrl = "http://maps.google.com/mapfiles/ms/icons/red-dot.png"; break;
-                case "3":
-                  iconUrl = "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"; break;
-                case "9":
-                  iconUrl = "http://maps.google.com/mapfiles/ms/icons/grey-dot.png"; break;
-                default:
-                  iconUrl = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
-              }
-            }
+          // 선택된 충전소일 때 아이콘만 다르게!
+          if (selectedCharger && (
+                poi.pkey === selectedCharger.pkey || 
+                poi.id === selectedCharger.id || 
+                poi.name === selectedCharger.name // fallback
+              )) {
+            iconUrl = "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png"; // 선택 시 노란색
           } else {
-            // 카페/편의점/음식점 POI
-            iconUrl = "http://maps.google.com/mapfiles/ms/icons/purple-dot.png";
+            // 상태별 색상 (예시)
+            switch (poi.status) {
+              case "1": case "4": case "5":
+                iconUrl = "http://maps.google.com/mapfiles/ms/icons/red-dot.png"; break;
+              case "3":
+                iconUrl = "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"; break;
+              case "9":
+                iconUrl = "http://maps.google.com/mapfiles/ms/icons/grey-dot.png"; break;
+              default:
+                iconUrl = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+            }
           }
-          const m = addMarker(poi.frontLat, poi.frontLon, iconUrl, poi);
+          const m = addMarker(poi.frontLat, poi.frontLon, iconUrl);
           if (m) markersRef.current.push(m);
         }
       });
@@ -103,12 +97,10 @@ function RouteTmap({ pathCoords, fromPoi, toPoi, poiList, selectedCharger, onMar
           map,
         });
         polylinesRef.current.push(polyline);
-      } catch (e) {
-        console.error("폴리라인 생성 오류:", e);
-      }
+      } catch (e) {}
     }
 
-    // 지도 영역 자동 확대
+    // 지도 bounds
     try {
       const bounds = new window.Tmapv2.LatLngBounds();
       if (fromPoi && fromPoi.lat && fromPoi.lon) bounds.extend(new window.Tmapv2.LatLng(Number(fromPoi.lat), Number(fromPoi.lon)));
@@ -121,10 +113,8 @@ function RouteTmap({ pathCoords, fromPoi, toPoi, poiList, selectedCharger, onMar
         });
       }
       if (!bounds.isEmpty()) map.fitBounds(bounds);
-    } catch (e) {
-      console.error("Bounds 오류:", e);
-    }
-  }, [pathCoords, fromPoi, toPoi, poiList, selectedCharger, onMarkerClick]);
+    } catch (e) {}
+  }, [pathCoords, fromPoi, toPoi, poiList, selectedCharger]);
 
   return <div id={mapDivId} style={{ width: "100%", height: "100%" }} />;
 }
