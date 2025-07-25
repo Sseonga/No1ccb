@@ -20,7 +20,7 @@ import Tmap from "./components/station/Tmap";
 import Sidebar from "./components/common/Sidebar";
 import MyLocationButton from "./components/common/MyLocationButton";
 import FilterPanel from "./components/station/Filterpanel";
-import RouteSearchPanel from "./components/route/RouteSearchPanel";
+import RoutePage from "./components/route/RoutePage";
 import IntroCar from "./components/intro/IntroCar";
 import LoginPanel from "./components/user/LoginPanel";
 
@@ -243,7 +243,7 @@ const UserLayout = () => {
         return "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
     }
   };
-  
+
   const spotSearchCenter = useMemo(() => {
     if (!selectedPoi) return null;
     return {
@@ -356,7 +356,7 @@ const UserLayout = () => {
 
       <Routes>
         <Route path="/" element={<></>} />
-        <Route path="/route" element={<RouteSearchPanel />} />
+        <Route path="/route" element={<RoutePage />} />
         <Route path="/hotel" element={<AccommodationPanel />} />
         <Route path="/calc" element={<ChargePayCalc />} />
         <Route path="/info" element={<IntroCar />} />

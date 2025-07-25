@@ -1,6 +1,7 @@
 /* station.css */
 
 .station-list-panel {
+
   flex: 0 0 340px;
   height: 100%;
 
@@ -44,10 +45,10 @@
 }
 
 .station-list-panel h3 {
-  font-size: 16px;
+  font-size: 16px !important;
   margin:0px;
   border-bottom: 1px solid #ddd;
-  padding:12px;
+  padding:16px;
 }
 
 .station-list-card {

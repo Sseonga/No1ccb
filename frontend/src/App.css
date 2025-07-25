@@ -22,3 +22,9 @@ body,
   background-color: #fff;
   z-index: 100;
 } */
+
+.route-maparea{
+
+    min-width:100% !important;
+}
+

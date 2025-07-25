@@ -41,7 +41,7 @@ const AccommodationPanel = () => {
       <div style={{ display: "flex", height: "100vh" }}>
         {/* 패널: 리스트 or 상세 */}
         <div className="hotel-panel" style={{
-          width: 340,
+          width: 350,
           borderRight: "1px solid #eee",
           background: "#fff",
           overflowY: "auto",

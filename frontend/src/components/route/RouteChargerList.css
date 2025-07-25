@@ -1,0 +1,42 @@
+.route-charger-card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px;
+}
+
+.route-charger-card {
+  flex: 1 1 calc(50% - 12px);
+  background: #f9fafc;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.route-charger-card:hover {
+  background: #eef3ff;
+  transform: translateY(-2px);
+}
+
+.route-charger-card.selected {
+  border-color: #377ee6;
+  background: #eaf2ff;
+}
+
+.route-charger-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.status-green {
+  color: #2e8b57;
+  font-weight: bold;
+}
+
+.status-red {
+  color: #d9534f;
+  font-weight: bold;
+}
