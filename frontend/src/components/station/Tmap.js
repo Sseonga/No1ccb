@@ -1,28 +1,40 @@
 import React, { useEffect, useRef, useState } from "react";
 
 // Tmap: 충전소 리스트(poiList)를 기반으로 Tmap 위에 마커를 표시하고, 마커 클릭 시 동작을 처리하는 컴포넌트
-const Tmap = ({ poiList, onMarkerClick, mapRef, myMarkerRef, onMapMoved, isHome, showSpotList, mapMoved, onResetMarkers, selectedPoi }) => {
-  const mapDivRef = useRef(null);                       // Tmap div DOM 참조
-  const markersRef = useRef({});                        // 마커들을 pkey 기준으로 저장하는 객체
-  const infoWindowRef = useRef(null);                   // infoWindow 참조 (현재 사용 안함)
-  const [isMapMoved, setIsMapMoved] = useState(false);  // 지도 이동 여부 (UI용)
-
+const Tmap = ({
+  poiList,
+  onMarkerClick,
+  mapRef,
+  myMarkerRef,
+  onMapMoved,
+  isHome,
+  showSpotList,
+  mapMoved,
+  onResetMarkers,
+  selectedPoi,
+}) => {
+  const mapDivRef = useRef(null); // Tmap div DOM 참조
+  const markersRef = useRef({}); // 마커들을 pkey 기준으로 저장하는 객체
+  const infoWindowRef = useRef(null); // infoWindow 참조 (현재 사용 안함)
+  const [isMapMoved, setIsMapMoved] = useState(false); // 지도 이동 여부 (UI용)
 
   //선택된 충전소를 제외한 마커 숨기기
   function clearMarkersExcept(markerToKeep) {
-    Object.values(markersRef.current).forEach((marker) => marker.setVisible(marker === markerToKeep));
+    Object.values(markersRef.current).forEach((marker) =>
+      marker.setVisible(marker === markerToKeep)
+    );
   }
-
 
   //외부에서 마커 리셋 요청(onResetMarkers) 시 모든 마커 다시 보이게 설정
   useEffect(() => {
     if (onResetMarkers) {
       onResetMarkers(() => {
-        Object.values(markersRef.current).forEach(marker => marker.setVisible(true));
+        Object.values(markersRef.current).forEach((marker) =>
+          marker.setVisible(true)
+        );
       });
     }
   }, [poiList]);
-
 
   //selectedPoi가 변경되면 해당 마커만 보이게 설정하고 클릭 처리
   useEffect(() => {
@@ -35,12 +47,10 @@ const Tmap = ({ poiList, onMarkerClick, mapRef, myMarkerRef, onMapMoved, isHome,
     }
   }, [selectedPoi]);
 
-
   //외부에서 mapMoved 값이 바뀌면 내부 상태도 업데이트
   useEffect(() => {
     setIsMapMoved(mapMoved);
-  },[mapMoved])
-
+  }, [mapMoved]);
 
   //Tmap 지도 초기화 (최초 1회 실행)
   useEffect(() => {
@@ -52,28 +62,29 @@ const Tmap = ({ poiList, onMarkerClick, mapRef, myMarkerRef, onMapMoved, isHome,
     }
 
     const map = new window.Tmapv2.Map(mapDivRef.current, {
-      center: new window.Tmapv2.LatLng(36.81023, 127.14644),  // 천안 중심
+      center: new window.Tmapv2.LatLng(36.81023, 127.14644), // 천안 중심
       width: "100%",
       height: "100%",
-      zoom: 14
+      zoom: 14,
     });
 
     mapRef.current = map;
 
     // 사용자가 지도 드래그 시작 시 상태 변경
     map.addListener("dragstart", () => {
+      if (typeof onMapMoved === "function") {
+        onMapMoved();
+      }
       setIsMapMoved(true);
     });
 
     // 지도 중심이 바뀔 때 외부 콜백 실행
-    map.addListener("center_changed", () => {
-      if (typeof onMapMoved === "function") {
-        onMapMoved();
-      }
-    });
-
+    // map.addListener("center_changed", () => {
+    //   if (typeof onMapMoved === "function") {
+    //     onMapMoved();
+    //   }
+    // });
   }, []);
-
 
   //poiList 변경 시 마커 전부 다시 그리기
   useEffect(() => {
@@ -83,13 +94,13 @@ const Tmap = ({ poiList, onMarkerClick, mapRef, myMarkerRef, onMapMoved, isHome,
     const map = mapRef.current;
 
     // 기존 마커 제거
-    Object.values(markersRef.current).forEach(marker => marker.setMap(null));
+    Object.values(markersRef.current).forEach((marker) => marker.setMap(null));
     markersRef.current = {};
 
     if (infoWindowRef.current) infoWindowRef.current.setMap(null);
 
     // poiList 순회하면서 마커 생성
-    poiList.forEach(poi => {
+    poiList.forEach((poi) => {
       const lat = parseFloat(poi.frontLat);
       const lon = parseFloat(poi.frontLon);
       if (!lat || !lon) return;
@@ -103,7 +114,7 @@ const Tmap = ({ poiList, onMarkerClick, mapRef, myMarkerRef, onMapMoved, isHome,
         position: new window.Tmapv2.LatLng(lat, lon),
         map,
         icon: markerIconByStatus(repStatus),
-        label: poi.name
+        label: poi.name,
       });
 
       // 마커 클릭 시: 외부에 선택 알리고 나머지 마커 숨김
@@ -143,7 +154,7 @@ const Tmap = ({ poiList, onMarkerClick, mapRef, myMarkerRef, onMapMoved, isHome,
 
     // 모든 마커 포함하는 지도 범위로 fitBounds
     const bounds = new window.Tmapv2.LatLngBounds();
-    poiList.forEach(poi => {
+    poiList.forEach((poi) => {
       if (poi.frontLat && poi.frontLon) {
         bounds.extend(new window.Tmapv2.LatLng(poi.frontLat, poi.frontLon));
       }
@@ -156,13 +167,14 @@ const Tmap = ({ poiList, onMarkerClick, mapRef, myMarkerRef, onMapMoved, isHome,
     <div className="mapContainer">
       <div ref={mapDivRef} />
 
-      {isHome && isMapMoved && !showSpotList && <div className="center-marker" />}
+      {isHome && isMapMoved && !showSpotList && (
+        <div className="center-marker" />
+      )}
     </div>
   );
 };
 
 export default Tmap;
-
 
 // 상태코드에 따라 마커 아이콘 색상 다르게 지정
 function markerIconByStatus(status) {

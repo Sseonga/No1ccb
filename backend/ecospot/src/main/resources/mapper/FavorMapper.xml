@@ -5,4 +5,40 @@
 
 <mapper namespace="fs.human.ecospot.personal.dao.FavorDAO">
 
+    <insert id="insertFavorite">
+        INSERT INTO TB_FAVORITES (
+        FAVOR_ID,
+        USER_ID,
+        FAVOR_TYPE_CD,
+        TARGET_ID,
+        CREATED_DATE,
+        CREATED_ID,
+        UPDATED_DATE,
+        UPDATED_ID
+        ) VALUES (
+        SEQ_FAVOR_ID.NEXTVAL,
+        #{userId},
+        'FAVOR_02',
+        #{stationId},
+        SYSDATE,
+        #{userId, jdbcType=NUMERIC},
+        SYSDATE,
+        #{userId, jdbcType=NUMERIC}
+        )
+    </insert>
+
+    <delete id="deleteFavorite">
+        DELETE FROM TB_FAVORITES
+        WHERE USER_ID = #{userId}
+        AND FAVOR_TYPE_CD = 'FAVOR_02'
+        AND TARGET_ID = #{stationId}
+    </delete>
+
+    <select id="existsFavorite" resultType="int">
+        SELECT COUNT(*)
+        FROM TB_FAVORITES
+        WHERE USER_ID = #{userId}
+        AND FAVOR_TYPE_CD = #{favorTypeCd}
+        AND TARGET_ID = #{targetId}
+    </select>
 </mapper>

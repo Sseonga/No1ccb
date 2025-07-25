@@ -1,21 +1,70 @@
 // components/StationDetailPanel.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ChargerList from "./ChargerList";
 import StationReportPopup from "./StationReportPopup";
 import SpotListPanel from "./SpotListPanel";
+import { checkLoginWithConfirm } from "../../util/auth";
+
+const isLogined = sessionStorage.getItem("userId");
 
 const StationDetailPanel = ({ poi, onShowSpots, onBack }) => {
   const [isFavorited, setIsFavorited] = useState(false); // 즐겨찾기 임시 상태
   const [showReportPopup, setShowReportPopup] = useState(false); // 팝업 상태
   const [showSpotList, setShowSpotList] = useState(false); // 주변 편의시설 찾기 상태
 
-  const handleToggleFavorite = () => {
-    setIsFavorited((prev) => !prev);
-    console.log(`${poi.name} 즐겨찾기 상태: ${!isFavorited}`);
-    // TODO: 로그인 여부 확인 + API 연결 예정
+  const userId = sessionStorage.getItem("userId");
+
+  useEffect(() => {
+    const fetchFavoriteStatus = async () => {
+      if (!userId || !poi?.pkey) return;
+
+      try {
+        const res = await fetch(
+          `/api/favor/exist?userId=${userId}&stationId=${poi.pkey}`
+        );
+        const data = await res.json();
+        setIsFavorited(data.favorited); // 백엔드에서 true/false로 응답
+      } catch (err) {
+        console.error("즐겨찾기 여부 조회 실패:", err);
+      }
+    };
+
+    fetchFavoriteStatus();
+  }, [poi?.pkey, userId]);
+
+  const handleToggleFavorite = async () => {
+    if (!checkLoginWithConfirm()) return;
+
+    try {
+      const userId = sessionStorage.getItem("userId");
+      const response = await fetch("/api/favor", {
+        method: isFavorited ? "DELETE" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId,
+          stationId: poi.pkey,
+          poiInfo: poi,
+          operatorId: poi.evChargers?.evCharger?.[0]?.operatorId,
+          fullAddressRoad: poi.newAddressList?.newAddress?.[0]?.fullAddressRoad,
+        }),
+      });
+
+      if (response.ok) {
+        setIsFavorited((prev) => !prev);
+      } else {
+        alert("즐겨찾기 처리 중 오류가 발생했습니다.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("서버 오류가 발생했습니다.");
+    }
   };
 
   const handleReport = () => {
+    if (!checkLoginWithConfirm()) return;
+
     setShowReportPopup(true);
   };
 
@@ -24,7 +73,10 @@ const StationDetailPanel = ({ poi, onShowSpots, onBack }) => {
       {/* 즐겨찾기 & 신고 버튼 */}
       <div className="station-detail-top">
         <button className="back-button" onClick={onBack}>
-          <span className="back-icon"><i className="fa-solid fa-arrow-left" style={{ fontSize: 12 }}></i></span> 목록으로
+          <span className="back-icon">
+            <i className="fa-solid fa-arrow-left" style={{ fontSize: 12 }}></i>
+          </span>{" "}
+          목록으로
         </button>
         <div>
           <button

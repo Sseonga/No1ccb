@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import './user.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import "./user.css";
 
 function LoginForm() {
-  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -12,8 +12,8 @@ function LoginForm() {
   // Google Identity Services 초기화
   useEffect(() => {
     // Google Identity Services 스크립트 로드
-    const script = document.createElement('script');
-    script.src = 'https://accounts.google.com/gsi/client';
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
     script.async = true;
     script.defer = true;
     document.body.appendChild(script);
@@ -22,18 +22,18 @@ function LoginForm() {
       if (window.google) {
         window.google.accounts.id.initialize({
           client_id:
-            '683525870756-p68k1e2o26m0nde7tp1em5uq2p47oio2.apps.googleusercontent.com',
+            "683525870756-p68k1e2o26m0nde7tp1em5uq2p47oio2.apps.googleusercontent.com",
           callback: handleGoogleLogin,
         });
 
         window.google.accounts.id.renderButton(
-          document.getElementById('google-signin-button'),
+          document.getElementById("google-signin-button"),
           {
-            theme: 'outline',
-            size: 'large',
+            theme: "outline",
+            size: "large",
             width: 350,
-            text: 'signin_with',
-            locale: 'ko',
+            text: "signin_with",
+            locale: "ko",
           }
         );
       }
@@ -55,12 +55,12 @@ function LoginForm() {
 
     const newErrors = {};
     if (!formData.email) {
-      newErrors.email = '이메일을 입력해주세요.';
+      newErrors.email = "이메일을 입력해주세요.";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = '올바른 이메일 형식이 아닙니다.';
+      newErrors.email = "올바른 이메일 형식이 아닙니다.";
     }
     if (!formData.password) {
-      newErrors.password = '비밀번호를 입력해주세요.';
+      newErrors.password = "비밀번호를 입력해주세요.";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -72,39 +72,35 @@ function LoginForm() {
     setErrors({});
 
     try {
-      const response = await axios.post(
-        'http://localhost:18090/api/user/login',
-        {
-          email: formData.email,
-          password: formData.password,
+      const response = await axios.post("/api/user/login", {
+        email: formData.email,
+        password: formData.password,
+      });
 
-        }
-      );
+      const { email, isAdmin, userId } = response.data;
 
-      const { email, isAdmin, userId  } = response.data;
-
-      sessionStorage.setItem('email', email);
+      sessionStorage.setItem("email", email);
       sessionStorage.setItem("userId", userId);
-      sessionStorage.setItem('isAdmin', isAdmin ? 'Y' : 'N');
+      sessionStorage.setItem("isAdmin", isAdmin ? "Y" : "N");
 
-      alert('로그인 성공! 환영합니다.');
+      alert("로그인 성공! 환영합니다.");
 
       if (isAdmin) {
-        window.location.href = '/admin/accommodation';
+        window.location.href = "/admin/accommodation";
       } else {
-        navigate('/');
+        navigate("/");
       }
 
-      setFormData({ email: '', password: '' });
+      setFormData({ email: "", password: "" });
     } catch (error) {
       if (error.response?.status === 401) {
         setErrors({
           password:
             error.response.data.message ||
-            '이메일 또는 비밀번호가 올바르지 않습니다.',
+            "이메일 또는 비밀번호가 올바르지 않습니다.",
         });
       } else {
-        alert('로그인 중 오류가 발생했습니다. 다시 시도해주세요.');
+        alert("로그인 중 오류가 발생했습니다. 다시 시도해주세요.");
       }
     } finally {
       setIsLoading(false);
@@ -113,19 +109,19 @@ function LoginForm() {
 
   // 🔵 구글 로그인 처리 (최신 방식)
   const handleGoogleLogin = async (response) => {
-    console.log('=== 구글 로그인 성공 ===');
-    console.log('구글 JWT 토큰:', response.credential);
+    console.log("=== 구글 로그인 성공 ===");
+    console.log("구글 JWT 토큰:", response.credential);
 
     setIsLoading(true);
 
     try {
       // JWT 토큰을 디코딩해서 사용자 정보 추출
-      const payload = JSON.parse(atob(response.credential.split('.')[1]));
-      console.log('사용자 정보:', payload);
+      const payload = JSON.parse(atob(response.credential.split(".")[1]));
+      console.log("사용자 정보:", payload);
 
       // 백엔드로 구글 토큰 전송
       const backendResponse = await axios.post(
-        'http://localhost:18090/api/user/google-login',
+        "http://localhost:18090/api/user/google-login",
         {
           token: response.credential,
           email: payload.email,
@@ -136,19 +132,19 @@ function LoginForm() {
 
       const { email, isAdmin } = backendResponse.data;
 
-      sessionStorage.setItem('email', email);
-      sessionStorage.setItem('isAdmin', isAdmin ? 'Y' : 'N');
+      sessionStorage.setItem("email", email);
+      sessionStorage.setItem("isAdmin", isAdmin ? "Y" : "N");
 
-      alert('구글 로그인 성공! 환영합니다.');
+      alert("구글 로그인 성공! 환영합니다.");
 
       if (isAdmin) {
-        window.location.href = '/admin/accommodation';
+        window.location.href = "/admin/accommodation";
       } else {
-        navigate('/');
+        navigate("/");
       }
     } catch (error) {
-      console.error('구글 로그인 처리 실패:', error);
-      alert('구글 로그인 처리 중 오류가 발생했습니다.');
+      console.error("구글 로그인 처리 실패:", error);
+      alert("구글 로그인 처리 중 오류가 발생했습니다.");
     } finally {
       setIsLoading(false);
     }
@@ -165,7 +161,7 @@ function LoginForm() {
             value={formData.email}
             onChange={handleInputChange}
             placeholder="이메일"
-            className={errors.email ? 'error' : ''}
+            className={errors.email ? "error" : ""}
           />
         </div>
         {errors.email && <span className="error-message">{errors.email}</span>}
@@ -177,7 +173,7 @@ function LoginForm() {
             value={formData.password}
             onChange={handleInputChange}
             placeholder="비밀번호"
-            className={errors.password ? 'error' : ''}
+            className={errors.password ? "error" : ""}
           />
         </div>
         {errors.password && (
@@ -185,7 +181,7 @@ function LoginForm() {
         )}
 
         <button type="submit" className="login-btn" disabled={isLoading}>
-          {isLoading ? '로그인 중...' : '로그인'}
+          {isLoading ? "로그인 중..." : "로그인"}
         </button>
       </form>
 

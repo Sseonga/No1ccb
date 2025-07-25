@@ -39,4 +39,49 @@
         FETCH FIRST 1 ROWS ONLY
     </select>
 
+    <!-- 충전소 존재 여부 확인 -->
+    <select id="existsStation" resultType="boolean" parameterType="long">
+        SELECT CASE WHEN EXISTS (
+        SELECT 1
+        FROM TB_STATION
+        WHERE STATION_ID = #{stationId}
+        ) THEN 1 ELSE 0 END
+        FROM DUAL
+    </select>
+
+    <!-- 충전소 정보 저장 -->
+    <insert id="insertStation">
+        INSERT INTO TB_STATION (
+        station_id,
+        station_name,
+        station_operator_cd,
+        station_lat,
+        station_lon,
+        station_address,
+        station_address_d,
+        station_area_code,
+        station_phone,
+        parking_id,
+        created_date,
+        created_id,
+        updated_date,
+        updated_id
+        ) VALUES (
+        #{station.stationId},
+        #{station.stationName},
+        #{station.stationOperatiorCD},
+        #{station.stationLat, jdbcType=NUMERIC},
+        #{station.stationLon, jdbcType=NUMERIC},
+        #{station.stationAddress, jdbcType=VARCHAR},
+        #{station.stationAddressD, jdbcType=VARCHAR},
+        #{station.stationAreaCode, jdbcType=VARCHAR},
+        #{station.stationPhone, jdbcType=VARCHAR},
+        #{station.parkingId, jdbcType=NUMERIC},
+        sysdate,
+        #{userId, jdbcType=NUMERIC},
+        sysdate,
+        #{userId, jdbcType=NUMERIC}
+        )
+    </insert>
+
 </mapper>

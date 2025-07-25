@@ -62,6 +62,7 @@ const UserLayout = () => {
     parking: [],
     operator: [],
   });
+
   const myMarkerRef = useRef(null);
   const location = useLocation();
   const handleResetMarkers = useRef(null);
@@ -203,27 +204,58 @@ const UserLayout = () => {
   //SpotListPanel 요청 편의시설 마커생성
   const addSpotMarkers = (spots) => {
     clearSpotMarkers(); // 기존 마커 제거
-      console.log("spots:", spots);
+    console.log("spots:", spots);
 
     const newMarkers = spots.map((spot) => {
       const marker = new window.Tmapv2.Marker({
-        position: new window.Tmapv2.LatLng(Number(spot.frontLat), Number(spot.frontLon)),
+        position: new window.Tmapv2.LatLng(
+          Number(spot.frontLat),
+          Number(spot.frontLon)
+        ),
         map: mapRef.current,
         icon: getSpotIconByCategory(spot.category),
         iconSize: new window.Tmapv2.Size(30, 30),
         title: spot.name,
       });
 
+      marker.spotData = spot;
+
       marker.addListener("click", () => {
         setSelectedSpotId(spot.pkey); // 마커 클릭 시 리스트 highlight
-        mapRef.current.setCenter(new window.Tmapv2.LatLng(Number(spot.frontLat), Number(spot.frontLon)));
+        mapRef.current.setCenter(
+          new window.Tmapv2.LatLng(Number(spot.frontLat), Number(spot.frontLon))
+        );
       });
 
       return marker;
     });
 
+    // 모든 마커 포함하는 지도 범위로 fitBounds
+    const map = mapRef.current;
+    const bounds = new window.Tmapv2.LatLngBounds();
+    spots.forEach((spot) => {
+      if (spot.frontLat && spot.frontLon) {
+        bounds.extend(new window.Tmapv2.LatLng(spot.frontLat, spot.frontLon));
+      }
+    });
+    if (!bounds.isEmpty()) map.fitBounds(bounds);
+
     setSpotMarkers(newMarkers);
   };
+
+  useEffect(() => {
+    // 마커 아이콘 강조 업데이트
+    spotMarkersRef.current.forEach((marker, idx) => {
+      const spot = marker.spotData; // 아래에서 직접 저장할 예정
+      const isSelected = selectedSpotId === spot?.pkey;
+
+      marker.setIcon(
+        isSelected
+          ? "http://maps.google.com/mapfiles/ms/icons/red-dot.png" // 강조 마커
+          : getSpotIconByCategory(spot?.category)
+      );
+    });
+  }, [selectedSpotId]);
 
   const clearSpotMarkers = () => {
     spotMarkersRef.current.forEach((m) => m.setMap(null));
@@ -277,6 +309,10 @@ const UserLayout = () => {
               handleResetMarkers.current(); // ✅ 마커 다시 보이기
             }
             setSelectedPoi(poi);
+            mapRef.current.setCenter(
+              new window.Tmapv2.LatLng(poi.frontLat, poi.frontLon)
+            );
+            setIsMapMoved(false);
           }}
         />
       )}
@@ -340,6 +376,7 @@ const UserLayout = () => {
                 const center = mapRef.current.getCenter();
                 setCenter({ lat: center._lat, lon: center._lng });
                 setIsMapMoved(false);
+                setSelectedPoi(null);
               }}
             />
           )}
