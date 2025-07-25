@@ -1,9 +1,9 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import SpotDetailPanel from "./SpotDetailPanel";
 
-const SpotListCard = ({ poi, isOpen, onClick }) => {
+const SpotListCard = forwardRef(({ poi, isOpen, onClick }, ref) => {
   return (
-    <li className={`spot-list-card ${isOpen ? "open" : ""}`}>
+    <li ref={ref} className={`spot-list-card ${isOpen ? "open" : ""}`}>
       <div className="poi-title" onClick={onClick}>
         {poi.name}
       </div>
@@ -12,6 +12,6 @@ const SpotListCard = ({ poi, isOpen, onClick }) => {
       </div>
     </li>
   );
-};
+});
 
 export default SpotListCard;
