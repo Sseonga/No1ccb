@@ -86,7 +86,7 @@
     height:30px;
     font-size:14px;
     margin-bottom:16px;
-    margin-right:23.5px;
+    margin-right:43.5px;
 
 
 
@@ -156,24 +156,23 @@ button.delete-btn:disabled {
   cursor: not-allowed;
 }
 
-/* .sidebar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 8%;
+ .admin_sidebar {
+  flex: 0 0 8%;
   height: 100%;
   background-color: white;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   padding-top: 15px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  width:8%;
+}
 
-  z-index: 10;
-} */
-
-.sidebar a {
+.admin_sidebar a {
   display: block;
   color: black;
   text-decoration: none;
-
+  width:100%;
   font-weight: 550;
   text-align: center;
   font-size: 16px;
@@ -181,11 +180,13 @@ button.delete-btn:disabled {
   padding-top: 20px;
   padding-bottom: 20px;
 }
-.sidebar a:hover {
+
+
+.admin_sidebar a:hover {
   color: #80d6fb;
 }
 
-.sidebar a.active {
+.admin_sidebar a.active {
   background-color: #80d6fb;
   color: white;
 }
@@ -208,3 +209,76 @@ a i {
     height: 100%;
 
 }
+
+.add-area{
+
+        width: 60%;
+        margin: auto;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        border-radius: 6px;
+        height: 80%;
+        background-color: #fff;
+        overflow-y: auto;
+
+}
+
+
+.accoset{
+
+    margin: 10px 28px;
+
+}
+
+.accoset label{
+
+    font-size:15px;
+    width: 100px !important;
+    display: inline-block;
+    text-align:right;
+    font-size: 13px;
+    font-weight: 550;
+
+
+}
+
+.accoset input{
+
+ width:70%;
+ margin: 13px 11px;
+
+}
+
+input.inout{
+
+    width:18% !important;
+
+
+}
+
+.add_button{
+
+    display:flex;
+    justify-content:center;
+
+
+
+}
+
+.add_button button{
+     width: 30%;
+     margin: 12px auto 30px auto;
+     height: 30px;
+     font-size: 15px;
+     color: white;
+     background-color: #80D6FB;
+     border: none;
+     border-radius: 10px;
+
+}
+
+.add_button button:hover{
+
+    background: #FFD600;
+
+}
+

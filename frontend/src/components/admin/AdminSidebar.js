@@ -10,7 +10,7 @@ const AdminSidebar = () => {
   };
 
   return (
-    <div className="admin-sidebar">
+    <div className="admin_sidebar">
       <Link to="/admin/accommodation">
         <img src={logo} alt="로고" width="100" height="100" />
       </Link>
@@ -22,6 +22,15 @@ const AdminSidebar = () => {
         <i className="fa-solid fa-hotel"></i>
         <br />
         숙소추가
+      </NavLink>
+
+      <NavLink
+              to="/admin/AccommManage"
+              className={({ isActive }) => (isActive ? 'tab active' : 'tab')}
+            >
+              <i className="fa-solid fa-hotel"></i>
+              <br />
+              숙소관리
       </NavLink>
 
       <NavLink

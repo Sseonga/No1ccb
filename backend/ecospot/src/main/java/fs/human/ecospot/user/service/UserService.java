@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -374,5 +375,14 @@ public class UserService {
 
     public UserVO findUserByEmail(String email) {
         return userDAO.findByEmail(email);
+    }
+
+
+    public int deleteUser(Long userId) {
+        return userDAO.deleteUser(userId);
+    }
+
+    public List<UserVO> getAllUsers() {
+        return userDAO.selectAllUsers();
     }
 }

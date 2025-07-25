@@ -16,4 +16,13 @@ public class AccomService {
     public List<AccommodationVO> getAccomList() {
         return accomDAO.getAccomList();
     }
+
+    // 숙소 등록
+    public int insertAccommodation(AccommodationVO accommodation) {
+        return accomDAO.insertAccommodation(accommodation);
+    }
+
+    public int deleteAccommodation(Long accomId) {
+        return accomDAO.deleteAccommodation(accomId);
+    }
 }

@@ -7,4 +7,8 @@ import java.util.List;
 @Mapper
 public interface AccomDAO {
     List<AccommodationVO> getAccomList();
+
+    int insertAccommodation(AccommodationVO accommodation);
+
+    int deleteAccommodation(Long accomId);
 }

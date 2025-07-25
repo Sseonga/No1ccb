@@ -1,46 +1,26 @@
 import React, { useState } from 'react';
 import AccommodationSaveButton from './AccommodationSaveButton';
 import '../admin/admin.css';
-/**
- * 숙소 추가 폼 컴포넌트
- * 새로운 숙소 정보를 입력받아 저장할 수 있는 폼
- */
+
 const AccommodationAddForm = () => {
-  // 숙소 정보 상태 관리
   const [accommodation, setAccommodation] = useState({
-    accomName: '', // 숙소 이름
-    accomDesc: '', // 숙소 소개
-    accomCheckin: '', // 체크인 시간
-    accomCheckout: '', // 체크아웃 시간
-    accomAddress: '', // 숙소 주소
-    accomAddressD: '', // 숙소 상세주소
-    accomLat: '', // 위도
-    accomLon: '', // 경도 (DB 컬럼명: ACCOM_LON)
-    accomPhone: '', // 전화번호
-    accomUrl: '', // 숙소 URL
-    accomImgMain: '', // 메인 이미지 URL
+    accomName: '',
+    accomDesc: '',
+    accomCheckin: '',
+    accomCheckout: '',
+    accomAddress: '',
+    accomLat: '',
+    accomLon: '',
+    accomUrl: '',
+    accomImgMain1: '',
+    createdId: Number(sessionStorage.getItem('userId')),
   });
 
-  /**
-   * 입력 필드 변경 처리 함수
-   * @param {Event} e - 입력 필드 변경 이벤트
-   */
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setAccommodation({ ...accommodation, [name]: value });
   };
 
-  /**
-   * 이미지 URL 변경 처리 함수 (별도 처리용)
-   * @param {string} accomImgMain - 변경된 이미지 URL
-   */
-  const handleUrlChange = (accomImgMain) => {
-    setAccommodation({ ...accommodation, accomImgMain });
-  };
-
-  /**
-   * 저장 성공 시 폼 초기화 함수
-   */
   const handleSaveSuccess = () => {
     setAccommodation({
       accomName: '',
@@ -48,24 +28,26 @@ const AccommodationAddForm = () => {
       accomCheckin: '',
       accomCheckout: '',
       accomAddress: '',
-      accomAddressD: '',
       accomLat: '',
       accomLon: '',
-      accomPhone: '',
       accomUrl: '',
-      accomImgMain: '',
+      accomImgMain1: '',
+      createdId: Number(sessionStorage.getItem('userId')),
     });
+
+
   };
 
   return (
     <div className="accommodation-add-form">
-      {/* 폼 제목 */}
-      <h2>숙소 추가</h2>
+      <h2>관리자페이지</h2>
 
       <form>
-        {/* 숙소 이름 입력 */}
         <div className="add-area">
-          <div>
+          <div className="table-name">숙소추가</div>
+
+          {/* 숙소 이름 입력 */}
+          <div className="accoset">
             <label>숙소 이름</label>
             <input
               type="text"
@@ -77,18 +59,19 @@ const AccommodationAddForm = () => {
           </div>
 
           {/* 숙소 소개 입력 */}
-          <div>
-            <label>소개</label>
-            <textarea
+          <div className="accoset">
+            <label>객실 정보</label>
+            <input
+              type="text"
               name="accomDesc"
               value={accommodation.accomDesc}
               onChange={handleInputChange}
-              placeholder="숙소 소개를 입력하세요"
+              placeholder="객실 정보를 입력하세요"
             />
           </div>
 
           {/* 주소 입력 */}
-          <div>
+          <div className="accoset">
             <label>주소</label>
             <input
               type="text"
@@ -99,46 +82,24 @@ const AccommodationAddForm = () => {
             />
           </div>
 
-          {/* 상세주소 입력 */}
-          <div>
-            <label>상세주소</label>
-            <input
-              type="text"
-              name="accomAddressD"
-              value={accommodation.accomAddressD}
-              onChange={handleInputChange}
-              placeholder="상세주소를 입력하세요"
-            />
-          </div>
-
-          {/* 전화번호 입력 */}
-          <div>
-            <label>전화번호</label>
-            <input
-              type="text"
-              name="accomPhone"
-              value={accommodation.accomPhone}
-              onChange={handleInputChange}
-              placeholder="전화번호를 입력하세요"
-            />
-          </div>
-
           {/* 체크인 시간 입력 */}
-          <div>
-            <label>체크인 시간</label>
+          <div className="accoset">
+            <label>체크인</label>
             <input
               type="time"
               name="accomCheckin"
+              className="inout"
               value={accommodation.accomCheckin}
               onChange={handleInputChange}
             />
           </div>
 
           {/* 체크아웃 시간 입력 */}
-          <div>
-            <label>체크아웃 시간</label>
+          <div className="accoset">
+            <label>체크아웃</label>
             <input
               type="time"
+              className="inout"
               name="accomCheckout"
               value={accommodation.accomCheckout}
               onChange={handleInputChange}
@@ -146,7 +107,7 @@ const AccommodationAddForm = () => {
           </div>
 
           {/* 위도 입력 */}
-          <div>
+          <div className="accoset">
             <label>위도</label>
             <input
               type="number"
@@ -159,7 +120,7 @@ const AccommodationAddForm = () => {
           </div>
 
           {/* 경도 입력 */}
-          <div>
+          <div className="accoset">
             <label>경도</label>
             <input
               type="number"
@@ -172,7 +133,7 @@ const AccommodationAddForm = () => {
           </div>
 
           {/* 숙소 URL 입력 */}
-          <div>
+          <div className="accoset">
             <label>숙소 URL</label>
             <input
               type="url"
@@ -184,22 +145,28 @@ const AccommodationAddForm = () => {
           </div>
 
           {/* 메인 이미지 URL 입력 */}
-          <div>
-            <label>메인 이미지 URL</label>
+          <div className="accoset">
+            <label>이미지 URL</label>
             <input
               type="url"
-              name="accomImgMain"
-              value={accommodation.accomImgMain}
+              name="accomImgMain1"
+              value={accommodation.accomImgMain1}
               onChange={handleInputChange}
               placeholder="메인 이미지 URL을 입력하세요"
             />
           </div>
 
-          {/* 저장 버튼 컴포넌트 */}
-          <AccommodationSaveButton
-            accommodation={accommodation}
-            onSaveSuccess={handleSaveSuccess}
-          />
+          {/* 생성자 ID 입력 (관리자 ID) */}
+
+
+
+          {/* 저장 버튼 */}
+          <div className="add_button">
+            <AccommodationSaveButton
+              accommodation={accommodation}
+              onSaveSuccess={handleSaveSuccess}
+            />
+          </div>
         </div>
       </form>
     </div>

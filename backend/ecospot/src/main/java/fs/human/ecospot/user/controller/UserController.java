@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -312,5 +313,35 @@ public class UserController {
                     .body(Map.of("message", "구글 로그인 처리 중 오류가 발생했습니다."));
         }
     }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
+        try {
+            int result = userService.deleteUser(userId);
+            if (result > 0) {
+                return ResponseEntity.ok(Map.of("message", "사용자가 삭제되었습니다."));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("message", "해당 사용자를 찾을 수 없습니다."));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("message", "사용자 삭제에 실패했습니다."));
+        }
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<?> getUserList() {
+        try {
+            List<UserVO> users = userService.getAllUsers();
+            return ResponseEntity.ok(users);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("message", "사용자 목록 조회 실패"));
+        }
+    }
+
 
 }

@@ -2,6 +2,9 @@ package fs.human.ecospot.user.dao;
 
 import fs.human.ecospot.user.vo.UserVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface UserDAO {
@@ -16,4 +19,8 @@ public interface UserDAO {
      * 사용자 비밀번호 업데이트
      */
     void updatePassword(String email, String hashedPassword);
+
+    int deleteUser(@Param("userId") Long userId);
+
+    List<UserVO> selectAllUsers();
 }

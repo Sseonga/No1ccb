@@ -35,6 +35,8 @@ import StationDetailPanel from "./components/station/StationDetailPanel";
 import SpotListPanel from "./components/station/SpotListPanel";
 import AccommodationPanel from "./components/accommodation/AccommodationPanel";
 import MyStationPanel from "./components/user/MyStationPanel";
+import AccommodationManage from "./components/accommodation/AccommodationManage";
+
 
 // 관리자 여부 확인
 const isAdmin = sessionStorage.getItem("isAdmin") === "Y";
@@ -327,6 +329,7 @@ const App = () => {
             />
             <Route path="/admin/report" element={<ReportReviewTable />} />
             <Route path="/admin/userCare" element={<UserManageTable />} />
+            <Route path="/admin/AccommManage" element={<AccommodationManage />} />
           </Route>
         ) : (
           <>

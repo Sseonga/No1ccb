@@ -35,5 +35,19 @@
         WHERE USER_EMAIL = #{email}
     </update>
 
+    <delete id="deleteUser" parameterType="long">
+        DELETE FROM TB_USER WHERE USER_ID = #{userId}
+    </delete>
 
+
+    <select id="selectAllUsers" resultType="fs.human.ecospot.user.vo.UserVO">
+        SELECT
+        USER_ID as userId,
+        USER_EMAIL as userEmail,
+        USER_PASSWORD as userPassword,
+        IS_ADMIN as isAdmin,
+        CREATED_ID as createdId,
+        UPDATED_ID as updatedId
+        FROM TB_USER
+    </select>
 </mapper>

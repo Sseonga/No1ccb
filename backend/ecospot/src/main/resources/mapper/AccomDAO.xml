@@ -24,4 +24,42 @@
         FROM TB_ACCOMMODATION
         ORDER BY ACCOM_ID DESC
     </select>
+
+    <insert id="insertAccommodation" parameterType="fs.human.ecospot.accommodationPanel.vo.AccommodationVO">
+        INSERT INTO TB_ACCOMMODATION (
+        ACCOM_ID,
+        ACCOM_NAME,
+        ACCOM_DESC,
+        ACCOM_CHECKIN,
+        ACCOM_CHECKOUT,
+        ACCOM_ADDRESS,
+        ACCOM_LAT,
+        ACCOM_LON,
+        ACCOM_URL,
+        ACCOM_IMG_MAIN1,
+        CREATED_ID,
+        CREATED_DATE
+        )
+        VALUES (
+        SEQ_ACCOM.NEXTVAL,
+        #{accomName},
+        #{accomDesc},
+        #{accomCheckin},
+        #{accomCheckout},
+        #{accomAddress},
+        #{accomLat},
+        #{accomLon},
+        #{accomUrl},
+        #{accomImgMain1},
+        #{createdId},
+        SYSDATE
+        )
+    </insert>
+
+    <delete id="deleteAccommodation" parameterType="long">
+        DELETE FROM TB_ACCOMMODATION
+        WHERE ACCOM_ID = #{accomId}
+    </delete>
+
+
 </mapper>
