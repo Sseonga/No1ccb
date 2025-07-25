@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import '../admin/admin.css';
 
 const AccommodationManage = () => {
   const [accommodations, setAccommodations] = useState([]);
@@ -35,6 +36,12 @@ const AccommodationManage = () => {
     }
   };
 
+  // 글자 자르기 함수 (10글자 제한)
+  const truncateText = (text, maxLength = 10) => {
+    if (!text) return '';
+    return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
+  };
+
   // 선택된 숙소 삭제
   const handleDeleteSelected = async () => {
     if (selectedIds.length === 0) {
@@ -63,77 +70,73 @@ const AccommodationManage = () => {
   };
 
   return (
-    <div style={{
-      maxWidth: '800px',
-      margin: '20px auto',
-      padding: '20px',
-      boxShadow: '0 0 15px rgba(0,0,0,0.1)',
-      borderRadius: '8px',
-      backgroundColor: '#fff',
-      fontFamily: 'Arial, sans-serif',
-    }}>
-      <h2>숙소 관리</h2>
-
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-        <thead>
-          <tr style={{ borderBottom: '2px solid #ddd' }}>
-            <th>
-              <input
-                type="checkbox"
-                checked={selectedIds.length === accommodations.length && accommodations.length > 0}
-                onChange={toggleSelectAll}
-              />
-            </th>
-            <th>번호</th>
-            <th>숙소 이름</th>
-            <th>주소</th>
-            <th>체크인</th>
-            <th>체크아웃</th>
-            {/* 필요한 컬럼 추가 가능 */}
-          </tr>
-        </thead>
-        <tbody>
-          {accommodations.length === 0 ? (
-            <tr>
-              <td colSpan="6" style={{ textAlign: 'center', padding: '20px' }}>
-                숙소 정보가 없습니다.
-              </td>
-            </tr>
-          ) : (
-            accommodations.map((acc, idx) => (
-              <tr key={acc.accomId} style={{ borderBottom: '1px solid #eee' }}>
-                <td style={{ textAlign: 'center' }}>
-                  <input
-                    type="checkbox"
-                    checked={selectedIds.includes(acc.accomId)}
-                    onChange={() => toggleSelect(acc.accomId)}
-                  />
-                </td>
-                <td style={{ textAlign: 'center' }}>{idx + 1}</td>
-                <td>{acc.accomName}</td>
-                <td>{acc.accomAddress}</td>
-                <td style={{ textAlign: 'center' }}>{acc.accomCheckin}</td>
-                <td style={{ textAlign: 'center' }}>{acc.accomCheckout}</td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
-
-      <button
-        onClick={handleDeleteSelected}
+    <div>
+      <h2
         style={{
-          marginTop: '20px',
-          backgroundColor: 'red',
-          color: '#fff',
-          border: 'none',
-          padding: '10px 20px',
-          borderRadius: '5px',
-          cursor: 'pointer',
+          width: '60%',
+          margin: '2% auto 5% auto',
+          paddingBottom: '4%',
+          textAlign: 'center',
+          borderBottom: 'solid 1px  #d3d3d3',
         }}
       >
-        삭제
-      </button>
+        관리자페이지
+      </h2>
+
+      <div className="hotelcare">
+        <div className="table-name">숙소관리</div>
+
+        <table className="report-table">
+          <thead>
+            <tr style={{ borderBottom: '2px solid #ddd' }}>
+              <th>번호</th>
+              <th>숙소 이름</th>
+              <th>주소</th>
+              <th>체크인</th>
+              <th>체크아웃</th>
+              <th>선택</th>
+            </tr>
+          </thead>
+          <tbody>
+            {accommodations.length === 0 ? (
+              <tr>
+                <td colSpan="6" style={{ textAlign: 'center', padding: '20px' }}>
+                  숙소 정보가 없습니다.
+                </td>
+              </tr>
+            ) : (
+              accommodations.map((acc, idx) => (
+                <tr key={acc.accomId} style={{ borderBottom: '1px solid #eee' }}>
+                  <td style={{ textAlign: 'center' }}>{idx + 1}</td>
+                  <td>{truncateText(acc.accomName)}</td>
+                  <td>{truncateText(acc.accomAddress)}</td>
+                  <td style={{ textAlign: 'center' }}>{acc.accomCheckin}</td>
+                  <td style={{ textAlign: 'center' }}>{acc.accomCheckout}</td>
+                  <td style={{ textAlign: 'center' }}>
+                    <input
+                      type="checkbox"
+                      checked={selectedIds.includes(acc.accomId)}
+                      onChange={() => toggleSelect(acc.accomId)}
+                    />
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+
+            <div className="button-area">
+                <button
+                  onClick={handleDeleteSelected}
+                style={{
+                      border: 'none',
+
+                    }}
+                >
+                  삭제
+                </button>
+            </div>
+      </div>
     </div>
   );
 };

@@ -15,14 +15,6 @@ const AdminSidebar = () => {
         <img src={logo} alt="로고" width="100" height="100" />
       </Link>
 
-      <NavLink
-        to="/admin/accommodation"
-        className={({ isActive }) => (isActive ? 'tab active' : 'tab')}
-      >
-        <i className="fa-solid fa-hotel"></i>
-        <br />
-        숙소추가
-      </NavLink>
 
       <NavLink
               to="/admin/AccommManage"
@@ -32,6 +24,16 @@ const AdminSidebar = () => {
               <br />
               숙소관리
       </NavLink>
+
+      <NavLink
+        to="/admin/accommodation"
+        className={({ isActive }) => (isActive ? 'tab active' : 'tab')}
+      >
+        <i class="fa-solid fa-plus"></i>
+        <br />
+        숙소추가
+      </NavLink>
+
 
       <NavLink
         to="/admin/report"

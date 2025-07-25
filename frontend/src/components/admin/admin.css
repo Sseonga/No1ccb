@@ -282,3 +282,16 @@ input.inout{
 
 }
 
+.hotelcare{
+
+    width: 60%;
+
+    margin: auto;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    height: 80%;
+    background-color: #fff;
+    overflow-y: auto;
+
+
+}
