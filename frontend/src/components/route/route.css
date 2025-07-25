@@ -1,72 +1,317 @@
-.route-panel {
-  position: absolute;
-  left: 8%; /* Sidebar 오른쪽으로 살짝 띄우기 */
-  top: 0px;
-  width: 300px;
-  background: white;
-  padding-top: 15px;
-  padding-left: 15px;
-  padding-right: 15px;
+/* route/route.css */
 
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  z-index: 10;
-  height: 100%;
-}
-
-.route-input-start input {
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  border-top-radius: 12px;
-  background-color: white;
-  border-bottom: solid black 0px;
-  border-right: solid black 2px;
-  border-left: solid black 2px;
-  border-top: solid black 2px;
-  width: 95%;
-  height: 40px;
-  margin-left: 3.5px;
-}
-
-.route-input-end input {
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-
-  background-color: white;
-  border-bottom: solid black 2px;
-  border-right: solid black 2px;
-  border-left: solid black 2px;
-  border-top: solid #eeeeee 1px;
-  width: 95%;
-  height: 40px;
-  margin-left: 3.5px;
-}
-
-.route-input-start {
-  width: 100%;
+/* ────────────────────────────────
+  [공통 전체 컨테이너]
+──────────────────────────────── */
+.route-container {
   display: flex;
-  align-items: center;
+  height: 100vh;
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  background: #f6f7fb;
 }
 
-.route-input-end {
-  width: 100%;
+/* ────────────────────────────────
+  [사이드바]
+──────────────────────────────── */
+.route-sidebar {
+  width: 400px;
+  background: #fafdff;
+  border-right: 1.5px solid #e3e6ea;
+  box-sizing: border-box;
+  padding: 30px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 350px;
+  max-width: 430px;
+  overflow-y: auto;
 }
 
-.search-button {
+/* ────────────────────────────────
+  [검색영역 카드 + 인풋/셀렉트]
+──────────────────────────────── */
+.route-search-form {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 2px 12px rgba(51,80,170,0.07);
+  padding: 23px 20px 16px 20px;
+  margin: 0 20px 16px 20px;
+}
+
+.route-search-form input,
+.route-search-form select {
+  border: 1px solid #dde4ee;
+  border-radius: 8px;
+  background: #f8fbff;
+  font-size: 18.5px;        /* ← 더 큼직하게 */
+  padding: 16px 14px;       /* ← 높이 증가 */
+  margin-bottom: 13px;      /* ← 간격 늘림 */
+  transition: border 0.18s;
+  box-sizing: border-box;
+}
+
+.route-search-form input::placeholder {
+  font-size: 18px;
+  color: #bbb;
+  letter-spacing: 0.02em;
+}
+
+.route-search-form input:focus,
+.route-search-form select:focus {
+  outline: none;
+  border: 1.7px solid #377ee6;
+  background: #fff;
+}
+
+.route-search-form button {
   width: 100%;
-  padding: 8px;
-  background-color: #007bff;
-  color: white;
-  font-weight: bold;
+  background: #377ee6;
+  color: #fff;
+  font-weight: 700;
+  padding: 13px 0 13px 0;
   border: none;
-  border-radius: 4px;
+  border-radius: 10px;
+  font-size: 17px;
+  margin-top: 4px;
   cursor: pointer;
-  margin-top: 20px;
+  box-shadow: 0 2px 7px rgba(51,90,200,0.09);
+  letter-spacing: 0.03em;
+  transition: background 0.16s, box-shadow 0.15s;
 }
 
-.route-result-box {
-  margin-top: 12px;
-  padding: 8px;
+.route-search-form button:active {
+  background: #195fc7;
+  box-shadow: none;
+}
 
+/* ────────────────────────────────
+  [카테고리 버튼 영역]
+──────────────────────────────── */
+.route-category-btns {
+  display: flex;
+  gap: 15px;
+  margin: 10px 22px 0 22px;
+  justify-content: space-between;
+}
+
+.route-category-btn {
+  flex: 1;
+  padding: 14px 0;
+  background: #f3f6fb;
+  color: #232323;
+  border: none;
+  border-radius: 11px;
+  font-weight: 700;
+  font-size: 16.5px;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  box-shadow: 0 1px 6px rgba(61, 101, 190, 0.04);
+  margin-bottom: 7px;
+  transition: background 0.16s, color 0.13s, box-shadow 0.14s;
+}
+
+.route-category-btn--active {
+  background: #377ee6;
+  color: #fff;
+  box-shadow: 0 4px 14px #377ee625;
+  font-size: 17px;
+}
+
+/* ────────────────────────────────
+  [충전소/POI 리스트]
+──────────────────────────────── */
+.route-list-block {
+  margin: 21px 0 0 0;
+  padding: 0 22px;
+}
+
+.route-list-title {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.route-list-inner {
+  margin: 12px 0 0 0;
+  min-height: 80px;
+}
+
+/* 충전소 리스트 스타일 */
+.route-charge-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.route-charge-list-empty {
+  color: #bbb;
+  font-size: 16px;
+  margin: 18px 0;
+  text-align: center;
+}
+
+/* ────────────────────────────────
+  [충전소 항목 한줄→여러줄, 길이/크기 개선]
+──────────────────────────────── */
+.route-charge-list-item {
+  margin-bottom: 10px;
+  padding: 11px 10px;
+  background: #fff;
+  border-radius: 9px;
+  cursor: pointer;
+  border: 1.2px solid #e3e6ea;
+  display: flex;
+  flex-direction: column;   /* ← 세로 쌓임 */
+  align-items: flex-start;  /* ← 왼쪽 정렬 */
+  white-space: normal;      /* ← 줄바꿈 허용 */
+  word-break: break-all;    /* ← 길면 강제 줄바꿈 */
+  min-height: 56px;
+  transition: border 0.14s, background 0.13s, box-shadow 0.15s;
+  box-shadow: 0 1px 8px rgba(50,120,220,0.03);
+}
+
+.route-charge-list-item.selected,
+.route-charge-list-item:hover {
+  background: #eaf3fe;
+  border: 1.7px solid #377ee6;
+  box-shadow: 0 2px 10px #377ee624;
+}
+
+.route-charge-list-name {
+  font-weight: 700;
+  font-size: 16.2px;
+  margin-bottom: 2px;
+  white-space: normal;
+  word-break: keep-all;
+  line-height: 1.33;
+}
+
+.route-charge-list-addr {
+  font-size: 13.7px;
+  color: #8a98a8;
+  margin-left: 0;
+  margin-top: 1.5px;
+  word-break: break-all;
+  line-height: 1.27;
+}
+
+/* ────────────────────────────────
+  [충전소 상세정보 하단]
+──────────────────────────────── */
+.route-chargerlist-wrap {
+  margin: 12px 0 0 0;
+  padding: 0 22px;
+}
+
+/* ────────────────────────────────
+  [에러 메시지]
+──────────────────────────────── */
+.route-error {
+  color: #e34040;
+  margin: 15px 22px 11px 22px;
+  font-size: 16px;
+  border-radius: 8px;
+  background: #fff2f4;
+  padding: 11px 13px;
+  border: 1.3px solid #ffc8c8;
+  font-weight: 500;
+}
+
+/* ────────────────────────────────
+  [사이드바 스크롤바 얇게]
+──────────────────────────────── */
+.route-sidebar::-webkit-scrollbar {
+  width: 7px;
+  background: #e3e6ea;
+}
+.route-sidebar::-webkit-scrollbar-thumb {
+  background: #d3d7de;
   border-radius: 4px;
-  font-size: 14px;
+}
+
+/* ────────────────────────────────
+  [지도영역]
+──────────────────────────────── */
+.route-maparea {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  height: 100vh;
+}
+
+/* ────────────────────────────────
+  [총 거리]
+──────────────────────────────── */
+.route-totaldistance {
+  position: absolute;
+  top: 18px;
+  left: 28px;
+  z-index: 9;
+  background: #fff;
+  border-radius: 9px;
+  padding: 10px 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+  font-weight: 600;
+  font-size: 16.5px;
+  color: #133a70;
+}
+
+/* ────────────────────────────────
+  [반응형: 모바일 등]
+──────────────────────────────── */
+@media (max-width: 600px) {
+  .route-sidebar {
+    min-width: 0;
+    width: 100vw;
+    max-width: 100vw;
+    padding: 15px 0 0 0;
+  }
+  .route-search-form {
+    margin: 0 6px 16px 6px;
+    padding: 14px 7px 9px 7px;
+  }
+  .route-list-block,
+  .route-chargerlist-wrap {
+    padding: 0 7px;
+  }
+  .route-category-btns {
+    margin: 10px 6px 0 6px;
+  }
+}
+
+/* ────────────────────────────────
+  [충전기 상세 테이블 꾸밈]
+──────────────────────────────── */
+.route-chargerlist-wrap table,
+.route-chargerlist-wrap th,
+.route-chargerlist-wrap td {
+  border-collapse: collapse;
+  border: none;
+}
+
+.route-chargerlist-wrap table {
+  width: 100%;
+  font-size: 13px;
+  margin-top: 8px;
+  background: #fafdff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.route-chargerlist-wrap th, .route-chargerlist-wrap td {
+  padding: 7px 6px;
+  text-align: center;
+}
+
+.route-chargerlist-wrap th {
+  background: #eaf2f8;
+  font-weight: 600;
+  color: #23455a;
+}
+
+.route-chargerlist-wrap tr:nth-child(even) {
+  background: #f3f7fb;
+}
+/* [교통정보 표출] select 박스만 완전히 숨기기 */
+.route-search-form select[name="trafficOption"] {
+  display: none !important;
+  pointer-events: none;
 }

@@ -25,6 +25,11 @@ const SpotListPanel = ({ selectedPoiName, center, onClose }) => {
   const [selectedSpotId, setSelectedSpotId] = useState(null);
 
   useEffect(() => {
+    console.log("Center changed:", center);
+    console.log("Spots by type:", spotsByType);
+  }, [center, spotsByType]);
+
+  useEffect(() => {
     const fetchSpots = async () => {
       const fetched = {};
 
@@ -65,10 +70,12 @@ const SpotListPanel = ({ selectedPoiName, center, onClose }) => {
       }
 
       setSpotsByType(fetched);
-      console.log(fetched);
+      console.log("Fetched spots by type:", fetched);
     };
 
-    fetchSpots();
+    if (center.lat && center.lon) {
+      fetchSpots();
+    }
   }, [center]);
 
   return (
