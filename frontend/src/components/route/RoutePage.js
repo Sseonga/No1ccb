@@ -12,6 +12,34 @@ const CATEGORY_BTNS = [
   { key: "food", label: "음식점" }
 ];
 
+// 플레이스홀더 상세 컴포넌트 예시
+function CafeDetailComponent({ poi }) {
+  return (
+    <div style={{ padding: 10, background: "#fff", borderRadius: 6, marginTop: 6 }}>
+      <b>{poi.name || "카페 상세 정보"}</b>
+      <div>카페 상세정보를 여기 표시하세요.</div>
+    </div>
+  );
+}
+
+function StoreDetailComponent({ poi }) {
+  return (
+    <div style={{ padding: 10, background: "#fff", borderRadius: 6, marginTop: 6 }}>
+      <b>{poi.name || "편의점 상세 정보"}</b>
+      <div>편의점 상세정보를 여기 표시하세요.</div>
+    </div>
+  );
+}
+
+function FoodDetailComponent({ poi }) {
+  return (
+    <div style={{ padding: 10, background: "#fff", borderRadius: 6, marginTop: 6 }}>
+      <b>{poi.name || "음식점 상세 정보"}</b>
+      <div>음식점 상세정보를 여기 표시하세요.</div>
+    </div>
+  );
+}
+
 function RoutePage() {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
@@ -22,8 +50,8 @@ function RoutePage() {
   const [fromPoi, setFromPoi] = useState(null);
   const [toPoi, setToPoi] = useState(null);
   const [poiByCat, setPoiByCat] = useState({ charge: [], cafe: [], store: [], food: [] });
-  const [selectedCharger, setSelectedCharger] = useState(null); // 현재 선택된 poi 전체 객체
-  const [selectedChargerIdx, setSelectedChargerIdx] = useState(null); // 충전소 idx
+  const [selectedCharger, setSelectedCharger] = useState(null);
+  const [selectedChargerIdx, setSelectedChargerIdx] = useState(null);
   const [totalDistance, setTotalDistance] = useState(null);
 
   const [routeOption, setRouteOption] = useState("0");
@@ -91,36 +119,36 @@ function RoutePage() {
           )}
         </div>
         <div className="route-list-block">
-          <b className="route-list-title">충전소 목록</b>
+          <b className="route-list-title">{CATEGORY_BTNS.find(c => c.key === category)?.label} 목록</b>
           <div className="route-list-inner">
-            {category === "charge" && (
-              <ul className="route-charge-list">
-                {poiList.length === 0
-                  ? <div className="route-charge-list-empty">충전소 없음</div>
-                  : poiList.map((poi, i) => (
-                    <React.Fragment key={poi.pkey || poi.id || i}>
-                      <li
-                        className={
-                          "route-charge-list-item" +
-                          (selectedChargerIdx === i ? " selected" : "")
-                        }
-                        onClick={() => handleChargerClick(poi, i)}
-                      >
-                        <span className="route-charge-list-name">{poi.name}</span>
-                        <span className="route-charge-list-addr">
-                          {poi.upperAddrName || ""} {poi.middleAddrName || ""}
-                        </span>
-                      </li>
-                      {selectedChargerIdx === i &&
-                        <div className="route-chargerlist-wrap">
-                          <RouteChargerList poi={poi} />
-                        </div>
+            <ul className={`route-${category}-list`}>
+              {poiList.length === 0
+                ? <div className="route-charge-list-empty">{CATEGORY_BTNS.find(c => c.key === category)?.label} 없음</div>
+                : poiList.map((poi, i) => (
+                  <React.Fragment key={poi.pkey || poi.id || i}>
+                    <li
+                      className={
+                        `route-charge-list-item${selectedChargerIdx === i ? " selected" : ""}`
                       }
-                    </React.Fragment>
-                  ))
-                }
-              </ul>
-            )}
+                      onClick={() => handleChargerClick(poi, i)}
+                    >
+                      <span className="route-charge-list-name">{poi.name}</span>
+                      <span className="route-charge-list-addr">
+                        {poi.upperAddrName || ""} {poi.middleAddrName || ""}
+                      </span>
+                    </li>
+                    {selectedChargerIdx === i && (
+                      <div className="route-chargerlist-wrap">
+                        {category === "charge" && <RouteChargerList poi={poi} />}
+                        {category === "cafe" && <CafeDetailComponent poi={poi} />}
+                        {category === "store" && <StoreDetailComponent poi={poi} />}
+                        {category === "food" && <FoodDetailComponent poi={poi} />}
+                      </div>
+                    )}
+                  </React.Fragment>
+                ))
+              }
+            </ul>
           </div>
         </div>
         {errorMsg && <div className="route-error">{errorMsg}</div>}

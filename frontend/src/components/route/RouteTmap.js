@@ -7,21 +7,18 @@ function RouteTmap({ pathCoords, fromPoi, toPoi, poiList, selectedCharger }) {
   const polylinesRef = useRef([]);
   const mapDivId = "map_div";
 
-
   useEffect(() => {
     if (!window.Tmapv2) return;
     const container = document.getElementById(mapDivId);
     if (!mapRef.current && container) {
-      setTimeout(() => {
-        mapRef.current = new window.Tmapv2.Map(mapDivId, {
-          center: new window.Tmapv2.LatLng(37.5665, 126.9780),
-          zoom: 11,
-          width: "100%",
-          height: "100%",
-        });
-        // refresh 대신 resize 호출
-        mapRef.current.resize();
-      }, 100);
+      mapRef.current = new window.Tmapv2.Map(mapDivId, {
+        center: new window.Tmapv2.LatLng(37.5665, 126.9780),
+        zoom: 11,
+        width: "100%",
+        height: "100%",
+      });
+      // resize로 화면 강제 업데이트
+      window.dispatchEvent(new Event("resize"));
     }
   }, []);
 
