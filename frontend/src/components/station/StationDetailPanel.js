@@ -14,22 +14,35 @@ const StationDetailPanel = ({ poi, onShowSpots, onBack }) => {
 
   const userId = sessionStorage.getItem("userId");
 
-  useEffect(() => {
-    const fetchFavoriteStatus = async () => {
-      if (!userId || !poi?.pkey) return;
+  const fetchFavoriteStatus = async () => {
+    if (!userId || !poi?.pkey) return;
 
-      try {
-        const res = await fetch(
-          `/api/favor/exist?userId=${userId}&stationId=${poi.pkey}`
-        );
-        const data = await res.json();
-        setIsFavorited(data.favorited); // 백엔드에서 true/false로 응답
-      } catch (err) {
-        console.error("즐겨찾기 여부 조회 실패:", err);
-      }
+    try {
+      const res = await fetch(
+        `/api/favor/exist?userId=${userId}&stationId=${poi.pkey}`
+      );
+      const data = await res.json();
+      setIsFavorited(data.favorited); // 백엔드에서 true/false로 응답
+    } catch (err) {
+      console.error("즐겨찾기 여부 조회 실패:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchFavoriteStatus();
+  }, [poi?.pkey, userId]);
+
+  // 즐겨찾기 업데이트 이벤트 감지
+  useEffect(() => {
+    const handleFavoriteUpdate = () => {
+      fetchFavoriteStatus();
     };
 
-    fetchFavoriteStatus();
+    window.addEventListener('favoriteUpdated', handleFavoriteUpdate);
+    
+    return () => {
+      window.removeEventListener('favoriteUpdated', handleFavoriteUpdate);
+    };
   }, [poi?.pkey, userId]);
 
   const handleToggleFavorite = async () => {
@@ -53,6 +66,9 @@ const StationDetailPanel = ({ poi, onShowSpots, onBack }) => {
 
       if (response.ok) {
         setIsFavorited((prev) => !prev);
+        
+        // 마이페이지 새로고침을 위한 이벤트 발생
+        window.dispatchEvent(new Event('favoriteUpdated'));
       } else {
         alert("즐겨찾기 처리 중 오류가 발생했습니다.");
       }

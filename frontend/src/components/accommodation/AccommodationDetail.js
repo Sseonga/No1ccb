@@ -1,12 +1,78 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './Accommodation.css';
+import { checkLoginWithConfirm } from "../../util/auth";
 
 const AccommodationDetail = ({ accommodation, onBack }) => {
   const [isFavorited, setIsFavorited] = useState(false);
+  const userId = sessionStorage.getItem("userId");
 
-  const handleToggleFavorite = () => {
-    setIsFavorited(prev => !prev);
-    console.log(`${accommodation.accomName} 즐겨찾기 상태: ${!isFavorited}`);
+  // 즐겨찾기 상태 조회
+  const fetchFavoriteStatus = async () => {
+    if (!userId || !accommodation?.accomId) return;
+
+    try {
+      const res = await fetch(
+        `/api/favor/exist?userId=${parseInt(userId)}&stationId=${parseInt(accommodation.accomId)}&type=accommodation`
+      );
+      const data = await res.json();
+      setIsFavorited(data.favorited);
+    } catch (err) {
+      console.error("숙소 즐겨찾기 여부 조회 실패:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchFavoriteStatus();
+  }, [accommodation?.accomId, userId]);
+
+  // 즐겨찾기 업데이트 이벤트 감지
+  useEffect(() => {
+    const handleFavoriteUpdate = () => {
+      fetchFavoriteStatus();
+    };
+
+    window.addEventListener('favoriteUpdated', handleFavoriteUpdate);
+    
+    return () => {
+      window.removeEventListener('favoriteUpdated', handleFavoriteUpdate);
+    };
+  }, [accommodation?.accomId, userId]);
+
+  const handleToggleFavorite = async () => {
+    if (!checkLoginWithConfirm()) return;
+
+    try {
+      const response = await fetch("/api/favor", {
+        method: isFavorited ? "DELETE" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: parseInt(userId),
+          stationId: parseInt(accommodation.accomId),
+          poiInfo: {
+            name: accommodation.accomName,
+            frontLat: parseFloat(accommodation.accomLat) || 0,
+            frontLon: parseFloat(accommodation.accomLon) || 0,
+          },
+          operatorId: "ACCOM_01", // 숙소 운영자 코드
+          fullAddressRoad: accommodation.accomAddressD || accommodation.accomAddress,
+        }),
+      });
+
+      if (response.ok) {
+        setIsFavorited((prev) => !prev);
+        alert(isFavorited ? "즐겨찾기에서 제거되었습니다." : "즐겨찾기에 추가되었습니다.");
+        
+        // 마이페이지 새로고침을 위한 이벤트 발생
+        window.dispatchEvent(new Event('favoriteUpdated'));
+      } else {
+        alert("즐겨찾기 처리 중 오류가 발생했습니다.");
+      }
+    } catch (err) {
+      console.error("숙소 즐겨찾기 처리 실패:", err);
+      alert("서버 오류가 발생했습니다.");
+    }
   };
 
   if (!accommodation) return null;

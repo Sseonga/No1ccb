@@ -18,8 +18,8 @@
         ) VALUES (
         SEQ_FAVOR_ID.NEXTVAL,
         #{userId},
-        'FAVOR_02',
-        #{stationId},
+        #{favorTypeCd},
+        #{targetId},
         SYSDATE,
         #{userId, jdbcType=NUMERIC},
         SYSDATE,
@@ -30,8 +30,8 @@
     <delete id="deleteFavorite">
         DELETE FROM TB_FAVORITES
         WHERE USER_ID = #{userId}
-        AND FAVOR_TYPE_CD = 'FAVOR_02'
-        AND TARGET_ID = #{stationId}
+        AND FAVOR_TYPE_CD = #{favorTypeCd}
+        AND TARGET_ID = #{targetId}
     </delete>
 
     <select id="existsFavorite" resultType="int">
@@ -40,5 +40,30 @@
         WHERE USER_ID = #{userId}
         AND FAVOR_TYPE_CD = #{favorTypeCd}
         AND TARGET_ID = #{targetId}
+    </select>
+
+    <select id="selectFavoritesByUserId" resultType="fs.human.ecospot.personal.dto.FavorResponseDto">
+        SELECT
+            f.FAVOR_ID as favorId,
+            f.USER_ID as userId,
+            f.FAVOR_TYPE_CD as favorTypeCd,
+            f.TARGET_ID as targetId,
+            TO_CHAR(f.CREATED_DATE, 'YYYY-MM-DD HH24:MI:SS') as createdDate,
+            TO_CHAR(f.UPDATED_DATE, 'YYYY-MM-DD HH24:MI:SS') as updatedDate,
+            CASE 
+                WHEN f.FAVOR_TYPE_CD = 'FAVOR_02' THEN NVL(s.STATION_NAME, '충전소명 없음')
+                WHEN f.FAVOR_TYPE_CD = 'FAVOR_04' THEN NVL(a.ACCOM_NAME, '숙소명 없음')
+                ELSE '알 수 없는 타입: ' || f.FAVOR_TYPE_CD
+            END as targetName,
+            CASE 
+                WHEN f.FAVOR_TYPE_CD = 'FAVOR_02' THEN NVL(s.STATION_ADDRESS, '주소 없음')
+                WHEN f.FAVOR_TYPE_CD = 'FAVOR_04' THEN NVL(a.ACCOM_ADDRESS, '주소 없음')
+                ELSE ''
+            END as targetAddress
+        FROM TB_FAVORITES f
+        LEFT JOIN TB_STATION s ON (f.FAVOR_TYPE_CD = 'FAVOR_02' AND f.TARGET_ID = s.STATION_ID)
+        LEFT JOIN TB_ACCOMMODATION a ON (f.FAVOR_TYPE_CD = 'FAVOR_04' AND f.TARGET_ID = a.ACCOM_ID)
+        WHERE f.USER_ID = #{userId}
+        ORDER BY f.CREATED_DATE DESC
     </select>
 </mapper>

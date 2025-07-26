@@ -6,9 +6,11 @@ import fs.human.ecospot.charger.vo.PoiInfo;
 import fs.human.ecospot.charger.vo.StationVO;
 import fs.human.ecospot.personal.dao.FavorDAO;
 import fs.human.ecospot.personal.dto.FavorRequestDto;
+import fs.human.ecospot.personal.dto.FavorResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -49,15 +51,34 @@ public class FavorService {
             chargerDAO.insertStation(station, dto.getUserId());
         }
 
-        // 즐겨찾기 등록
-        favorDAO.insertFavorite(dto.getUserId(), dto.getStationId());
+        // 즐겨찾기 등록 (충전소는 FAVOR_02)
+        favorDAO.insertFavorite(dto.getUserId(), dto.getStationId(), "FAVOR_02");
     }
 
     public void removeFavorite(FavorRequestDto dto) {
-        favorDAO.deleteFavorite(dto.getUserId(), dto.getStationId());
+        favorDAO.deleteFavorite(dto.getUserId(), dto.getStationId(), "FAVOR_02");
     }
 
     public boolean isStationFavorited(Long userId, Long stationId) {
         return favorDAO.existsFavorite(userId, "FAVOR_02", stationId) > 0;
+    }
+
+    public List<FavorResponseDto> getFavoritesByUserId(Long userId) {
+        return favorDAO.selectFavoritesByUserId(userId);
+    }
+
+    // 숙소 즐겨찾기 추가
+    public void addAccommodationFavorite(Long userId, Long accomId) {
+        favorDAO.insertFavorite(userId, accomId, "FAVOR_04");
+    }
+
+    // 숙소 즐겨찾기 삭제
+    public void removeAccommodationFavorite(Long userId, Long accomId) {
+        favorDAO.deleteFavorite(userId, accomId, "FAVOR_04");
+    }
+
+    // 숙소 즐겨찾기 여부 확인
+    public boolean isAccommodationFavorited(Long userId, Long accomId) {
+        return favorDAO.existsFavorite(userId, "FAVOR_04", accomId) > 0;
     }
 }
