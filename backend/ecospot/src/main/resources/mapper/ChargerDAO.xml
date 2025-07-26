@@ -84,4 +84,20 @@
         )
     </insert>
 
+
+    <select id="findByParkingId" resultType="fs.human.ecospot.charger.vo.ChargerVO">
+        SELECT
+        PARKING_ID,
+        PARKING_NAME,
+        PARKING_TYPE,
+        PARKING_ADDRESS,
+        PARKING_ADDRESS_D,
+        PARKING_OPERATING,
+        PARKING_CAPACITY,
+        PARKING_FEE,
+        PARKING_PHONE
+        FROM TB_PARKING
+        WHERE PARKING_ID = #{parkingId}
+    </select>
+
 </mapper>

@@ -251,6 +251,55 @@
   cursor: pointer;
 }
 
+.report-summary {
+  background-color: #ffe5e5;
+  border: 1px solid #ff4d4f;
+  color: #b30000;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  margin-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.report-summary button {
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.report-summary button:hover {
+  background-color: #cc0000;
+}
+
+.report-summary-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.report-summary-table th,
+.report-summary-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.report-summary-table th {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.report-summary-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
 /* SpotPanel */
 .spot-list-panel {
   flex: 0 0 340px;
@@ -313,6 +362,12 @@
   transition: box-shadow 0.3s;
 }
 
+.spot-list-card.open {
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2); /* 파란 계열 그림자 */
+  border-color: #339af0; /* 하이라이트된 테두리 */
+  background-color: #f0f8ff; /* 아주 연한 파란색 배경 */
+}
+
 .poi-title {
   background: #f2f2f2;
   padding: 10px 14px;
@@ -331,6 +386,27 @@
 .spot-detail-wrapper.visible {
   max-height: 200px;
   padding: 10px 14px;
+}
+
+/* parkingInfo */
+.parking-info-panel {
+  margin: 10px 0;
+  padding: 12px;
+  background-color: #f4f4f4;
+  border-left: 4px solid #0099cc;
+  border-radius: 6px;
+  font-size: 14px;
+  animation: slideDown 0.3s ease;
+}
+
+.parking-toggle-btn {
+  margin-left: 8px;
+  font-size: 13px;
+  background-color: #e0e0e0;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .back-button {

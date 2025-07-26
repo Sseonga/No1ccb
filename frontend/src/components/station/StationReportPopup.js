@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import "./station.css"; // 스타일 import
 
-const StationReportPopup = ({ stationId, onClose, onSubmit }) => {
+const StationReportPopup = ({ stationId, onClose, reportComplete }) => {
   const [reportType, setReportType] = useState("");
   const [comment, setComment] = useState("");
   const [reportOptions, setReportOptions] = useState([]);
@@ -14,10 +14,32 @@ const StationReportPopup = ({ stationId, onClose, onSubmit }) => {
       .catch(err => console.error("신고유형 로딩 실패", err));
   }, []);
 
-  const handleSubmit = () => {
+  const handleReportSubmit = async () => {
     if (!reportType) return alert("신고 유형을 선택해주세요");
-    onSubmit({ reportType, comment });
-    onClose();
+    try {
+      const userId = sessionStorage.getItem("userId");
+      const res = await fetch("/api/report", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: Number(userId),
+          stationId: stationId,
+          reportTypeCd: reportType,
+          reportComment: comment,
+        }),
+      });
+
+      if (res.ok) {
+        alert("신고가 접수되었습니다.");
+        reportComplete();
+        onClose();
+      } else {
+        alert("신고 처리 중 오류 발생");
+      }
+    } catch (err) {
+      console.error("신고 오류:", err);
+      alert("서버 오류");
+    }
   };
 
   return (
@@ -30,7 +52,7 @@ const StationReportPopup = ({ stationId, onClose, onSubmit }) => {
             value={reportType}
             onChange={e => setReportType(e.target.value)}
           >
-            <option value="">신고 유형 선택</option>
+            <option>신고 유형 선택</option>
             {reportOptions.map(opt => (
               <option key={opt.codeDetailId} value={opt.codeDetailId}>
                 {opt.codeDetailName}
@@ -48,7 +70,7 @@ const StationReportPopup = ({ stationId, onClose, onSubmit }) => {
         </div>
 
         <div className="report-button-group">
-          <button className="report-submit-btn" onClick={handleSubmit}>
+          <button className="report-submit-btn" onClick={handleReportSubmit}>
             신고하기
           </button>
           <button className="report-cancel-btn" onClick={onClose}>

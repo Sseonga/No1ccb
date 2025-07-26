@@ -31,4 +31,8 @@ public class ChargerService {
                 })
                 .collect(Collectors.toList());
     }
+
+    public ChargerVO getParkingById(Long parkingId) {
+        return chargerDAO.findByParkingId(parkingId);
+    }
 }
