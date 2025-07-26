@@ -5,7 +5,6 @@ import fs.human.ecospot.charger.vo.ChargerVO;
 import fs.human.ecospot.charger.vo.StationVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 
@@ -18,4 +17,6 @@ public interface ChargerDAO {
     void insertStation(@Param("station") StationVO station, @Param("userId") Long userId);
 
     boolean existsStation(Long stationId);
+
+    ChargerVO findByParkingId(@Param("parkingId") Long parkingId);
 }

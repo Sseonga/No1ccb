@@ -149,7 +149,6 @@ const UserLayout = () => {
             parkingFee: match?.parkingFee ?? null,
           };
         });
-        console.log(parkingPois);
 
         setPoiList(parkingPois);
       } catch (e) {
@@ -165,8 +164,6 @@ const UserLayout = () => {
     const applyFilters = () => {
       const filtered = poiList.filter((poi) => {
         const chargers = poi.evChargers?.evCharger ?? [];
-        console.log(filters);
-        console.log(chargers);
 
         // 🔌 충전 타입 필터
         if (filters.type.length > 0) {

@@ -114,13 +114,16 @@ const Tmap = ({
         position: new window.Tmapv2.LatLng(lat, lon),
         map,
         icon: markerIconByStatus(repStatus),
-        label: poi.name,
+        title: poi.name,
       });
 
       // 마커 클릭 시: 외부에 선택 알리고 나머지 마커 숨김
       marker.addListener("click", () => {
         onMarkerClick(poi);
         clearMarkersExcept(marker); // 선택된 마커만 남김
+        mapRef.current.setCenter(
+          new window.Tmapv2.LatLng(Number(poi.frontLat), Number(poi.frontLon))
+        );
 
         // 버그가 끝도없이 나와서 마크인포창 기능 삭제 new window.Tmapv2.InfoWindow 새 객체 생성, 이전객체참조와 관련있는것같음
         // if (infoWindowRef.current) infoWindowRef.current.setMap(null);

@@ -8,31 +8,38 @@ const ChargerList = ({ evChargers }) => {
 
   return (
     <div style={{ marginTop: 12 }}>
-      <b>⚡ 충전기 정보 ({chargers.length}대)</b>
-      <table style={{ width: "100%", marginTop: 8, fontSize: 13 }}>
+      <div style={{ marginBottom: 10 }}>
+        <div style={{ fontWeight: 600, fontSize: 15, color: "#2c3e50" }}>
+          ⚡ 충전기 정보 ({chargers.length}대)
+        </div>
+        <div style={{ fontSize: 13, color: "#555" }}>
+          운영기관: <span style={{ fontWeight: 500 }}>{chargers[0].operatorName}</span>
+        </div>
+      </div>
+      <table style={{ width: "100%", marginTop: 8, fontSize: 13, borderCollapse: "collapse" }}>
         <thead>
-          <tr style={{ background: "#eaf2f8" }}>
-            <th>업체명</th>
-            <th>충전기ID</th>
-            <th>타입</th>
-            <th>급속</th>
-            <th>상태</th>
-            <th>출력</th>
-            <th>마지막충전</th>
+          <tr style={{ background: "#eaf2f8", textAlign: "center" }}>
+            {/* <th>운영기관</th> */}
+            <th style={{ padding: "6px 8px" }}>충전기ID</th>
+            <th style={{ padding: "6px 8px" }}>타입</th>
+            <th style={{ padding: "6px 8px" }}>급속</th>
+            <th style={{ padding: "6px 8px" }}>상태</th>
+            <th style={{ padding: "6px 8px" }}>출력</th>
+            {/* <th>마지막충전</th> */}
           </tr>
         </thead>
         <tbody>
           {chargers.map((ch, i) => (
             <tr key={ch.chargerId || i}>
-              <td>{ch.operatorName}</td>
-              <td>{ch.chargerId}</td>
-              <td>{chargerTypeToKor(ch.type)}</td>
-              <td>{ch.isFast === "Y" ? "O" : "-"}</td>
-              <td style={{ color: chargerStatusColor(ch.status), fontWeight: 600 }}>
+              {/* <td>{ch.operatorName}</td> */}
+              <td style={{ padding: "6px 8px" }}>{ch.chargerId}</td>
+              <td style={{ padding: "6px 8px" }}>{chargerTypeToKor(ch.type)}</td>
+              <td style={{ padding: "6px 8px" }}>{ch.isFast === "Y" ? "O" : "-"}</td>
+              <td style={{ padding: "6px 8px", color: chargerStatusColor(ch.status), fontWeight: 600 }}>
                 {chargerStatusToKor(ch.status)}
               </td>
-              <td>{ch.powerType}</td>
-              <td>{formatDateTime(ch.chargingDateTime)}</td>
+              <td style={{ padding: "6px 8px" }}>{ch.powerType}</td>
+              {/* <td>{formatDateTime(ch.chargingDateTime)}</td> */}
             </tr>
           ))}
         </tbody>

@@ -5,4 +5,50 @@
 
 <mapper namespace="fs.human.ecospot.admin.dao.ReportDAO">
 
+    <insert id="insertReport" parameterType="fs.human.ecospot.admin.vo.ReportVO">
+        INSERT INTO TB_REPORT (
+        REPORT_ID,
+        STATION_ID,
+        USER_ID,
+        REPORT_TYPE_CD,
+        REPORT_COMMENT,
+        STATE,
+        CREATED_DATE,
+        CREATED_ID,
+        UPDATED_DATE,
+        UPDATED_ID
+        ) VALUES (
+        SEQ_REPORT.NEXTVAL,
+        #{stationId, jdbcType=NUMERIC},
+        #{userId, jdbcType=NUMERIC},
+        #{reportTypeCd, jdbcType=VARCHAR},
+        #{reportComment, jdbcType=VARCHAR},
+        'N',
+        SYSDATE,
+        #{userId, jdbcType=NUMERIC},
+        SYSDATE,
+        #{userId, jdbcType=NUMERIC}
+        )
+    </insert>
+
+    <select id="countReportByUserAndStation" resultType="int">
+        SELECT COUNT(*)
+        FROM TB_REPORT
+        WHERE USER_ID = #{userId, jdbcType=NUMERIC}
+        AND STATION_ID = #{stationId, jdbcType=NUMERIC}
+    </select>
+
+    <select id="countReports" resultType="int">
+        SELECT COUNT(*)
+        FROM TB_REPORT
+        WHERE STATION_ID = #{stationId, jdbcType=NUMERIC}
+    </select>
+
+    <select id="countReportsByType" resultType="fs.human.ecospot.admin.dto.ReportGroupCountDTO">
+        SELECT a.REPORT_TYPE_CD AS codeDetailId, b.code_detail_name AS codeDetailName, COUNT(*) AS count
+        FROM TB_REPORT a
+        JOIN tb_code_d b ON a.report_type_cd = b.code_detail_id
+        WHERE STATION_ID = #{stationId, jdbcType=NUMERIC}
+        GROUP BY a.REPORT_TYPE_CD, b.code_detail_name
+    </select>
 </mapper>
