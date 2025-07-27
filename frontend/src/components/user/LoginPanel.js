@@ -18,7 +18,7 @@ function LoginPanel() {
 
   return (
     <div className="login-container">
-      <h1 className="h2">회원</h1>
+
       <AuthTabMenu activeTab={activeTab} onTabClick={handleTabClick} />
 
       <div className="login-form-box">

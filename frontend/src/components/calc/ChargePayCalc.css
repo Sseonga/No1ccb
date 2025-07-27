@@ -1,134 +1,138 @@
-
-.chargepay-area{
-
-
-  min-width: 450px;
-
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  padding: 30px 28px 24px 28px;
-
-
-}
-
-.calcinput{
-
-    width:200px !important;
-
-
-}
-
+/* === 전체 컨테이너 (사이드바 + 로고 라인 밑에서 시작) === */
 .chargepay-wrap {
-    background-color: #f7f9fb !important;
-    position: absolute;
-    left: 8%;
-    top: 0px;
-    width: 93%;
-    background: white;
-    min-height: 100%;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+  position: absolute;
+               /* 상단 로고 라인 높이 */
+  left: 8%;              /* 사이드바 너비 */
+  right: 0;
+                /* 하단 탭바(네비) 높이 */
+  width: auto;
+  height: 100%; /* 상단/하단 제외 */
+  overflow-y: auto;
+  background-color: #f7f9fb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+  box-sizing: border-box;
+  z-index: 10;
 }
 
-.chargepay-wrap h2 {
-  margin-bottom: 22px;
-  font-size: 1.52rem;
+
+
+
+
+
+/* === 메인 박스 === */
+.chargepay-area {
+  position: relative;
+  width: 100%;
+  max-width: 480px;           /* 최대 폭 제한 */
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-sizing: border-box;
+}
+
+/* === 제목 === */
+.chargepay-area h2 {
+  margin-bottom: 18px;
+  font-size: 1.5rem;
   font-weight: 700;
-  letter-spacing: -1px;
+  text-align: center;
+  color: #222;
 }
 
+/* === 차량 정보 박스 === */
 .vehicle-box {
   background: #f8fafb;
-  border: 1.2px solid #e0e5ea;
-  border-radius: 12px;
-  padding: 18px 16px 12px 16px;
-  margin-bottom: 24px;
+  border: 1px solid #e0e5ea;
+  border-radius: 10px;
+  padding: 14px 12px;
+  margin-bottom: 18px;
   transition: background 0.25s;
 }
 .vehicle-box.dimmed {
   opacity: 0.68;
   background: #f5f6f7;
 }
+
 .input-header {
   font-weight: 600;
-  margin-bottom: 10px;
-  font-size: 1.05rem;
+  margin-bottom: 8px;
+  font-size: 1rem;
   color: #404348;
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 6px;
 }
+
 .vehicle-inputs {
   display: flex;
-  gap: 14px;
-  margin-bottom: 8px;
+  gap: 10px;
+  margin-bottom: 6px;
 }
-.vehicle-inputs > div {
+.vehicle-inputs > .set {
   flex: 1;
 }
 .vehicle-inputs label {
-  font-size: 0.95rem;
-  color: #888;
+  font-size: 0.9rem;
+  color: #777;
   margin-bottom: 3px;
   display: block;
 }
 .vehicle-inputs input {
   width: 100%;
-  padding: 7px 10px;
-  font-size: 1rem;
-  border: 1.1px solid #c7d2e1;
-  border-radius: 8px;
+  padding: 6px 8px;
+  font-size: 0.95rem;
+  border: 1px solid #c7d2e1;
+  border-radius: 6px;
   background: #fff;
-  margin-bottom: 3px;
+  margin-bottom: 2px;
   outline: none;
   transition: border 0.16s;
 }
 .vehicle-inputs input:focus {
   border-color: #2a88f7;
 }
+
 .recommend-charge {
   color: #3777e7;
   font-weight: 600;
-  font-size: 1.01rem;
-  margin-bottom: 2px;
+  font-size: 0.95rem;
   margin-top: 3px;
+  text-align: right;
 }
 .recommend-charge b {
   color: #2175d1;
-  font-size: 1.08em;
-  margin-left: 1px;
+  font-size: 1.02em;
 }
 
-/* 브랜드 선택 - 검색+셀렉트 한 줄로 */
+/* === 기관명 선택 === */
+.field-group {
+  margin-bottom: 14px;
+}
+.field-group label {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: #25282d;
+}
+
 .brand-search-select-wrap {
   display: flex;
-  gap: 9px;
-  margin-bottom: 8px;
+  gap: 6px;
 }
-.brand-search {
-  flex: 1 1 0;
-  min-width: 0;
-  height: 40px;
-  border: 1.1px solid #d7dde7;
-  border-radius: 8px;
-  padding: 0 13px;
-  background: #f8fafb;
-  font-size: 1rem;
-  transition: border 0.17s;
-}
+.brand-search,
 .brand-select {
-  flex: 1 1 0;
-  min-width: 0;
-  height: 40px;
-  border: 1.1px solid #d7dde7;
-  border-radius: 8px;
-  padding: 0 13px;
+  flex: 1;
+  height: 36px;
+  border: 1px solid #d7dde7;
+  border-radius: 6px;
+  padding: 0 10px;
   background: #f8fafb;
-  font-size: 1rem;
+  font-size: 0.95rem;
   transition: border 0.17s;
 }
 .brand-search:focus,
@@ -137,43 +141,31 @@
   background: #fff;
 }
 
-.field-group {
-  margin-bottom: 16px;
-}
-.field-group label {
-  display: block;
-  font-size: 1.01rem;
-  font-weight: 500;
-  margin-bottom: 4px;
-  color: #25282d;
-}
+/* === 충전기 타입 === */
 .charge-types {
   display: flex;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 .type-btn {
-  flex: 1 1 0;
-  padding: 13px 2px 10px 2px;
-  border: 1.5px solid #e0e5ec;
+  flex: 1;
+  padding: 10px 0;
+  border: 1.2px solid #e0e5ec;
   background: #f8fafb;
-  border-radius: 10px;
-  font-size: 1rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
   font-weight: 500;
   color: #49505c;
   cursor: pointer;
   outline: none;
   transition: all 0.16s;
-  min-width: 0;
-  min-height: 56px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 .type-btn .desc {
-  font-size: 0.97em;
-  font-weight: 400;
+  font-size: 0.85em;
   color: #6e7896;
   margin-top: 2px;
 }
@@ -182,12 +174,14 @@
   background: #eaf3ff;
   color: #2266cd;
 }
+
+/* === 충전량 입력 === */
 .charge-amount-input {
   width: 100%;
-  font-size: 1rem;
-  padding: 7px 10px;
-  border: 1.1px solid #c7d2e1;
-  border-radius: 8px;
+  font-size: 0.95rem;
+  padding: 6px 0px;
+  border: 1px solid #c7d2e1;
+  border-radius: 6px;
   background: #fff;
   outline: none;
   transition: border 0.14s;
@@ -196,27 +190,29 @@
   border-color: #2a88f7;
 }
 
+/* === 회원 구분 라디오 === */
 .member-radio-wrap label {
   font-weight: 400;
-  margin-right: 17px;
-  font-size: 1em;
+  margin-right: 14px;
+  font-size: 0.9rem;
 }
 .member-radio-wrap input[type="radio"] {
   accent-color: #3496f8;
 }
 
+/* === 계산 버튼 === */
 .calc-btn {
   width: 100%;
   background: #3696fa;
   color: #fff;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 700;
-  padding: 13px 0 12px 0;
+  padding: 10px 0;
   border: none;
-  border-radius: 8px;
-  margin: 12px 0 0 0;
+  border-radius: 6px;
+  margin: 8px 0 0 0;
   cursor: pointer;
-  box-shadow: 0 1.5px 7px rgba(40,90,190,0.07);
+  box-shadow: 0 1.5px 6px rgba(40, 90, 190, 0.07);
   transition: background 0.18s;
 }
 .calc-btn:disabled {
@@ -225,26 +221,25 @@
   cursor: not-allowed;
 }
 
+/* === 결과 박스 === */
 .result-box {
-  margin-top: 28px;
+  margin-top: 16px;
   background: #f8fafb;
-  border-radius: 12px;
-  padding: 19px 12px 13px 12px;
-  box-shadow: 0 1px 6px rgba(60,110,210,0.04);
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 1px 4px rgba(60, 110, 210, 0.04);
 }
 .result-box table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  font-size: 0.97rem;
+  border-collapse: collapse;
+  font-size: 0.85rem;
 }
 .result-box th, .result-box td {
   text-align: center;
-  padding: 8px 6px;
+  padding: 6px 4px;
   border-bottom: 1px solid #ececec;
 }
 .result-box th {
-  font-size: 1.02em;
   color: #203b60;
   font-weight: 700;
   background: #f2f5fb;
@@ -253,73 +248,75 @@
   border-bottom: none;
 }
 
+input.calcinput {
+
+    width:180px;
+
+}
+
+/* === 모바일 최적화 === */
 @media (max-width: 600px) {
+  .chargepay-wrap {
+    top: 55px;
+    left: 0;          /* 모바일은 사이드바 제거 */
+    right: 0;
+    bottom: 50px;
+    width: 100%;
+    height: calc(100vh - 105px);
+    padding:0px;
+
+  }
+
+  .chargepay-area {
+    width: 100%;
+    height: 100%;
+    padding: 14px;
+    border-radius: 0;
+
+  }
+
+  .chargepay-area h2 {
+    font-size: 20px;
+    margin-bottom: 30px;
+    margin-top: 2px;
+  }
 
 
-.chargepay-wrap{
+  .vehicle-box {
+    padding: 10px 8px;
+    margin-bottom: 10px;
+  }
 
-    position: absolute;
-    left:0;
-    width:100%;
-    top:54px;
-    bottom:50px;
-    overflow-y: auto;
+  .vehicle-inputs {
+    flex-direction: column;
+    gap: 6px;
+  }
 
-}
+  .vehicle-inputs input.calcinput {
+    font-size: 13px;
+    padding: 5px 6px;
+    width:calc(100% - 16px);
+  }
 
+  .brand-search,
+  .brand-select {
+    height: 32px;
+    font-size: 13px;
+    padding: 0 6px;
+  }
 
-.chargepay-area{
+  .type-btn {
+    padding: 8px 0;
+    font-size: 13px;
+    min-height: 38px;
+  }
 
-    position: absolute;
-    left:0;
-    width:100%;
-    height:100%;
-    top:0px;
-    bottom:50px;
-    padding:20px;
-    border-radius:0px;
+  .calc-btn {
+    padding: 8px 0;
+    font-size: 14px;
+  }
 
-}
-
-.chargepay-area h2{
-
-    font-size:20px;
-
-}
-
-.input-header{
-
-
-
-
-}
-
-.vehicle-box dimmed{
-
-
-
-
-}
-
-.vehicle-inputs{
-
-
-
-}
-
-
-.vehicle-inputs input{
-
-    width:100px !important;
-
-}
-
-.vehicle-inputs label{
-
-    font-size:15px;
-}
-
-
-
-
+  .result-box table {
+    font-size: 11px;
+  }
 }
