@@ -364,7 +364,7 @@ const UserLayout = () => {
         />
         <Route path="/hotel" element={<AccommodationPanel />} />
       </Routes>
-      {isHome && !showSpotList && (
+      {isHome && !showSpotList && !selectedPoi && (
         <>
           <MyLocationButton tmapObjRef={mapRef} myMarkerRef={myMarkerRef} />
           {isMapMoved && (

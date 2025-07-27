@@ -170,7 +170,7 @@ const Tmap = ({
     <div className="mapContainer">
       <div ref={mapDivRef} />
 
-      {isHome && isMapMoved && !showSpotList && (
+      {isHome && isMapMoved && !showSpotList && !selectedPoi && (
         <div className="center-marker" />
       )}
     </div>
