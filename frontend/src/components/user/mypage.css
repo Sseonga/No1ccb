@@ -313,4 +313,27 @@
     .item-description {
         font-size: 13px;
     }
+
+    .mypage-box{
+        position: absolute;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: calc(100vh - 55px);
+        display: flex
+;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+
+
+    }
+
+    .mypage-tabs{
+         display: flex;
+
+
+
+    }
 }

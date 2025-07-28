@@ -480,7 +480,8 @@ button.confirm-button {
     justify-content: center;      /* 중앙 정렬 */
 
     box-sizing: border-box;
-    overflow: hidden;             /* 휠 스크롤 제거 */
+                 /* 휠 스크롤 제거 */
+    overflow-y: auto;
   }
 
   /* 로그인 제목 */
@@ -492,7 +493,9 @@ button.confirm-button {
 
   /* 탭 메뉴 (로그인/회원가입/비밀번호 찾기) */
   .auth-tab-menu {
+    position:fixed;
     display: flex;
+    top:110px;
     gap:0px;
     margin-bottom: 16px;
     width: 100%;
@@ -520,10 +523,20 @@ button.confirm-button {
 
   /* 로그인 폼 박스 */
   .login-form-box {
+    position:fixed;
     width: 90%;
-
+    top:130px;
     display: flex;
     justify-content: center;
+    overflow-y: auto;
+  }
+
+  .join-form-container{
+    overflow-y: auto;
+  }
+
+  .join-form{
+    overflow-y: auto;
   }
 
   /* 로그인 폼 컨테이너 */
@@ -570,6 +583,48 @@ button.confirm-button {
 
   }
 
+  .email-input-container input{
+    margin:5px;
+    width:70%;
+  }
+
+  .form-input {
+
+      margin-left:15px;
+      margin-top:10px;
+      margin-bottom:10px;
+
+
+  }
+
+  .send-button{
+       width: 65px !important;
+       height: 35px !important;
+       font-size: 11px !important;
+
+  }
+
+  .reset-button{
+
+    width: 90%;
+    height: 45px;
+    font-size: 15px
+
+  }
+  .check{
+        width: 65px !important;
+        height: 35px !important;
+        font-size: 11px !important;
+
+  }
+
+  .verification-btn{
+
+    width:65px !important;
+    height:35px !important;
+    font-size:11px !important;
+
+  }
   .google-signin-button{
     width:60% !important;
 
@@ -582,8 +637,5 @@ button.confirm-button {
 
   }
 
-  .login-form-box{
 
-    overflow-y: auto;
-  }
 }

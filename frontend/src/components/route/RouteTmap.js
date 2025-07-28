@@ -16,6 +16,8 @@ function RouteTmap({ pathCoords, fromPoi, toPoi, poiList, selectedCharger }) {
         zoom: 11,
         width: "100%",
         height: "100%",
+        zoomControl: false
+
       });
       // resize로 화면 강제 업데이트
       window.dispatchEvent(new Event("resize"));
