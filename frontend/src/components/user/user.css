@@ -541,14 +541,9 @@ button.confirm-button {
 
   /* 로그인 버튼 */
   .login-form-container .login-btn {
-    width: 100%;
-    font-size: 15px;
-    padding: 10px 0;
-    border: none;
-    border-radius: 6px;
-    background-color: #3496f8;
-    color: #fff;
-    cursor: pointer;
+    width: 90%;
+    height:45px;
+    font-size:15px;
   }
 
   /* 에러 메시지 */
@@ -560,5 +555,35 @@ button.confirm-button {
   .input-group input{
     width:90%;
     height:40px;
+  }
+
+   .S9gUrf-YoZ4jf{
+    width: 100% !important;
+
+
+   }
+
+  .google-login-section{
+
+    margin-bottom:33px !important;
+    max-width:30px !important;
+
+  }
+
+  .google-signin-button{
+    width:60% !important;
+
+  }
+
+  .login-form{
+
+    padding-top:20px;
+
+
+  }
+
+  .login-form-box{
+
+    overflow-y: auto;
   }
 }

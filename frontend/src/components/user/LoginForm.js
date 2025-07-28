@@ -26,16 +26,26 @@ function LoginForm() {
           callback: handleGoogleLogin,
         });
 
-        window.google.accounts.id.renderButton(
-          document.getElementById("google-signin-button"),
-          {
-            theme: "outline",
-            size: "large",
-            width: 350,
-            text: "signin_with",
-            locale: "ko",
-          }
-        );
+        // 화면 크기에 따라 버튼 width 결정
+        const renderGoogleButton = () => {
+          const buttonWidth = window.innerWidth <= 600 ? 240 : 350; // 모바일이면 240px
+          window.google.accounts.id.renderButton(
+            document.getElementById("google-signin-button"),
+            {
+              theme: "outline",
+              size: "large",
+              width: buttonWidth,
+              text: "signin_with",
+              locale: "ko",
+            }
+          );
+        };
+
+        renderGoogleButton(); // 초기 실행
+        window.addEventListener("resize", renderGoogleButton);
+
+        // cleanup
+        return () => window.removeEventListener("resize", renderGoogleButton);
       }
     };
 
@@ -43,6 +53,7 @@ function LoginForm() {
       document.body.removeChild(script);
     };
   }, []);
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

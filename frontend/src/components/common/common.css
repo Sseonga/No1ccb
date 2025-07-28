@@ -247,7 +247,7 @@ button.loginbtn{
 
 .my-location-button{
   position: fixed;
-  bottom: 210px;     /* 패널 높이(320px) + 탭 높이(60px) + 여유(예: 10px) */
+  bottom: 260px;     /* 패널 높이(320px) + 탭 높이(60px) + 여유(예: 10px) */
   right: 8px;
   width: 40px;
   height: 40px;
@@ -282,6 +282,30 @@ button.loginbtn{
 
 }
 
+.user-info{
+
+      position: fixed;
+      right: 10px;
+      top: 9px; /* 사이드바 위 */
+
+      width:60px;
+      padding:0px;
+      color: #fff;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      z-index: 3000;
+      font-size:12px;
+      flex-direction: column;
+      border-radius:5px;
+}
+
+.logout-btn{
+    font-size:10px;
+
+}
 
 .login-area a{
 

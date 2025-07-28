@@ -66,6 +66,7 @@ const Tmap = ({
       width: "100%",
       height: "100%",
       zoom: 14,
+      zoomControl: false
     });
 
     mapRef.current = map;

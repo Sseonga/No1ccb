@@ -277,6 +277,7 @@
   }
   .route-category-btns {
     margin: 10px 6px 0 6px;
+    gap:5px;
   }
 }
 
@@ -317,4 +318,68 @@
 .route-search-form select[name="trafficOption"] {
   display: none !important;
   pointer-events: none;
+}
+
+@media (max-width: 600px) {
+
+  .route-container {
+    display: block; /* 좌우 구조 해제 */
+    height: auto;
+  }
+
+  .route-map-area {
+    position: absolute;
+    top: 55px;    /* 로고 높이 */
+    bottom: 50px; /* 하단 네비 */
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: auto;
+    z-index: 1;
+  }
+
+  .route-sidebar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 50px; /* 하단 네비 위 */
+    width: 100%;
+    height: 200px;
+    overflow-y: auto;
+    background: #fff;
+    border-top: 1px solid #ddd;
+    border-right: none;
+    border-radius: 12px 12px 0 0;
+    z-index: 2; /* 지도 위 */
+    padding: 8px 12px;
+    box-sizing: border-box;
+  }
+
+.route-search-form input{
+
+    font-size:12px !important;
+
+
+}
+
+.route-search-form button{
+
+    height:40px;
+    font-size:15px !important;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+
+.route-category-btns button{
+
+    height: 40px !important;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:15px !important;
+
+}
+
 }

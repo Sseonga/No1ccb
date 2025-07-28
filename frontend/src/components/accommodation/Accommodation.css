@@ -1,47 +1,101 @@
-
-@media (max-width: 600px) {
-
-.hotel-panel{
-
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 50px;  /* ← 하단 탭(사이드바) 높이에 맞게 조정 */
-    height: 150px; /* 원하는 패널 높이 고정 */
-    z-index: 30;   /* 지도, 사이드바보다 위에 나오게 조정 */
-
-    border-right: none;   /* 필요없으면 삭제 */
-    border-top: 1px solid #ddd;
-    box-shadow: 0 -2px 6px rgba(0,0,0,0.12);
-    border-radius: 18px 18px 0 0 !important;
-    width:100% !important;
-
-}
-
-.hotel-panel-title{
-
-    font-size: 14px;
-
-    padding: 8px !important;
-
-
-}
-
-.hotel-list{
-    font-size: 14px;
-    padding: 8px !important;
-
-}
-
-
-
+/* PC 기본 레이아웃 */
+.accom-container {
+  display: flex;
+  height: 100vh;
 }
 
 .station-detail-top{
 
-    display: flex;
-    justify-content: flex-start !important;
+    display:flex;
+    justify-content:flex-start;
 
+}
+.hotel-panel {
+  width: 350px;
+  border-right: 1px solid #eee;
+  background: #fff;
+  overflow-y: auto;
+  position: relative;
+}
 
+.hotel-panel-title {
+  font-weight: bold;
+  padding: 16px;
+  border-bottom: 1px solid #ddd;
+  font-size: 16px;
+}
 
+.hotel-list {
+  cursor: pointer;
+  border-bottom: 1px solid #f3f3f3;
+  padding: 12px;
+  transition: background 0.2s;
+}
+
+.hotel-list:hover {
+  background: #f8f8f8;
+}
+
+.hotel-name {
+  font-weight: bold;
+}
+
+.hotel-address {
+  font-size: 13px;
+  color: #666;
+}
+
+.map-area {
+  flex: 1;
+  height: 100vh;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 600px) {
+  .accom-container {
+    display: block;
+    position: relative;
+  }
+
+  .map-area {
+    position: absolute;
+    top: 55px; /* 로고 높이 */
+    bottom: 50px; /* 하단 네비게이션 */
+    left: 0;
+    right: 0;
+    height: auto;
+    z-index: 1;
+  }
+
+  .hotel-panel {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 50px; /* 하단 네비 위 */
+    width: 100%;
+    height: 200px; /* 화면 하단 40% */
+    overflow-y: auto;
+    background: #fff;
+    border-top: 1px solid #ddd;
+    border-right: none;
+    border-radius: 12px 12px 0 0;
+    z-index: 2; /* 지도 위 */
+
+    box-sizing: border-box;
+  }
+
+  .hotel-panel-title h3 {
+    font-size: 16px;
+    padding: 8px;
+    margin:0px;
+  }
+
+  .hotel-panel-title{
+    padding:0px;
+  }
+
+  .hotel-list {
+    padding: 8px;
+    font-size: 14px;
+  }
 }

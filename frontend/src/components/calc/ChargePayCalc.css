@@ -134,6 +134,7 @@
   background: #f8fafb;
   font-size: 0.95rem;
   transition: border 0.17s;
+  width:40px;
 }
 .brand-search:focus,
 .brand-select:focus {
@@ -303,6 +304,7 @@ input.calcinput {
     height: 32px;
     font-size: 13px;
     padding: 0 6px;
+    width:50px;
   }
 
   .type-btn {
