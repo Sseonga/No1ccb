@@ -5,17 +5,12 @@ import "./ChargePayCalc.css";
 const CHARGE_TYPES = [
   { label: "완속 충전기", value: "완속", desc: "3~7kW", time: "4~5시간" },
   { label: "급속 충전기", value: "급속", desc: "50~200kW", time: "30~60분" },
-  {
-    label: "초급속 충전기",
-    value: "초급속",
-    desc: "300~350kW",
-    time: "약 20분",
-  },
+  { label: "초급속 충전기", value: "초급속", desc: "300~350kW", time: "약 20분" },
 ];
 
 function ChargePayCalc() {
-  // 상태들
   const [brands, setBrands] = useState([]);
+  const [payData, setPayData] = useState([]);
   const [brandSearch, setBrandSearch] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
   const [chargeType, setChargeType] = useState("완속");
@@ -25,26 +20,41 @@ function ChargePayCalc() {
   const [isMember, setIsMember] = useState(true);
   const [results, setResults] = useState([]);
 
-  // 브랜드 데이터 불러오기
+  // 브랜드/요금 데이터 가져오기
   useEffect(() => {
-    axios
-      .get("/api/calc/pay")
-      .then((res) => {
+    axios.get("/api/calc/brands")
+      .then(res => {
         setBrands(res.data);
-        if (res.data.length > 0) setSelectedBrand(res.data[0].brand);
+        if (res.data.length > 0) setSelectedBrand(res.data[0]);
+        // ⭐ brands 콘솔
+        console.log("[brands] /api/calc/brands 응답:", res.data);
       })
       .catch(() => setBrands([]));
+
+    axios.get("/api/calc/pay")
+      .then(res => {
+        setPayData(res.data);
+        // ⭐ payData 콘솔
+        console.log("[payData] /api/calc/pay 응답:", res.data);
+      })
+      .catch(() => setPayData([]));
   }, []);
 
-  // 브랜드 검색 필터
-  const filteredBrands = brands.filter((b) =>
-    b.brand
-      .replace(/\s/g, "")
-      .toLowerCase()
-      .includes(brandSearch.replace(/\s/g, "").toLowerCase())
+  // 🔥 brands 배열에서 검색/중복제거 (최종적으로 select에 표시되는 브랜드)
+  const filteredBrands = Array.from(
+    new Set(
+      brands.filter(b =>
+        b.replace(/\s/g, "").toLowerCase().includes(brandSearch.replace(/\s/g, "").toLowerCase())
+      )
+    )
   );
 
-  // 추천 충전량 계산
+  // ⭐ select 옵션 배열도 콘솔 확인!
+  useEffect(() => {
+    console.log("[filteredBrands] (중복제거+검색결과):", filteredBrands);
+  }, [brands, brandSearch]);
+
+  // 추천 충전량
   const recommendedCharge = (() => {
     const cap = parseFloat(capacity);
     const rem = parseFloat(remain);
@@ -52,24 +62,26 @@ function ChargePayCalc() {
     return Math.round(cap * (1 - rem / 100));
   })();
 
-  // 추천 충전량 입력 자동 반영
   useEffect(() => {
     if (recommendedCharge) setChargeAmount(recommendedCharge);
   }, [recommendedCharge]);
 
-  // form 입력 완료 조건
   const infoReady = capacity && remain && !isNaN(recommendedCharge);
 
-  // 계산 결과 추가
   const handleCalc = (e) => {
     e.preventDefault();
-    const brandObj = brands.find((b) => b.brand === selectedBrand);
-    if (!brandObj) return;
+    const priceInfo = payData.find(
+      p => p.brand === selectedBrand && p.type === chargeType
+    );
+    if (!priceInfo) {
+      alert("선택한 브랜드의 해당 충전 방식 요금정보가 없습니다.");
+      return;
+    }
 
     const amount = parseFloat(chargeAmount);
     if (isNaN(amount) || amount <= 0) return;
 
-    const price = isMember ? brandObj.memberPrice : brandObj.nonmemberPrice;
+    const price = isMember ? priceInfo.memberPrice : priceInfo.nonmemberPrice;
     const total = Math.round(amount * price).toLocaleString();
 
     setResults([
@@ -79,7 +91,7 @@ function ChargePayCalc() {
         type: chargeType,
         amount: amount + "kWh",
         member: isMember ? "회원" : "비회원",
-        time: CHARGE_TYPES.find((t) => t.value === chargeType)?.time || "-",
+        time: CHARGE_TYPES.find(t => t.value === chargeType)?.time || "-",
         total: total + "원",
       },
     ]);
@@ -91,10 +103,7 @@ function ChargePayCalc() {
         <h2>충전 요금 계산기</h2>
         <div className={`vehicle-box${infoReady ? "" : " dimmed"}`}>
           <div className="input-header">
-            <span role="img" aria-label="car">
-              🚗
-            </span>{" "}
-            차량 정보 입력
+            <span role="img" aria-label="car">🚗</span> 차량 정보 입력
           </div>
           <div className="vehicle-inputs">
             <div className="set">
@@ -145,8 +154,8 @@ function ChargePayCalc() {
                 onChange={(e) => setSelectedBrand(e.target.value)}
               >
                 {filteredBrands.map((b) => (
-                  <option key={b.brand} value={b.brand}>
-                    {b.brand}
+                  <option key={b} value={b}>
+                    {b}
                   </option>
                 ))}
               </select>
@@ -200,6 +209,7 @@ function ChargePayCalc() {
             계산 결과 추가
           </button>
         </form>
+
         {results.length > 0 && (
           <div className="result-box">
             <table>

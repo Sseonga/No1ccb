@@ -9,11 +9,17 @@ import java.util.List;
 
 @Service
 public class ChargePayServiceImpl implements ChargePayService {
+
     @Autowired
-    private ChargePayDAO dao;
+    private ChargePayDAO chargePayDAO;
 
     @Override
     public List<ChargePayVO> getAll() {
-        return dao.getAll();
+        return chargePayDAO.getAll();
+    }
+
+    @Override
+    public List<String> getDistinctBrands() {
+        return chargePayDAO.getDistinctBrands();
     }
 }
