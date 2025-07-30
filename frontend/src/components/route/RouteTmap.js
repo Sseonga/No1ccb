@@ -32,8 +32,6 @@ function RouteTmap({ pathCoords, fromPoi, toPoi, poiList, selectedCharger }) {
 
 
 
-
-
   useEffect(() => {
     const map = mapRef.current;
     if (!window.Tmapv2 || !map) return;
