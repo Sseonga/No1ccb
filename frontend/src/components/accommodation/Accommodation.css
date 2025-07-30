@@ -16,6 +16,7 @@
   background: #fff;
   overflow-y: auto;
   position: relative;
+  scrollbar-width: none;
 }
 
 .hotel-panel-title {
@@ -80,7 +81,7 @@
     border-right: none;
     border-radius: 12px 12px 0 0;
     z-index: 2; /* 지도 위 */
-
+    scrollbar-width: none;
     box-sizing: border-box;
   }
 
