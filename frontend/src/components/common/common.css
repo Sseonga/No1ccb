@@ -279,7 +279,33 @@ button.loginbtn {
   }
 
   .filter-panel {
-    display: none;
+
+    position: absolute;
+    top: 100px !important;
+    right: 8px !important;
+    width:150px !important;
+
+
+
+  }
+
+  .filter-title{
+    font-size:12px;
+
+  }
+
+  .filter-title label{
+    font-size:10px !important;
+
+
+  }
+
+  .filter-group{
+     padding:8px !important;
+     height:44px;
+     overflow-y: auto;
+     margin-bottom: 10px !important;
+     scrollbar-width: none;
   }
 
   .search-again-button {
@@ -289,5 +315,18 @@ button.loginbtn {
     padding: 8px 12px;
     font-size: 12px;
     border-radius: 16px;
+  }
+
+  .filter-group label {
+    font-size: 11px;
+
+
+  }
+
+  .filter-group input[type="checkbox"] {
+    width: 14px;         /* 체크박스 크기 */
+    height: 14px;
+    /* 체크박스 기본 크기 줄임 */
+    vertical-align: middle;
   }
 }

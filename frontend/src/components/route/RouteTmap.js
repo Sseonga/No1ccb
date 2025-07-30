@@ -10,8 +10,19 @@ function RouteTmap({ pathCoords, fromPoi, toPoi, poiList, selectedCharger }) {
   const mapDivId = "map_div";
 
 
-
-
+  useEffect(() => {
+    const fix = () => {
+      const mapDiv = document.getElementById("map_div");
+      if (mapDiv && window.innerWidth <= 600) {
+        mapDiv.style.height = (window.innerHeight - 105) + "px";
+        mapDiv.style.minHeight = "280px";
+        mapDiv.style.width = "100vw";
+      }
+    };
+    fix(); // mount
+    window.addEventListener("resize", fix);
+    return () => window.removeEventListener("resize", fix);
+  }, []);
 
   useEffect(() => {
     if (!window.Tmapv2) return;
@@ -73,8 +84,8 @@ function RouteTmap({ pathCoords, fromPoi, toPoi, poiList, selectedCharger }) {
           let iconUrl;
           // 선택된 충전소일 때 아이콘만 다르게!
           if (selectedCharger && (
-                poi.pkey === selectedCharger.pkey || 
-                poi.id === selectedCharger.id || 
+                poi.pkey === selectedCharger.pkey ||
+                poi.id === selectedCharger.id ||
                 poi.name === selectedCharger.name // fallback
               )) {
             iconUrl = "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png"; // 선택 시 노란색
