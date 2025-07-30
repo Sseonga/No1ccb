@@ -4,6 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="fs.human.ecospot.calc.dao.ChargePayDAO">
+
+    <!-- 전체 요금 정보 -->
     <select id="getAll" resultType="fs.human.ecospot.calc.vo.ChargePayVO">
         SELECT
         id,
@@ -14,4 +16,12 @@
         FROM TB_CHARGE_PAY
         ORDER BY id
     </select>
+
+    <!-- ✅ 중복 제거된 브랜드 목록 -->
+    <select id="getDistinctBrands" resultType="string">
+        SELECT DISTINCT brand
+        FROM TB_CHARGE_PAY
+        ORDER BY brand
+    </select>
+
 </mapper>

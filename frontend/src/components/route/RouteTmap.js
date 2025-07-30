@@ -1,11 +1,17 @@
 // RouteTmap.jsx
 import React, { useEffect, useRef } from "react";
+import "./RouteTmap.css";
+
 
 function RouteTmap({ pathCoords, fromPoi, toPoi, poiList, selectedCharger }) {
   const mapRef = useRef(null);
   const markersRef = useRef([]);
   const polylinesRef = useRef([]);
   const mapDivId = "map_div";
+
+
+
+
 
   useEffect(() => {
     if (!window.Tmapv2) return;
@@ -23,6 +29,10 @@ function RouteTmap({ pathCoords, fromPoi, toPoi, poiList, selectedCharger }) {
       window.dispatchEvent(new Event("resize"));
     }
   }, []);
+
+
+
+
 
   useEffect(() => {
     const map = mapRef.current;
