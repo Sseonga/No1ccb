@@ -110,11 +110,11 @@ const Tmap = ({
       const repStatus = Array.isArray(poi.evChargers?.evCharger)
         ? poi.evChargers.evCharger[0]?.status
         : poi.evChargers?.evCharger?.status;
-
       const marker = new window.Tmapv2.Marker({
         position: new window.Tmapv2.LatLng(lat, lon),
         map,
         icon: markerIconByStatus(repStatus),
+        iconSize: new window.Tmapv2.Size(32, 32),
         title: poi.name,
       });
 
@@ -186,12 +186,12 @@ function markerIconByStatus(status) {
     case "1":
     case "4":
     case "5":
-      return "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+      return "/icons/free-icon-location-pin-red.png";
     case "3":
-      return "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
+      return "/icons/free-icon-location-pin-blue.png";
     case "9":
-      return "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
+      return "/icons/free-icon-location-pin-yellow.png";
     default:
-      return "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+      return "/icons/free-icon-location-pin-green.png";
   }
 }
